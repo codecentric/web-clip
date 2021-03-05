@@ -1,30 +1,16 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 
 import * as rdf from "rdflib";
 import solidNamespace from "solid-namespace";
+import {getDefaultSession, handleIncomingRedirect, login, fetch} from "@inrupt/solid-client-authn-browser";
 
 const ns = solidNamespace(rdf);
-const {sym} = rdf;
+const {sym, st} = rdf;
 
 
 const store = rdf.graph();
-const fetcher =new rdf.Fetcher(store);
-import {
-  login,
-  handleIncomingRedirect,
-  getDefaultSession,
-  fetch
-} from "@inrupt/solid-client-authn-browser";
-import {
-  addDatetime,
-  addStringNoLocale,
-  addUrl,
-  createSolidDataset,
-  createThing,
-  saveSolidDatasetAt,
-  setThing
-} from "@inrupt/solid-client";
-import {SCHEMA_INRUPT_EXT, RDF} from "@inrupt/vocab-common-rdf";
+const fetcher =new rdf.Fetcher(store, { fetch });
+const updater = new rdf.UpdateManager(store)
 
 
 function loginToInruptDotCom() {
@@ -34,18 +20,24 @@ function loginToInruptDotCom() {
   });
 }
 
-async function trackPageView() {
-  let dataset = createSolidDataset();
+async function trackPageView(webId) {
 
   const id = Date.now().toString();
+
   const trackingUrl = `https://angelo.veltens.org/tracking/${id}`;
-  let pageview = createThing({name: id})
-  pageview = addUrl(pageview, RDF.type, SCHEMA_INRUPT_EXT.NS('ViewAction'));
-  pageview = addStringNoLocale(pageview, SCHEMA_INRUPT_EXT.NS('url'), window.location.href);
-  pageview = addDatetime(pageview, SCHEMA_INRUPT_EXT.NS('dateCreated'), new Date());
-  dataset = setThing(dataset, pageview);
-  let saved = await saveSolidDatasetAt(trackingUrl, dataset, {fetch});
-  console.log({saved})
+  const trackingFile = sym(trackingUrl);
+  const trackingThing = sym(`${trackingUrl}#${id}`);
+
+  let ins = [
+    st(trackingThing, ns.rdf('type'), ns.schema('ViewAction'), trackingFile),
+    st(trackingThing, ns.schema('url'), sym(window.location.href), trackingFile),
+    st(trackingThing, ns.schema('dateCreated'), new Date(), trackingFile)
+  ];
+  let del = []
+  updater.update(del, ins, (uri, ok, message) => {
+    if (ok) console.log('Tracked to '+ trackingThing.uri)
+    else alert(message)
+  })
 }
 
 function useRedirectAfterLogin() {
@@ -62,6 +54,7 @@ function useRedirectAfterLogin() {
     if (session.info.isLoggedIn) {
       setWebId(session.info.webId);
       setLoading(false);
+      trackPageView(webId);
     } else {
       setLoading(false);
       // auto log-in?
