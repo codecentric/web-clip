@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import {Login} from "./Login";
+import React from 'react'
+
 class App extends React.Component {
   render() {
     return <main>
     <h1>WebTrack</h1>
-      <Login />
+      <div>Hello, world.</div>
     </main>
   }
 }

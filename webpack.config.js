@@ -12,7 +12,8 @@ const config = {
   },
   output: {
     path: path.resolve(__dirname, "./build"),
-    filename: "[name].js"
+    filename: "[name].js",
+    publicPath: '/',
   },
   resolve: {
     extensions: ["*", ".js"],
@@ -58,10 +59,6 @@ const config = {
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"]
-      },
-      {
-        test: /\.(png|svg|jpg|gif)$/,
-        use: ["file-loader"]
       }
     ]
   }
