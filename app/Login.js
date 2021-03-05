@@ -1,4 +1,4 @@
-import React  from 'react'
+import React, {useState, useEffect}  from 'react'
 
 import {
   login,
@@ -9,25 +9,34 @@ import {
 
 function loginToInruptDotCom() {
   return login({
-
     oidcIssuer: "https://angelo.veltens.org" || "https://broker.pod.inrupt.com",
-
     redirectUrl: window.location.href,
-
   });
 }
 
-async function useRedirectAfterLogin() {
+function useRedirectAfterLogin() {
 
-  await handleIncomingRedirect();
+  const [loading, setLoading] = useState(false);
+  const [webId, setWebId] = useState(null);
 
-  const session = getDefaultSession();
-  if (session.info.isLoggedIn) {
-    console.log("hello", session.info.webId)
-  }
+  useEffect(async () => {
+    setLoading(true);
+    await handleIncomingRedirect();
+
+    const session = getDefaultSession();
+    if (session.info.isLoggedIn) {
+      setWebId(session.info.webId);
+    } else {
+      // auto log-in?
+      // loginToInruptDotCom()
+    }
+    setLoading(false);
+
+  }, []);
+
   return {
-    session,
-    loading: false
+    webId,
+    loading
   }
 }
 
@@ -37,7 +46,6 @@ const authenticate = () => {
 }
 
 export const Login = () => {
-  const { session, loading } = useRedirectAfterLogin();
-
-  return <button onClick={authenticate}>Login</button>
+  const { webId, loading } = useRedirectAfterLogin();
+  return loading ? <div>Loading</div> : (webId ? <div>{webId}</div> : <button onClick={authenticate}>Login</button>)
 }
