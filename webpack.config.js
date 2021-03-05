@@ -8,13 +8,18 @@ const config = {
   devtool: "cheap-module-source-map",
   entry: {
     app: path.join(__dirname, "./static/index.js"),
+    contentScript: path.join(__dirname, "./static/contentScript.js"),
   },
   output: {
     path: path.resolve(__dirname, "./build"),
     filename: "[name].js"
   },
   resolve: {
-    extensions: ["*", ".js"]
+    extensions: ["*", ".js"],
+    fallback: {
+      "stream": require.resolve("stream-browserify"),
+      "crypto": require.resolve("crypto-browserify")
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({

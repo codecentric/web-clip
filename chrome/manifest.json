@@ -13,5 +13,13 @@
     "default_title": "WebTrack",
     "default_popup": "index.html"
   },
-  "permissions": []
+  "content_scripts": [
+    {
+      "matches": ["https://*/*"],
+      "js": ["contentScript.js"],
+      "exclude_matches": ["https://angelo.veltens.org/*"]
+    }
+  ],
+  "permissions": [],
+  "web_accessible_resources": ["script.js"]
 }

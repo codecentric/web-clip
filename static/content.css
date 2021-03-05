@@ -1,0 +1,22 @@
+#webtrack {
+    margin: 1rem;
+    --primary-color: #6700d4;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    background-color: #cfcfcf;
+    height: auto;
+    padding: 1rem;
+    z-index: 1000;
+    border-radius: 1rem;
+}
+
+#webtrack button {
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+}
+
