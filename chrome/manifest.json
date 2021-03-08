@@ -23,6 +23,6 @@
       "exclude_matches": ["https://angelo.veltens.org/*"]
     }
   ],
-  "permissions": [],
+  "permissions": ["tabs"],
   "web_accessible_resources": ["script.js"]
 }
