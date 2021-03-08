@@ -77,7 +77,12 @@ function useRedirectAfterLogin() {
     if (webId) {
       setLoading(true);
       fetcher.load(webId).then(response => {
-        setName(store.anyValue(sym(webId), ns.vcard('fn')));
+        const name = store.anyValue(sym(webId), ns.vcard('fn'));
+        setName(name);
+        const message = {type: 'setSession', payload: {webId, name}};
+        chrome.runtime.sendMessage(message, function(response) {
+          console.log("response from extension", response);
+        });
         setLoading(false);
       }, err => {
         console.log("Load failed",  err);

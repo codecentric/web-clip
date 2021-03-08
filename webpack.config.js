@@ -9,6 +9,7 @@ const config = {
   entry: {
     app: path.join(__dirname, "./static/index.js"),
     contentScript: path.join(__dirname, "./static/contentScript.js"),
+    background: path.join(__dirname, "./static/background.js"),
   },
   output: {
     path: path.resolve(__dirname, "./build"),
@@ -30,6 +31,7 @@ const config = {
         viewport: "width=device-width, initial-scale=1, shrink-to-fit=no",
         "theme-color": "#000000"
       },
+      chunks : ['app'],
       manifest: "manifest.json",
       filename: "index.html",
       template: "./static/index.html",
