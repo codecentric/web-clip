@@ -63,7 +63,6 @@ function useRedirectAfterLogin() {
     setLoading(true);
     if (session) {
       setWebId(session.webId);
-      trackPageView(webId);
     } else {
       setLoading(false);
       // auto log-in?
