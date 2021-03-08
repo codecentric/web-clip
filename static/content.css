@@ -1,11 +1,11 @@
-#webtrack {
+#webtrack .main {
     margin: 1rem;
     --primary-color: #6700d4;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 50%;
-    background-color: #cfcfcf;
+    background-color: #f4f4f4;
     height: auto;
     padding: 1rem;
     z-index: 1000;
