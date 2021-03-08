@@ -1,4 +1,4 @@
-let session = {};
+let session = null;
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -8,6 +8,5 @@ chrome.runtime.onMessage.addListener(
     } else if(request.type === 'getSession') {
       sendResponse(session)
     }
-
   }
 );
