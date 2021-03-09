@@ -1,18 +1,19 @@
-import React, {useEffect, useState} from 'react'
-
-import {login, logout} from "./messages";
+import React, {useEffect, useState, useMemo, useCallback} from 'react'
+import {types} from "./messages";
 
 
 /**
  * Main view of the extension, that appears when clicked on the extension icon
  */
 function App({tab}) {
-
-
   const [session, setSession] = useState(null)
+  const port = useMemo(() => chrome.tabs.connect(tab.id, {name: "communication-port"}), [tab])
+
+  const login = useCallback(() => {
+    port.postMessage({type: types.LOGIN})
+  }, [port]);
 
   useEffect(() => {
-    const port = chrome.tabs.connect(tab.id, {name: "communication-port"});
     port.postMessage({type: 'init'})
     port.onMessage.addListener(function(msg) {
       console.log({msg})
@@ -22,7 +23,7 @@ function App({tab}) {
         console.error("unknown message", msg)
       }
     });
-  }, [])
+  }, [port])
 
   return <main>
     <h1>WebTrack</h1>

@@ -13,20 +13,6 @@ async function loginWithRedirect() {
   });
 }
 
-
-
-chrome.runtime.onMessage.addListener(
-  function (request, sender, sendResponse) {
-    if (request.type === types.LOGIN) {
-      loginWithRedirect().then(() => console.log("logged in"));
-      sendResponse("logged in");
-    } else if (request.type === types.LOGOUT) {
-      logout().then(() => console.log("logged out"))
-      sendResponse("logged out");
-    }
-  }
-);
-
 const root = document.createElement("div")
 root.id = "webtrack";
 document.body.appendChild(root);
@@ -34,8 +20,11 @@ document.body.appendChild(root);
 chrome.runtime.onConnect.addListener(function(port) {
   console.assert(port.name === "communication-port");
   ReactDOM.render(<PageContent port={port}/>, document.querySelector("#webtrack"));
-  port.onMessage.addListener(function(msg) {
-    console.log("listener in content.js", msg);
+  port.onMessage.addListener(function(request) {
+    console.log("received in content.js", {request});
+    if (request.type === types.LOGIN) {
+      loginWithRedirect().then(() => console.log("logged in"));
+    }
   });
 });
 
