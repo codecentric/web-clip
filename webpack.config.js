@@ -7,8 +7,8 @@ const config = {
   mode: "development",
   devtool: "cheap-module-source-map",
   entry: {
-    app: path.join(__dirname, "./static/index.js"),
-    contentScript: path.join(__dirname, "./static/contentScript.js"),
+    app: path.join(__dirname, "./static/app.js"),
+    content: path.join(__dirname, "./static/content.js"),
     background: path.join(__dirname, "./static/background.js"),
   },
   output: {

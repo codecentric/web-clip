@@ -19,10 +19,9 @@
   "content_scripts": [
     {
       "matches": ["https://*/*"],
-      "js": ["contentScript.js"],
-      "exclude_matches": ["https://angelo.veltens.org/*"]
+      "js": ["content.js"]
     }
   ],
   "permissions": ["tabs"],
-  "web_accessible_resources": ["script.js"]
+  "web_accessible_resources": []
 }
