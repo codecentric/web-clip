@@ -6,13 +6,14 @@ import {PageContent} from "../src/content/PageContent";
 import {types} from "../src/app/messages";
 import {login, logout} from '@inrupt/solid-client-authn-browser'
 
-
 async function loginWithRedirect() {
   await login({
     oidcIssuer: "https://angelo.veltens.org", // TODO: read from plugin configuration?
     redirectUrl: window.location.href,
   });
 }
+
+
 
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
@@ -30,4 +31,11 @@ const root = document.createElement("div")
 root.id = "webtrack";
 document.body.appendChild(root);
 
-ReactDOM.render(<PageContent />, document.querySelector("#webtrack"));
+chrome.runtime.onConnect.addListener(function(port) {
+  console.assert(port.name === "communication-port");
+  ReactDOM.render(<PageContent port={port}/>, document.querySelector("#webtrack"));
+  port.onMessage.addListener(function(msg) {
+    console.log("listener in content.js", msg);
+  });
+});
+
