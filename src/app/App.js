@@ -7,7 +7,7 @@ import {types} from "./messages";
  */
 function App({tab}) {
   const [session, setSession] = useState(null)
-  const port = useMemo(() => chrome.tabs.connect(tab.id, {name: "communication-port"}), [tab])
+  const port = useMemo(() => chrome.tabs.connect(tab.id, {name: "communication-port"}), [tab.id])
 
   const login = useCallback(() => {
     port.postMessage({type: types.LOGIN})

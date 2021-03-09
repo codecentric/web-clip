@@ -1,10 +1,8 @@
-import ReactDOM from "react-dom";
 import React from "react";
 
 import "./content.css";
-import {PageContent} from "../src/content/PageContent";
 import {types} from "../src/app/messages";
-import {login, logout} from '@inrupt/solid-client-authn-browser'
+import {getDefaultSession, handleIncomingRedirect, login} from '@inrupt/solid-client-authn-browser'
 
 async function loginWithRedirect() {
   await login({
@@ -17,11 +15,23 @@ const root = document.createElement("div")
 root.id = "webtrack";
 document.body.appendChild(root);
 
+async function handleRedirectAfterLogin() {
+  await handleIncomingRedirect();
+  return getDefaultSession();
+}
+
+const promise = handleRedirectAfterLogin()
+
 chrome.runtime.onConnect.addListener(function(port) {
   console.assert(port.name === "communication-port");
-  ReactDOM.render(<PageContent port={port}/>, document.querySelector("#webtrack"));
+
+  promise.then((session) => {
+    console.log("send session to app", session)
+    port.postMessage({type: "SESSION", payload: session});
+  });
+
   port.onMessage.addListener(function(request) {
-    console.log("received in content.js", {request});
+    console.log("received in content.js", request.type, {request});
     if (request.type === types.LOGIN) {
       loginWithRedirect().then(() => console.log("logged in"));
     }
