@@ -1,6 +1,7 @@
 export const types = {
   LOGIN: 'LOGIN',
-  LOGOUT: 'LOGOUT'
+  LOGOUT: 'LOGOUT',
+  ACTIVATE: 'ACTIVATE'
 }
 
 export function login() {
