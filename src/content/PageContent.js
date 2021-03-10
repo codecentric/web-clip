@@ -13,7 +13,7 @@ const updater = new rdf.UpdateManager(store)
 
 async function loginWithRedirect() {
   await login({
-    oidcIssuer: "https://angelo.veltens.org", // TODO: read from plugin configuration?
+    oidcIssuer: "https://solidcommunity.net", // TODO: read from plugin configuration?
     redirectUrl: window.location.href,
   });
 }
