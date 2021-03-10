@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Popup from "../app/App";
+import Popup from "../src/app/App";
 import "./index.css";
 
 window.onload = function() {
