@@ -29,9 +29,9 @@ export const PageContent = ({ session }) => {
 };
 
 PageContent.propTypes = {
-  session: {
-    info: {
-      webId: PropTypes.string,
-    },
-  },
+  session: PropTypes.shape({
+    info: PropTypes.shape({
+      webId: PropTypes.string
+    })
+  })
 };
