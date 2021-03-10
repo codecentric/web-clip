@@ -3,6 +3,7 @@ import React, {useEffect} from 'react'
 import * as rdf from "rdflib";
 import solidNamespace from "solid-namespace";
 import {getDefaultSession, handleIncomingRedirect, login} from "@inrupt/solid-client-authn-browser";
+import {Toolbar} from "./Toolbar";
 
 const ns = solidNamespace(rdf);
 const {sym, st} = rdf;
@@ -20,5 +21,5 @@ async function loginWithRedirect() {
 
 
 export const PageContent = ({session}) => {
-  return session ? session.info.webId : <button onClick={loginWithRedirect}>Login</button>
+  return session ? <Toolbar webId={session.info.webId} /> : <button onClick={loginWithRedirect}>Login</button>
 }
