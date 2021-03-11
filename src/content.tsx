@@ -1,13 +1,12 @@
+import {
+  getDefaultSession,
+  handleIncomingRedirect,
+  Session,
+} from '@inrupt/solid-client-authn-browser';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import './assets/content.css';
-import {
-  getDefaultSession,
-  handleIncomingRedirect,
-  login,
-  Session,
-} from '@inrupt/solid-client-authn-browser';
 import { PageContent } from './content/PageContent';
 import { MessageType } from './messages';
 
@@ -21,20 +20,21 @@ async function handleRedirectAfterLogin() {
 
 handleRedirectAfterLogin().then((session: Session) => {
   if (session.info.isLoggedIn) {
-    ReactDOM.render(<PageContent sessionInfo={session.info} />, root);
+    renderApp(session);
   }
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   switch (request.type) {
     case MessageType.ACTIVATE:
-      ReactDOM.render(
-        <PageContent sessionInfo={getDefaultSession().info} />,
-        root
-      );
+      renderApp(getDefaultSession());
       break;
     default:
       throw new Error('unknown message received');
   }
   sendResponse();
 });
+
+function renderApp(session: Session) {
+  ReactDOM.render(<PageContent sessionInfo={session.info} />, root);
+}
