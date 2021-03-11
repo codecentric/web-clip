@@ -2,9 +2,8 @@ import React from 'react';
 
 import * as rdf from 'rdflib';
 import solidNamespace from 'solid-namespace';
-import { login } from '@inrupt/solid-client-authn-browser';
+import { login, Session } from '@inrupt/solid-client-authn-browser';
 import { Toolbar } from './Toolbar';
-import * as PropTypes from 'prop-types';
 
 const ns = solidNamespace(rdf);
 const { sym, st } = rdf;
@@ -20,18 +19,14 @@ async function loginWithRedirect() {
   });
 }
 
-export const PageContent = ({ session }) => {
-  return session ? (
-    <Toolbar webId={session.info.webId} />
+interface PageContentProps {
+  sessionInfo: Session['info'];
+}
+
+export const PageContent = ({ sessionInfo }: PageContentProps) => {
+  return sessionInfo.isLoggedIn ? (
+    <Toolbar webId={sessionInfo.webId} />
   ) : (
     <button onClick={loginWithRedirect}>Login</button>
   );
-};
-
-PageContent.propTypes = {
-  session: PropTypes.shape({
-    info: PropTypes.shape({
-      webId: PropTypes.string
-    })
-  })
 };
