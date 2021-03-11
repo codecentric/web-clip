@@ -1,5 +1,5 @@
 import { useSolidApi } from '../api/apiContext';
-import { SolidApi } from '../api/solidApi';
+import { SolidApi } from '../api/SolidApi';
 
 jest.mock('../api/apiContext');
 
