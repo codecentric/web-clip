@@ -4,6 +4,7 @@ import {
   UpdateManager,
   graph,
   NamedNode,
+  sym,
 } from 'rdflib';
 import * as rdf from 'rdflib';
 import solidNamespace from 'solid-namespace';
@@ -21,6 +22,7 @@ interface Profile {
 }
 
 export class SolidApi {
+  private readonly me: NamedNode;
   private readonly sessionInfo: SessionInfo;
   private readonly store: IndexedFormula;
   private readonly fetcher: Fetcher;
@@ -29,6 +31,7 @@ export class SolidApi {
 
   constructor(sessionInfo: SessionInfo) {
     this.sessionInfo = sessionInfo;
+    this.me = sym(sessionInfo.webId);
     this.store = graph();
     this.fetcher = new Fetcher(this.store, { fetch: authenticatedFetch });
     this.updater = new UpdateManager(this.store);
@@ -45,7 +48,9 @@ export class SolidApi {
   }
 
   getProfile(): Profile {
-    return { name: 'Solid User' };
+    const name: string =
+      this.store.anyValue(this.me, this.ns.vcard('fn')) || 'Anonymous';
+    return { name };
   }
 
   bookmark(page: PageMetaData): void {

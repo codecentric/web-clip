@@ -8,26 +8,57 @@ jest.mock('@inrupt/solid-client-authn-browser');
 
 describe('SolidApi', () => {
   describe('login', () => {
-    it('logs the user in and fetches their profile', async () => {
-      (login as jest.Mock).mockResolvedValue(true);
-      (authenticatedFetch as jest.Mock).mockResolvedValue({
-        ok: true,
-        headers: new Headers(),
-        status: 200,
-        statusText: 'OK',
-        body: async () => '',
+    describe('profile can be read after login', () => {
+      it('name is Anonymous, when profile contains no name', async () => {
+        (login as jest.Mock).mockResolvedValue(true);
+        mockFetch('');
+
+        const solidApi = new SolidApi({
+          webId: 'https://pod.example/#me',
+        } as SessionInfo);
+
+        await solidApi.login();
+
+        expect(login).toHaveBeenCalled();
+        expect(authenticatedFetch).toHaveBeenCalled();
+
+        expect(solidApi.getProfile()).toEqual({
+          name: 'Anonymous',
+        });
       });
 
-      const solidApi = new SolidApi({ webId: 'some_id' } as SessionInfo);
+      it('name is read from vcard:fn', async () => {
+        (login as jest.Mock).mockResolvedValue(true);
+        mockFetch(`
+          <https://pod.example/#me>
+            <http://www.w3.org/2006/vcard/ns#fn> "Solid User" .
+          `);
 
-      await solidApi.login();
+        const solidApi = new SolidApi({
+          webId: 'https://pod.example/#me',
+        } as SessionInfo);
 
-      expect(login).toHaveBeenCalled();
-      expect(authenticatedFetch).toHaveBeenCalled();
+        await solidApi.login();
 
-      expect(solidApi.getProfile()).toEqual({
-        name: 'Solid User',
+        expect(login).toHaveBeenCalled();
+        expect(authenticatedFetch).toHaveBeenCalled();
+
+        expect(solidApi.getProfile()).toEqual({
+          name: 'Solid User',
+        });
       });
     });
   });
 });
+
+function mockFetch(bodyText: string) {
+  (authenticatedFetch as jest.Mock).mockResolvedValue({
+    ok: true,
+    headers: new Headers({
+      'Content-Type': 'text/turtle',
+    }),
+    status: 200,
+    statusText: 'OK',
+    text: async () => bodyText,
+  });
+}
