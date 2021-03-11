@@ -42,9 +42,14 @@ export class SolidApi {
     return login({
       oidcIssuer: 'https://solidcommunity.net', // TODO: read from plugin configuration?
       redirectUrl: window.location.href,
-    })
-      .then(() => this.fetcher.load('https://mypod/profile'))
-      .catch((e) => console.log(e)); //?
+    });
+  }
+
+  async loadProfile() {
+    if (!this.me) {
+      throw new Error('No user is logged in.');
+    }
+    return this.fetcher.load(this.me);
   }
 
   getProfile(): Profile {

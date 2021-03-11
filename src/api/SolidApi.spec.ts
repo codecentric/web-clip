@@ -7,8 +7,8 @@ import { SessionInfo, SolidApi } from './SolidApi';
 jest.mock('@inrupt/solid-client-authn-browser');
 
 describe('SolidApi', () => {
-  describe('login', () => {
-    describe('profile can be read after login', () => {
+  describe('loadProfile', () => {
+    describe('profile can be read after being loaded', () => {
       it('name is Anonymous, when profile contains no name', async () => {
         (login as jest.Mock).mockResolvedValue(true);
         mockFetch('');
@@ -17,10 +17,12 @@ describe('SolidApi', () => {
           webId: 'https://pod.example/#me',
         } as SessionInfo);
 
-        await solidApi.login();
+        await solidApi.loadProfile();
 
-        expect(login).toHaveBeenCalled();
-        expect(authenticatedFetch).toHaveBeenCalled();
+        expect(authenticatedFetch).toHaveBeenCalledWith(
+          'https://pod.example/',
+          expect.anything()
+        );
 
         expect(solidApi.getProfile()).toEqual({
           name: 'Anonymous',
@@ -38,15 +40,26 @@ describe('SolidApi', () => {
           webId: 'https://pod.example/#me',
         } as SessionInfo);
 
-        await solidApi.login();
+        await solidApi.loadProfile();
 
-        expect(login).toHaveBeenCalled();
-        expect(authenticatedFetch).toHaveBeenCalled();
+        expect(authenticatedFetch).toHaveBeenCalledWith(
+          'https://pod.example/',
+          expect.anything()
+        );
 
         expect(solidApi.getProfile()).toEqual({
           name: 'Solid User',
         });
       });
+    });
+    it('profile cannot be loaded, when noone is logged in', async () => {
+      const solidApi = new SolidApi({
+        isLoggedIn: false,
+      } as SessionInfo);
+
+      await expect(solidApi.loadProfile()).rejects.toThrow(
+        'No user is logged in.'
+      );
     });
   });
 });
