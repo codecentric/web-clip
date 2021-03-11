@@ -45,7 +45,7 @@ export class SolidApi {
     });
   }
 
-  async loadProfile() {
+  async loadProfile(): Promise<Profile> {
     if (!this.me) {
       throw new Error('No user is logged in.');
     }

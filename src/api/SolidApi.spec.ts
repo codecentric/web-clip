@@ -15,6 +15,7 @@ describe('SolidApi', () => {
 
         const solidApi = new SolidApi({
           webId: 'https://pod.example/#me',
+          isLoggedIn: true,
         } as SessionInfo);
 
         await solidApi.loadProfile();
@@ -38,6 +39,7 @@ describe('SolidApi', () => {
 
         const solidApi = new SolidApi({
           webId: 'https://pod.example/#me',
+          isLoggedIn: true,
         } as SessionInfo);
 
         await solidApi.loadProfile();
