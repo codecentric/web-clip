@@ -3,16 +3,13 @@ import * as PropTypes from 'prop-types';
 import { useSolidApi } from '../api/apiContext';
 import { usePage } from './usePage';
 
-interface ToolbarProps {
-  webId: string;
-}
-
-export const Toolbar = ({ webId }: ToolbarProps) => {
+export const Toolbar = () => {
   const solidApi = useSolidApi();
   const page = usePage();
+  const { name } = solidApi.getProfile();
   return (
     <>
-      {webId}
+      <p>{name}</p>
       <button onClick={() => solidApi.bookmark(page)}>Clip it!</button>
     </>
   );

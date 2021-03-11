@@ -17,7 +17,7 @@ import {
 
 export type SessionInfo = Session['info'];
 
-interface Profile {
+export interface Profile {
   name: string;
 }
 
@@ -31,7 +31,7 @@ export class SolidApi {
 
   constructor(sessionInfo: SessionInfo) {
     this.sessionInfo = sessionInfo;
-    this.me = sym(sessionInfo.webId);
+    this.me = sessionInfo.isLoggedIn ? sym(sessionInfo.webId) : null;
     this.store = graph();
     this.fetcher = new Fetcher(this.store, { fetch: authenticatedFetch });
     this.updater = new UpdateManager(this.store);

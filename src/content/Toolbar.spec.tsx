@@ -15,16 +15,19 @@ describe('Toolbar', () => {
     window.location = location;
   });
 
-  it("renders the user's web id", () => {
-    render(<Toolbar webId={'some_id'} />);
-    expect(screen.getByText('some_id')).toBeInTheDocument();
+  it("renders the user's name", () => {
+    const solidApi = mockSolidApi();
+    solidApi.getProfile.mockReturnValue({ name: 'Jane Doe' });
+    render(<Toolbar />);
+    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
   });
 
   it("saves a web page to the user's pod", () => {
     const solidApi = mockSolidApi();
+    solidApi.getProfile.mockReturnValue({ name: 'Jane Doe' });
     window.location.href = 'https://page.example/article';
     window.document.title = 'An interesting article';
-    render(<Toolbar webId={'some_id'} />);
+    render(<Toolbar />);
     const button = screen.getByText('Clip it!');
     fireEvent.click(button);
     expect(solidApi.bookmark).toHaveBeenCalledWith({
