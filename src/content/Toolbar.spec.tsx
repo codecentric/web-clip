@@ -1,10 +1,7 @@
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { SolidApi } from '../api/solidApi';
-import { useSolidApi } from '../api/apiContext';
+import { mockSolidApi } from '../test/solidApiMock';
 import { Toolbar } from './Toolbar';
-
-jest.mock('../api/apiContext');
 
 describe('Toolbar', () => {
   const { location } = window;
@@ -36,12 +33,4 @@ describe('Toolbar', () => {
       name: 'An interesting article',
     });
   });
-
-  function mockSolidApi() {
-    const solidApi = {
-      bookmark: jest.fn(),
-    };
-    (useSolidApi as jest.Mock<SolidApi>).mockReturnValue(solidApi);
-    return solidApi;
-  }
 });
