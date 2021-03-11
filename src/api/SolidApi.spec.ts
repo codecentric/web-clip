@@ -18,14 +18,14 @@ describe('SolidApi', () => {
           isLoggedIn: true,
         } as SessionInfo);
 
-        await solidApi.loadProfile();
+        const result = await solidApi.loadProfile();
 
         expect(authenticatedFetch).toHaveBeenCalledWith(
           'https://pod.example/',
           expect.anything()
         );
 
-        expect(solidApi.getProfile()).toEqual({
+        expect(result).toEqual({
           name: 'Anonymous',
         });
       });
@@ -42,14 +42,14 @@ describe('SolidApi', () => {
           isLoggedIn: true,
         } as SessionInfo);
 
-        await solidApi.loadProfile();
+        const result = await solidApi.loadProfile();
 
         expect(authenticatedFetch).toHaveBeenCalledWith(
           'https://pod.example/',
           expect.anything()
         );
 
-        expect(solidApi.getProfile()).toEqual({
+        expect(result).toEqual({
           name: 'Solid User',
         });
       });

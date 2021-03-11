@@ -49,10 +49,11 @@ export class SolidApi {
     if (!this.me) {
       throw new Error('No user is logged in.');
     }
-    return this.fetcher.load(this.me);
+    await this.fetcher.load(this.me);
+    return this.getProfile();
   }
 
-  getProfile(): Profile {
+  private getProfile(): Profile {
     const name: string =
       this.store.anyValue(this.me, this.ns.vcard('fn')) || 'Anonymous';
     return { name };
