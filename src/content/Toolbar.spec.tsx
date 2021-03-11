@@ -1,9 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { SolidApi } from '../api/solidApi';
+import { useSolidApi } from '../api/apiContext';
 import { Toolbar } from './Toolbar';
-import * as solidApi from '../api/solidApi';
 
-jest.mock('../api/solidApi');
+jest.mock('../api/apiContext');
 
 describe('Toolbar', () => {
   const { location } = window;
@@ -23,6 +24,7 @@ describe('Toolbar', () => {
   });
 
   it("saves a web page to the user's pod", () => {
+    const solidApi = mockSolidApi();
     window.location.href = 'https://page.example/article';
     window.document.title = 'An interesting article';
     render(<Toolbar webId={'some_id'} />);
@@ -34,4 +36,12 @@ describe('Toolbar', () => {
       name: 'An interesting article',
     });
   });
+
+  function mockSolidApi() {
+    const solidApi = {
+      bookmark: jest.fn(),
+    };
+    (useSolidApi as jest.Mock<SolidApi>).mockReturnValue(solidApi);
+    return solidApi;
+  }
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-import { bookmark } from '../api/solidApi';
+import { useSolidApi } from '../api/apiContext';
 import { usePage } from './usePage';
 
 interface ToolbarProps {
@@ -8,11 +8,12 @@ interface ToolbarProps {
 }
 
 export const Toolbar = ({ webId }: ToolbarProps) => {
+  const solidApi = useSolidApi();
   const page = usePage();
   return (
     <>
       {webId}
-      <button onClick={() => bookmark(page)}>Clip it!</button>
+      <button onClick={() => solidApi.bookmark(page)}>Clip it!</button>
     </>
   );
 };

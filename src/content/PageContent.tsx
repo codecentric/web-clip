@@ -3,7 +3,9 @@ import React from 'react';
 import * as rdf from 'rdflib';
 import solidNamespace from 'solid-namespace';
 import { login, Session } from '@inrupt/solid-client-authn-browser';
+import { SolidApi } from '../api/solidApi';
 import { Toolbar } from './Toolbar';
+import { SolidApiContext } from '../api/apiContext';
 
 const ns = solidNamespace(rdf);
 const { sym, st } = rdf;
@@ -24,9 +26,14 @@ interface PageContentProps {
 }
 
 export const PageContent = ({ sessionInfo }: PageContentProps) => {
-  return sessionInfo.isLoggedIn ? (
-    <Toolbar webId={sessionInfo.webId} />
-  ) : (
-    <button onClick={loginWithRedirect}>Login</button>
+  const solidApi = new SolidApi();
+  return (
+    <SolidApiContext.Provider value={solidApi}>
+      {sessionInfo.isLoggedIn ? (
+        <Toolbar webId={sessionInfo.webId} />
+      ) : (
+        <button onClick={loginWithRedirect}>Login</button>
+      )}
+    </SolidApiContext.Provider>
   );
 };
