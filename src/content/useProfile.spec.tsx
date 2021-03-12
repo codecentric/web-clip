@@ -14,8 +14,10 @@ describe('useProfile', () => {
 
     act(() => {
       expect(solidApi.loadProfile).toHaveBeenCalled();
-      expect(result.current.loading).toBe(true);
-      expect(result.current.profile).toBe(null);
+      expect(result.all[0]).toEqual({
+        loading: true,
+      });
+      expect(result.all).toHaveLength(1);
     });
   });
 
@@ -31,8 +33,14 @@ describe('useProfile', () => {
     await waitForNextUpdate();
 
     act(() => {
-      expect(result.current.loading).toBe(false);
-      expect(result.current.profile).toEqual({ name: 'Jane Doe' });
+      expect(result.all).toHaveLength(2);
+      expect(result.all[0]).toEqual({
+        loading: true,
+      });
+      expect(result.all[1]).toEqual({
+        loading: false,
+        profile: { name: 'Jane Doe' },
+      });
     });
   });
 });
