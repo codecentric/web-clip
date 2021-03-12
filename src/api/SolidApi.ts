@@ -62,10 +62,17 @@ export class SolidApi {
     return { name };
   }
 
-  bookmark(page: PageMetaData) {
+  async bookmark(page: PageMetaData) {
+    const storageUrl = this.store.anyValue(this.me, this.ns.space('storage'));
+
+    if (!storageUrl) {
+      throw new Error('No storage available.');
+    }
+
     const uri = sym(
       urlJoin(
-        'https://storage.example/webclip',
+        storageUrl,
+        'webclip',
         generateDatePathForToday(),
         generateUuid(),
         '#it'
@@ -74,6 +81,6 @@ export class SolidApi {
     const a = this.ns.rdf('type');
     const BookmarkAction = this.ns.schema('BookmarkAction');
 
-    return this.updater.update([], [st(uri, a, BookmarkAction, uri)]);
+    return this.updater.update([], [st(uri, a, BookmarkAction, uri.doc())]);
   }
 }

@@ -88,11 +88,11 @@ describe('SolidApi', () => {
       const store = graph();
       parse(
         `
-          <#me>
-            <https://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          <https://pod.example/#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
           `,
         store,
-        'https://pod.example'
+        'https://pod.example/'
       );
 
       const solidApi = new SolidApi(
@@ -112,7 +112,12 @@ describe('SolidApi', () => {
       expect(authenticatedFetch).toHaveBeenCalled();
 
       const parser = new SparqlParser();
+
       const sparqlUpdateCall = (authenticatedFetch as jest.Mock).mock.calls[1];
+
+      const uri = sparqlUpdateCall[0];
+      expect(uri).toBe('https://storage.example/webclip/2021/03/12/some-uuid');
+
       const body = sparqlUpdateCall[1].body;
       const actualQuery = parser.parse(body) as Update;
       const expectedQuery = parser.parse(`
@@ -120,6 +125,30 @@ describe('SolidApi', () => {
         <https://storage.example/webclip/2021/03/12/some-uuid#it> a <http://schema.org/BookmarkAction> .
       }`) as Update;
       expect(actualQuery).toEqual(expectedQuery);
+    });
+
+    it('throws an exception if no storage is available', async () => {
+      mockFetchWithResponse('');
+      (generateUuid as jest.Mock).mockReturnValue('some-uuid');
+      (generateDatePathForToday as jest.Mock).mockReturnValue('/2021/03/12');
+
+      const store = graph();
+
+      const solidApi = new SolidApi(
+        {
+          webId: 'https://pod.example/#me',
+          isLoggedIn: true,
+        } as SessionInfo,
+        store
+      );
+
+      await expect(
+        solidApi.bookmark({
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        })
+      ).rejects.toThrow('No storage available.');
     });
   });
 });
