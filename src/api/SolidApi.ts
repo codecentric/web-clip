@@ -60,12 +60,11 @@ export class SolidApi {
   }
 
   bookmark(page: PageMetaData) {
-    const bookmarkUri = sym(
+    const uri = sym(
       'https://storage.example/webclip/2021/03/12/ee4fc42e-9d84-46f5-a3c1-3f9ef0f6faea#it'
     );
-    return this.updater.update(
-      [],
-      [st(bookmarkUri, bookmarkUri, bookmarkUri, bookmarkUri)]
-    );
+    const a = this.ns.rdf('type');
+    const BookmarkAction = this.ns.schema('BookmarkAction');
+    return this.updater.update([], [st(uri, a, BookmarkAction, uri)]);
   }
 }

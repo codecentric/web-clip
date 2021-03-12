@@ -4,6 +4,7 @@ import {
 } from '@inrupt/solid-client-authn-browser';
 import { graph, parse } from 'rdflib';
 import { SessionInfo, SolidApi } from './SolidApi';
+import { Parser as SparqlParser, Update } from 'sparqljs';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 
@@ -106,6 +107,17 @@ describe('SolidApi', () => {
       });
 
       expect(authenticatedFetch).toHaveBeenCalled();
+
+      var parser = new SparqlParser();
+      const sparqlUpdateCall = (authenticatedFetch as jest.Mock).mock.calls[1];
+      const body = sparqlUpdateCall[1].body;
+      const actualQuery = parser.parse(body) as Update;
+      const expectedQuery = parser.parse(`
+      INSERT DATA {
+        <https://storage.example/webclip/2021/03/12/ee4fc42e-9d84-46f5-a3c1-3f9ef0f6faea#it> a <http://schema.org/BookmarkAction> .
+      }
+`) as Update;
+      expect(actualQuery).toEqual(expectedQuery);
     });
   });
 });
