@@ -1,10 +1,10 @@
-import { today } from './today';
+import { now } from './now';
 
 export const generateDatePathForToday = (): string => {
-  const now = today();
-  const year = now.getFullYear();
-  const month = stringifyWithLeadingZero(now.getMonth() + 1);
-  const date = stringifyWithLeadingZero(now.getDate());
+  const today = now();
+  const year = today.getFullYear();
+  const month = stringifyWithLeadingZero(today.getMonth() + 1);
+  const date = stringifyWithLeadingZero(today.getDate());
   return `/${year}/${month}/${date}`;
 };
 

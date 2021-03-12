@@ -4,10 +4,12 @@ import { SessionInfo, SolidApi } from './SolidApi';
 import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateUuid } from './generateUuid';
 import { generateDatePathForToday } from './generateDatePathForToday';
+import { now } from './now';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('./generateUuid');
 jest.mock('./generateDatePathForToday');
+jest.mock('./now');
 
 describe('SolidApi', () => {
   beforeEach(() => {
@@ -84,6 +86,9 @@ describe('SolidApi', () => {
       mockFetchWithResponse('');
       (generateUuid as jest.Mock).mockReturnValue('some-uuid');
       (generateDatePathForToday as jest.Mock).mockReturnValue('/2021/03/12');
+      (now as jest.Mock).mockReturnValue(
+        new Date(Date.UTC(2021, 2, 12, 9, 10, 11, 12))
+      );
 
       const store = graph();
       parse(
@@ -122,7 +127,10 @@ describe('SolidApi', () => {
       const actualQuery = parser.parse(body) as Update;
       const expectedQuery = parser.parse(`
       INSERT DATA {
-        <https://storage.example/webclip/2021/03/12/some-uuid#it> a <http://schema.org/BookmarkAction> .
+        <https://storage.example/webclip/2021/03/12/some-uuid#it>
+          a <http://schema.org/BookmarkAction> ;
+          <http://schema.org/startTime> "2021-03-12T09:10:11.012Z"^^<http://schema.org/DateTime> ;
+        .
       }`) as Update;
       expect(actualQuery).toEqual(expectedQuery);
     });

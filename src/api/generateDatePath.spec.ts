@@ -1,7 +1,7 @@
 import { generateDatePathForToday } from './generateDatePathForToday';
-import { today } from './today';
+import { now } from './now';
 
-jest.mock('./today');
+jest.mock('./now');
 
 describe('generateDatePathForToday', () => {
   it.each([
@@ -12,7 +12,7 @@ describe('generateDatePathForToday', () => {
   ])(
     'for a given date %s it returns a path %s with the format year/month/date',
     (date: string, path: string) => {
-      (today as jest.Mock).mockReturnValue(new Date(date));
+      (now as jest.Mock).mockReturnValue(new Date(date));
 
       const result = generateDatePathForToday();
 

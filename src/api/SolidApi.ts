@@ -7,6 +7,7 @@ import * as rdf from 'rdflib';
 import {
   Fetcher,
   IndexedFormula,
+  lit,
   NamedNode,
   st,
   sym,
@@ -17,6 +18,7 @@ import urlJoin from 'url-join';
 import { PageMetaData } from '../content/usePage';
 import { generateUuid } from './generateUuid';
 import { generateDatePathForToday } from './generateDatePathForToday';
+import { now } from './now';
 
 export type SessionInfo = Session['info'];
 
@@ -69,7 +71,7 @@ export class SolidApi {
       throw new Error('No storage available.');
     }
 
-    const uri = sym(
+    const it = sym(
       urlJoin(
         storageUrl,
         'webclip',
@@ -81,6 +83,16 @@ export class SolidApi {
     const a = this.ns.rdf('type');
     const BookmarkAction = this.ns.schema('BookmarkAction');
 
-    return this.updater.update([], [st(uri, a, BookmarkAction, uri.doc())]);
+    return this.updater.update(
+      [],
+      [
+        st(it, a, BookmarkAction, it.doc()),
+        st(it, this.ns.schema('startTime'), schemaDateTime(now()), it.doc()),
+      ]
+    );
   }
+}
+
+function schemaDateTime(date: Date) {
+  return lit(date.toISOString(), null, sym('http://schema.org/DateTime'));
 }
