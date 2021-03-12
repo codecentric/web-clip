@@ -93,6 +93,7 @@ export class SolidApi {
         st(it, this.ns.schema('startTime'), schemaDateTime(now()), document),
         st(it, this.ns.schema('object'), object, document),
         st(object, a, WebPage, document),
+        st(object, this.ns.schema('url'), sym(page.url), document),
       ]
     );
   }
