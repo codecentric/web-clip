@@ -134,7 +134,8 @@ describe('SolidApi', () => {
         .
         <https://storage.example/webclip/2021/03/12/some-uuid#object>
           a <http://schema.org/WebPage> ;
-          <http://schema.org/url> <https://myfavouriteurl.example>
+          <http://schema.org/url> <https://myfavouriteurl.example> ;
+          <http://schema.org/name> "I love this page" ;
         .
       }`) as Update;
       expect(actualQuery).toEqual(expectedQuery);
