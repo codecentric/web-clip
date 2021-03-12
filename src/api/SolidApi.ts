@@ -14,6 +14,8 @@ import {
 } from 'rdflib';
 import solidNamespace from 'solid-namespace';
 import { PageMetaData } from '../content/usePage';
+import { generateUuid } from './generateUuid';
+import { generateDatePathForToday } from './generateDatePathForToday';
 
 export type SessionInfo = Session['info'];
 
@@ -61,10 +63,11 @@ export class SolidApi {
 
   bookmark(page: PageMetaData) {
     const uri = sym(
-      'https://storage.example/webclip/2021/03/12/ee4fc42e-9d84-46f5-a3c1-3f9ef0f6faea#it'
+      `https://storage.example/webclip/${generateDatePathForToday()}/${generateUuid()}#it`
     );
     const a = this.ns.rdf('type');
     const BookmarkAction = this.ns.schema('BookmarkAction');
+
     return this.updater.update([], [st(uri, a, BookmarkAction, uri)]);
   }
 }
