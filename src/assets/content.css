@@ -1,4 +1,4 @@
-#webtrack .overlay {
+#webclip .overlay {
     border-radius: 0;
     width: auto;
     margin: 2rem;
@@ -13,14 +13,14 @@
     box-shadow: -5px 5px 5px 0 rgba(0,0,0,0.26);
 }
 
-#webtrack .overlay button {
+#webclip .overlay button {
     padding: 1rem;
     background-color: var(--primary-color);
     color: #000;
     font-weight: bold;
 }
 
-#webtrack .overlay button {
+#webclip .overlay button {
     box-shadow:inset 0 39px 0 -24px var(--primary-color);
     background-color: #00b5d4;
     border-radius:4px;
@@ -33,10 +33,50 @@
     text-decoration:none;
     text-shadow:0 1px 0 var(--primary-color);
 }
-#webtrack .overlay button:hover {
+#webclip .overlay button:hover {
     background-color:var(--primary-color);
 }
-#webtrack .overlay button:active {
+#webclip .overlay button:active {
     position:relative;
     top:1px;
+}
+
+#webclip .paperclip {
+    padding: 0;
+    background: transparent;
+    box-sizing: border-box;
+    display: block;
+    top: 30%;
+    left: -5%;
+    margin-top: -40px;
+    margin-left: -19px;
+    height: 80px;
+    width: 38px;
+    border: 3px groove #DDDDDD;
+    border-radius: 0 0 90px 90px;
+    border-top: none;
+    position: absolute;
+    transform: rotate(7deg);
+    -webkit-transform: rotate(7deg);
+    -webkit-backface-visibility: hidden;
+}
+#webclip .paperclip::before, #webclip .paperclip::after {
+    content:'';
+    position: absolute;
+    border: 3px groove #DDDDDD;
+}
+#webclip .paperclip::before {
+    left: 3px;
+    height: 50px;
+    width: 20px;
+    border-radius: 0 0 90px 90px;
+    border-top: none;
+}
+#webclip .paperclip::after {
+    top: -30px;
+    left: -3px;
+    height: 30px;
+    width: 26px;
+    border-radius: 90px 90px 0 0;
+    border-bottom: none;
 }
