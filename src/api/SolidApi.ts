@@ -13,6 +13,7 @@ import {
   UpdateManager,
 } from 'rdflib';
 import solidNamespace from 'solid-namespace';
+import urlJoin from 'url-join';
 import { PageMetaData } from '../content/usePage';
 import { generateUuid } from './generateUuid';
 import { generateDatePathForToday } from './generateDatePathForToday';
@@ -63,7 +64,12 @@ export class SolidApi {
 
   bookmark(page: PageMetaData) {
     const uri = sym(
-      `https://storage.example/webclip/${generateDatePathForToday()}/${generateUuid()}#it`
+      urlJoin(
+        'https://storage.example/webclip',
+        generateDatePathForToday(),
+        generateUuid(),
+        '#it'
+      )
     );
     const a = this.ns.rdf('type');
     const BookmarkAction = this.ns.schema('BookmarkAction');

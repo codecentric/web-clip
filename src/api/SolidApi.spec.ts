@@ -83,7 +83,7 @@ describe('SolidApi', () => {
     it("stores a bookmark in the user's pod when storage is available", async () => {
       mockFetchWithResponse('');
       (generateUuid as jest.Mock).mockReturnValue('some-uuid');
-      (generateDatePathForToday as jest.Mock).mockReturnValue('2021-03-12');
+      (generateDatePathForToday as jest.Mock).mockReturnValue('/2021/03/12');
 
       const store = graph();
       parse(
@@ -117,7 +117,7 @@ describe('SolidApi', () => {
       const actualQuery = parser.parse(body) as Update;
       const expectedQuery = parser.parse(`
       INSERT DATA {
-        <https://storage.example/webclip/2021-03-12/some-uuid#it> a <http://schema.org/BookmarkAction> .
+        <https://storage.example/webclip/2021/03/12/some-uuid#it> a <http://schema.org/BookmarkAction> .
       }`) as Update;
       expect(actualQuery).toEqual(expectedQuery);
     });
