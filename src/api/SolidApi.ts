@@ -1,19 +1,12 @@
 import {
-  Fetcher,
-  IndexedFormula,
-  UpdateManager,
-  graph,
-  NamedNode,
-  sym,
-} from 'rdflib';
-import * as rdf from 'rdflib';
-import solidNamespace from 'solid-namespace';
-import { PageMetaData } from '../content/usePage';
-import {
   fetch as authenticatedFetch,
   login,
   Session,
 } from '@inrupt/solid-client-authn-browser';
+import * as rdf from 'rdflib';
+import { Fetcher, IndexedFormula, NamedNode, sym, UpdateManager } from 'rdflib';
+import solidNamespace from 'solid-namespace';
+import { PageMetaData } from '../content/usePage';
 
 export type SessionInfo = Session['info'];
 
@@ -29,10 +22,10 @@ export class SolidApi {
   private readonly updater: UpdateManager;
   private readonly ns: Record<string, (alias: string) => NamedNode>;
 
-  constructor(sessionInfo: SessionInfo) {
+  constructor(sessionInfo: SessionInfo, store: IndexedFormula) {
     this.sessionInfo = sessionInfo;
     this.me = sessionInfo.isLoggedIn ? sym(sessionInfo.webId) : null;
-    this.store = graph();
+    this.store = store;
     this.fetcher = new Fetcher(this.store, { fetch: authenticatedFetch });
     this.updater = new UpdateManager(this.store);
     this.ns = solidNamespace(rdf);

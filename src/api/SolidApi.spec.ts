@@ -1,7 +1,8 @@
 import {
-  login,
   fetch as authenticatedFetch,
+  login,
 } from '@inrupt/solid-client-authn-browser';
+import { graph } from 'rdflib';
 import { SessionInfo, SolidApi } from './SolidApi';
 
 jest.mock('@inrupt/solid-client-authn-browser');
@@ -13,10 +14,13 @@ describe('SolidApi', () => {
         (login as jest.Mock).mockResolvedValue(true);
         mockFetch('');
 
-        const solidApi = new SolidApi({
-          webId: 'https://pod.example/#me',
-          isLoggedIn: true,
-        } as SessionInfo);
+        const solidApi = new SolidApi(
+          {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          } as SessionInfo,
+          graph()
+        );
 
         const result = await solidApi.loadProfile();
 
@@ -37,10 +41,13 @@ describe('SolidApi', () => {
             <http://www.w3.org/2006/vcard/ns#fn> "Solid User" .
           `);
 
-        const solidApi = new SolidApi({
-          webId: 'https://pod.example/#me',
-          isLoggedIn: true,
-        } as SessionInfo);
+        const solidApi = new SolidApi(
+          {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          } as SessionInfo,
+          graph()
+        );
 
         const result = await solidApi.loadProfile();
 
@@ -55,9 +62,12 @@ describe('SolidApi', () => {
       });
     });
     it('profile cannot be loaded, when noone is logged in', async () => {
-      const solidApi = new SolidApi({
-        isLoggedIn: false,
-      } as SessionInfo);
+      const solidApi = new SolidApi(
+        {
+          isLoggedIn: false,
+        } as SessionInfo,
+        graph()
+      );
 
       await expect(solidApi.loadProfile()).rejects.toThrow(
         'No user is logged in.'
