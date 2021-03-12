@@ -130,7 +130,9 @@ describe('SolidApi', () => {
         <https://storage.example/webclip/2021/03/12/some-uuid#it>
           a <http://schema.org/BookmarkAction> ;
           <http://schema.org/startTime> "2021-03-12T09:10:11.012Z"^^<http://schema.org/DateTime> ;
+          <http://schema.org/object> <https://storage.example/webclip/2021/03/12/some-uuid#object>
         .
+        <https://storage.example/webclip/2021/03/12/some-uuid#object> a <http://schema.org/WebPage> .
       }`) as Update;
       expect(actualQuery).toEqual(expectedQuery);
     });

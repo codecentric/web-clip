@@ -16,8 +16,8 @@ import {
 import solidNamespace from 'solid-namespace';
 import urlJoin from 'url-join';
 import { PageMetaData } from '../content/usePage';
-import { generateUuid } from './generateUuid';
 import { generateDatePathForToday } from './generateDatePathForToday';
+import { generateUuid } from './generateUuid';
 import { now } from './now';
 
 export type SessionInfo = Session['info'];
@@ -82,12 +82,17 @@ export class SolidApi {
     );
     const a = this.ns.rdf('type');
     const BookmarkAction = this.ns.schema('BookmarkAction');
+    const document = it.doc();
+    const object = sym(document.uri + '#object');
+    const WebPage = this.ns.schema('WebPage');
 
     return this.updater.update(
       [],
       [
-        st(it, a, BookmarkAction, it.doc()),
-        st(it, this.ns.schema('startTime'), schemaDateTime(now()), it.doc()),
+        st(it, a, BookmarkAction, document),
+        st(it, this.ns.schema('startTime'), schemaDateTime(now()), document),
+        st(it, this.ns.schema('object'), object, document),
+        st(object, a, WebPage, document),
       ]
     );
   }
