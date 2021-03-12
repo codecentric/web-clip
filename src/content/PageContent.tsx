@@ -12,8 +12,11 @@ interface PageContentProps {
 export const PageContent = ({ sessionInfo }: PageContentProps) => {
   const solidApi = new SolidApi(sessionInfo, graph());
   return (
-    <SolidApiContext.Provider value={solidApi}>
-      {sessionInfo.isLoggedIn ? <Toolbar /> : <LoginButton />}
-    </SolidApiContext.Provider>
+    <div className="overlay">
+      <h1>📎 WebClip</h1>
+      <SolidApiContext.Provider value={solidApi}>
+        {sessionInfo.isLoggedIn ? <Toolbar /> : <LoginButton />}
+      </SolidApiContext.Provider>
+    </div>
   );
 };

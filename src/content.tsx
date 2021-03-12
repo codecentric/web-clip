@@ -11,6 +11,7 @@ import { PageContent } from './content/PageContent';
 import { MessageType } from './messages';
 
 const root = document.createElement('div');
+root.id = 'webtrack';
 document.body.appendChild(root);
 
 async function handleRedirectAfterLogin() {
