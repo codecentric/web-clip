@@ -2,17 +2,17 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { useSolidApi } from '../api/apiContext';
 import { usePage } from './usePage';
+import { useProfile } from './useProfile';
 
-interface ToolbarProps {
-  webId: string;
-}
-
-export const Toolbar = ({ webId }: ToolbarProps) => {
+export const Toolbar = () => {
   const solidApi = useSolidApi();
   const page = usePage();
-  return (
+  const { loading, profile } = useProfile();
+  return loading ? (
+    <p>Loading...</p>
+  ) : (
     <>
-      {webId}
+      <p>{profile.name}</p>
       <button onClick={() => solidApi.bookmark(page)}>Clip it!</button>
     </>
   );

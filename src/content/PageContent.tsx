@@ -1,23 +1,19 @@
-import { Session } from '@inrupt/solid-client-authn-browser';
+import { graph } from 'rdflib';
 import React from 'react';
 import { SolidApiContext } from '../api/apiContext';
-import { SolidApi } from '../api/solidApi';
+import { SessionInfo, SolidApi } from '../api/SolidApi';
 import { LoginButton } from './LoginButton';
 import { Toolbar } from './Toolbar';
 
 interface PageContentProps {
-  sessionInfo: Session['info'];
+  sessionInfo: SessionInfo;
 }
 
 export const PageContent = ({ sessionInfo }: PageContentProps) => {
-  const solidApi = new SolidApi();
+  const solidApi = new SolidApi(sessionInfo, graph());
   return (
     <SolidApiContext.Provider value={solidApi}>
-      {sessionInfo.isLoggedIn ? (
-        <Toolbar webId={sessionInfo.webId} />
-      ) : (
-        <LoginButton />
-      )}
+      {sessionInfo.isLoggedIn ? <Toolbar /> : <LoginButton />}
     </SolidApiContext.Provider>
   );
 };

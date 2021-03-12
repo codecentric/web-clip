@@ -1,13 +1,24 @@
 import { useSolidApi } from '../api/apiContext';
-import { SolidApi } from '../api/solidApi';
+import { Profile, SolidApi } from '../api/SolidApi';
 
 jest.mock('../api/apiContext');
 
-export function mockSolidApi() {
-  const solidApi = ({
+interface SolidApiMock {
+  login: jest.Mock;
+  bookmark: jest.Mock;
+  loadProfile: jest.Mock;
+  getProfile: jest.Mock<Profile>;
+}
+
+export function mockSolidApi(): SolidApiMock {
+  const solidApi: SolidApiMock = {
     login: jest.fn(),
     bookmark: jest.fn(),
-  } as unknown) as SolidApi;
-  (useSolidApi as jest.Mock<SolidApi>).mockReturnValue(solidApi);
+    loadProfile: jest.fn(),
+    getProfile: jest.fn(),
+  };
+  (useSolidApi as jest.Mock<SolidApi>).mockReturnValue(
+    (solidApi as unknown) as SolidApi
+  );
   return solidApi;
 }
