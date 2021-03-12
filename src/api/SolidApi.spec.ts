@@ -2,17 +2,20 @@ import {
   fetch as authenticatedFetch,
   login,
 } from '@inrupt/solid-client-authn-browser';
-import { graph } from 'rdflib';
+import { graph, parse } from 'rdflib';
 import { SessionInfo, SolidApi } from './SolidApi';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 
 describe('SolidApi', () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+
   describe('loadProfile', () => {
     describe('profile can be read after being loaded', () => {
       it('name is Anonymous, when profile contains no name', async () => {
-        (login as jest.Mock).mockResolvedValue(true);
-        mockFetch('');
+        mockFetchWithResponse('');
 
         const solidApi = new SolidApi(
           {
@@ -35,8 +38,7 @@ describe('SolidApi', () => {
       });
 
       it('name is read from vcard:fn', async () => {
-        (login as jest.Mock).mockResolvedValue(true);
-        mockFetch(`
+        mockFetchWithResponse(`
           <https://pod.example/#me>
             <http://www.w3.org/2006/vcard/ns#fn> "Solid User" .
           `);
@@ -74,13 +76,47 @@ describe('SolidApi', () => {
       );
     });
   });
+
+  describe('bookmark', () => {
+    it("stores a bookmark in the user's pod when storage is available", async () => {
+      mockFetchWithResponse('');
+
+      const store = graph();
+      parse(
+        `
+          <#me>
+            <https://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `,
+        store,
+        'https://pod.example'
+      );
+
+      const solidApi = new SolidApi(
+        {
+          webId: 'https://pod.example/#me',
+          isLoggedIn: true,
+        } as SessionInfo,
+        store
+      );
+
+      await solidApi.bookmark({
+        type: 'WebPage',
+        url: 'https://myfavouriteurl.example',
+        name: 'I love this page',
+      });
+
+      expect(authenticatedFetch).toHaveBeenCalled();
+    });
+  });
 });
 
-function mockFetch(bodyText: string) {
+function mockFetchWithResponse(bodyText: string) {
   (authenticatedFetch as jest.Mock).mockResolvedValue({
     ok: true,
     headers: new Headers({
       'Content-Type': 'text/turtle',
+      'wac-allow': 'user="read write append control",public=""',
+      'ms-author-via': 'SPARQL',
     }),
     status: 200,
     statusText: 'OK',
