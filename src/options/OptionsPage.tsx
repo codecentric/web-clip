@@ -2,7 +2,7 @@ import React from 'react';
 import { useOptions } from './useOptions';
 
 export const OptionsPage = () => {
-  const { loading, providerUrl, setProviderUrl, save } = useOptions();
+  const { loading, providerUrl, setProviderUrl, save, saved } = useOptions();
 
   if (loading) {
     return <p>Loading...</p>;
@@ -30,15 +30,8 @@ export const OptionsPage = () => {
           required
         />
       </label>
-      <button
-        onClick={() =>
-          save({
-            providerUrl,
-          })
-        }
-      >
-        Save
-      </button>
+      <button onClick={save}>Save</button>
+      {saved && <p>URL was saved</p>}
     </section>
   );
 };

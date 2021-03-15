@@ -5,23 +5,27 @@ import { useOptionsStorage } from './useOptionsStorage';
 jest.mock('./useOptionsStorage');
 
 describe('useOptions', () => {
-  describe('on mount', () => {
-    let renderResult: RenderResult<any>;
-    beforeEach(async () => {
-      const loadOptions = jest.fn();
-      (useOptionsStorage as jest.Mock).mockReturnValue({
-        save: jest.fn(),
-        load: loadOptions,
-      });
-      loadOptions.mockResolvedValue({
-        providerUrl: 'https://pod.provider.example',
-      });
-      const render = renderHook(() => useOptions());
-      renderResult = render.result;
+  let renderResult: RenderResult<any>;
+  let loadOptions: jest.Mock;
+  let saveOptions: jest.Mock;
 
-      await render.waitForNextUpdate();
+  beforeEach(async () => {
+    loadOptions = jest.fn();
+    saveOptions = jest.fn();
+    (useOptionsStorage as jest.Mock).mockReturnValue({
+      save: saveOptions,
+      load: loadOptions,
     });
+    loadOptions.mockResolvedValue({
+      providerUrl: 'https://pod.provider.example',
+    });
+    const render = renderHook(() => useOptions());
+    renderResult = render.result;
 
+    await render.waitForNextUpdate();
+  });
+
+  describe('on mount', () => {
     it('indicates loading', async () => {
       expect(renderResult.all[0]).toMatchObject({
         loading: true,
@@ -38,11 +42,6 @@ describe('useOptions', () => {
 
   describe('change provider url', () => {
     it('updates the value', async () => {
-      const loadOptions = jest.fn();
-      (useOptionsStorage as jest.Mock).mockReturnValue({
-        save: jest.fn(),
-        load: loadOptions,
-      });
       loadOptions.mockResolvedValue({
         providerUrl: 'https://pod.provider.example',
       });
@@ -55,6 +54,28 @@ describe('useOptions', () => {
       });
 
       expect(result.current.providerUrl).toBe('https://new.provider.example');
+    });
+  });
+
+  describe('saving the provider url', () => {
+    it('saves the url and returns a confirmation', async () => {
+      saveOptions.mockResolvedValue(null);
+      const { result, waitForNextUpdate } = renderHook(() => useOptions());
+
+      act(() => {
+        result.current.setProviderUrl('https://new.provider.example');
+      });
+
+      act(() => {
+        result.current.save();
+      });
+
+      await waitForNextUpdate();
+
+      expect(saveOptions).toHaveBeenCalledWith({
+        providerUrl: 'https://new.provider.example',
+      });
+      expect(result.current.saved).toBe(true);
     });
   });
 });

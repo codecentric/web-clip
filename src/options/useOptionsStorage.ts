@@ -1,4 +1,4 @@
-interface Options {
+export interface Options {
   providerUrl: string;
 }
 
@@ -8,9 +8,12 @@ const defaultsOptions: Options = {
 
 export const useOptionsStorage = () => {
   return {
-    save: (options: Options) => {
-      chrome.storage.sync.set(options, function () {
-        console.log('saved options', options);
+    save: (options: Options): Promise<Options> => {
+      return new Promise((resolve) => {
+        chrome.storage.sync.set(options, function () {
+          console.log('saved options', options);
+          resolve(options);
+        });
       });
     },
     load: (): Promise<Options> => {

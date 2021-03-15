@@ -10,7 +10,7 @@ describe('OptionsPage', () => {
   describe('while loading', () => {
     beforeEach(() => {
       (useOptionsStorage as jest.Mock).mockReturnValue({
-        save: jest.fn(),
+        save: jest.fn().mockResolvedValue(undefined),
         load: jest.fn().mockReturnValue(new Promise(() => {})),
       });
       render(<OptionsPage />);
@@ -23,7 +23,7 @@ describe('OptionsPage', () => {
   describe('after loading', () => {
     let saveOptions: jest.Mock;
     beforeEach(async () => {
-      saveOptions = jest.fn();
+      saveOptions = jest.fn().mockResolvedValue(undefined);
       (useOptionsStorage as jest.Mock).mockReturnValue({
         save: saveOptions,
         load: jest.fn().mockResolvedValue({
@@ -59,7 +59,7 @@ describe('OptionsPage', () => {
       expect(button).toBeInTheDocument();
     });
 
-    it('should save the pod provider url', async () => {
+    it('should save the pod provider url and provide a confirmation message', async () => {
       render(<OptionsPage />);
       const input = await screen.findByLabelText('Pod Provider URL');
       fireEvent.change(input, {
@@ -69,9 +69,11 @@ describe('OptionsPage', () => {
       });
       const button = await screen.findByText('Save');
       fireEvent.click(button);
+
       expect(saveOptions).toHaveBeenCalledWith({
         providerUrl: 'https://pod.provider.example',
       });
+      expect(await screen.findByText('URL was saved')).toBeInTheDocument();
     });
   });
 });
