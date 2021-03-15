@@ -10,6 +10,17 @@ export const OptionsPage = () => {
 
   return (
     <section>
+      <h1>webclip options</h1>
+      <p>
+        Please configure the URL for your Solid pod provider, to enable webclip
+        to save clips in your pod.
+      </p>
+      <p>
+        For more information on how to create your own pod, please visit{' '}
+        <a href="https://solidproject.org/users/get-a-pod">the Solid Project</a>{' '}
+        or just create a pod on{' '}
+        <a href="https://solidcommunity.net/register">solidcommunity.net</a>
+      </p>
       <label>
         <p>Pod Provider URL</p>
         <input
