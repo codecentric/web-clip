@@ -42,7 +42,7 @@ describe('useBookmark', () => {
     expect(solidApi.bookmark).toHaveBeenCalledWith(page);
   });
 
-  it('stops loading indicator after successful bookmarking', async () => {
+  it('returns no error and stops loading indicator after successful bookmarking', async () => {
     mockSolidApi();
     const { result } = renderHook(() => useBookmark());
     await act(async () => {
@@ -54,6 +54,26 @@ describe('useBookmark', () => {
     });
     expect(result.all[2]).toMatchObject({
       loading: false,
+      error: null,
+    });
+    expect(result.all).toHaveLength(3);
+  });
+
+  it('returns error and stops loading indicator after unsuccessful bookmarking', async () => {
+    const solidApi = mockSolidApi();
+    solidApi.bookmark.mockRejectedValue(new Error('Pod not available'));
+
+    const { result } = renderHook(() => useBookmark());
+    await act(async () => {
+      await result.current.addBookmark({
+        name: 'any',
+        url: 'any',
+        type: 'WebPage',
+      });
+    });
+    expect(result.all[2]).toMatchObject({
+      loading: false,
+      error: new Error('Pod not available'),
     });
     expect(result.all).toHaveLength(3);
   });
