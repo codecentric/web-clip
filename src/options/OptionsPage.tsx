@@ -2,7 +2,11 @@ import React from 'react';
 import { useOptions } from './useOptions';
 
 export const OptionsPage = () => {
-  const { providerUrl, setProviderUrl, save } = useOptions();
+  const { loading, providerUrl, setProviderUrl, save } = useOptions();
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <section>
