@@ -16,6 +16,7 @@ import {
 import solidNamespace from 'solid-namespace';
 import urlJoin from 'url-join';
 import { PageMetaData } from '../content/usePage';
+import { subscribeOption } from '../options/optionsStorageApi';
 import { generateDatePathForToday } from './generateDatePathForToday';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
@@ -33,8 +34,12 @@ export class SolidApi {
   private readonly fetcher: Fetcher;
   private readonly updater: UpdateManager;
   private readonly ns: Record<string, (alias: string) => NamedNode>;
+  private providerUrl: string;
 
   constructor(sessionInfo: SessionInfo, store: IndexedFormula) {
+    subscribeOption('providerUrl', (value) => {
+      this.providerUrl = value;
+    });
     this.sessionInfo = sessionInfo;
     this.me = sessionInfo.isLoggedIn ? sym(sessionInfo.webId) : null;
     this.store = store;
@@ -43,9 +48,12 @@ export class SolidApi {
     this.ns = solidNamespace(rdf);
   }
 
-  login() {
+  async login() {
+    if (!this.providerUrl) {
+      throw new Error('No pod provider URL configured');
+    }
     return login({
-      oidcIssuer: 'https://solidcommunity.net', // TODO: read from plugin configuration?
+      oidcIssuer: this.providerUrl,
       redirectUrl: window.location.href,
     });
   }

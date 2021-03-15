@@ -1,5 +1,9 @@
-import { fetch as authenticatedFetch } from '@inrupt/solid-client-authn-browser';
+import {
+  fetch as authenticatedFetch,
+  login,
+} from '@inrupt/solid-client-authn-browser';
 import { graph, parse } from 'rdflib';
+import { subscribeOption } from '../options/optionsStorageApi';
 import { SessionInfo, SolidApi } from './SolidApi';
 import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateUuid } from './generateUuid';
@@ -10,10 +14,43 @@ jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('./generateUuid');
 jest.mock('./generateDatePathForToday');
 jest.mock('./now');
+jest.mock('../options/optionsStorageApi');
 
 describe('SolidApi', () => {
   beforeEach(() => {
     jest.resetAllMocks();
+  });
+
+  describe('login', () => {
+    it('logs in against the configured provider url', async () => {
+      (subscribeOption as jest.Mock).mockImplementation((key, callback) => {
+        expect(key).toBe('providerUrl');
+        callback('https://pod.provider.example');
+      });
+      const solidApi = new SolidApi(
+        {
+          isLoggedIn: false,
+        } as SessionInfo,
+        graph()
+      );
+      await solidApi.login();
+      expect(login).toHaveBeenCalledWith({
+        oidcIssuer: 'https://pod.provider.example',
+        redirectUrl: 'http://localhost/',
+      });
+    });
+
+    it('login fails if provider url is not present yet', async () => {
+      const solidApi = new SolidApi(
+        {
+          isLoggedIn: false,
+        } as SessionInfo,
+        graph()
+      );
+      await expect(() => solidApi.login()).rejects.toEqual(
+        new Error('No pod provider URL configured')
+      );
+    });
   });
 
   describe('loadProfile', () => {

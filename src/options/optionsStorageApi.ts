@@ -1,3 +1,5 @@
+import { onOptionChange } from './onOptionChange';
+
 export interface Options {
   providerUrl: string;
 }
@@ -22,4 +24,12 @@ export const load = (): Promise<Options> => {
       resolve(options as Options);
     });
   });
+};
+
+export const subscribeOption = (
+  key: keyof Options,
+  callback: (value: string) => void
+) => {
+  load().then((options) => callback(options[key]));
+  chrome.storage.onChanged.addListener(onOptionChange(key, callback));
 };
