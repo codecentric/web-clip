@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { Options, useOptionsStorage } from './useOptionsStorage';
+import {
+  Options,
+  save as saveOptions,
+  load as loadOptions,
+} from './optionsStorageApi';
 
 interface AsyncLoadingState<T> {
   loading: boolean;
@@ -8,7 +12,6 @@ interface AsyncLoadingState<T> {
 }
 
 export const useOptions = () => {
-  const { save: saveOptions, load } = useOptionsStorage();
   const [{ loading, value }, setState] = useState<AsyncLoadingState<Options>>({
     loading: true,
     value: null,
@@ -16,7 +19,7 @@ export const useOptions = () => {
   const [saved, setSaved] = useState<boolean>(false);
 
   useEffect(() => {
-    load().then((options) => {
+    loadOptions().then((options) => {
       setState({
         loading: false,
         value: options,

@@ -1,22 +1,15 @@
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 import { useOptions } from './useOptions';
-import { useOptionsStorage } from './useOptionsStorage';
+import { save as saveOptions, load as loadOptions } from './optionsStorageApi';
 
-jest.mock('./useOptionsStorage');
+jest.mock('./optionsStorageApi');
 
 describe('useOptions', () => {
   let renderResult: RenderResult<any>;
-  let loadOptions: jest.Mock;
-  let saveOptions: jest.Mock;
 
   beforeEach(async () => {
-    loadOptions = jest.fn();
-    saveOptions = jest.fn();
-    (useOptionsStorage as jest.Mock).mockReturnValue({
-      save: saveOptions,
-      load: loadOptions,
-    });
-    loadOptions.mockResolvedValue({
+    (saveOptions as jest.Mock).mockResolvedValue(undefined);
+    (loadOptions as jest.Mock).mockResolvedValue({
       providerUrl: 'https://pod.provider.example',
     });
     const render = renderHook(() => useOptions());
@@ -42,7 +35,7 @@ describe('useOptions', () => {
 
   describe('change provider url', () => {
     it('updates the value', async () => {
-      loadOptions.mockResolvedValue({
+      (loadOptions as jest.Mock).mockResolvedValue({
         providerUrl: 'https://pod.provider.example',
       });
       const { result, waitForNextUpdate } = renderHook(() => useOptions());
@@ -59,7 +52,7 @@ describe('useOptions', () => {
 
   describe('saving the provider url', () => {
     it('saves the url and returns a confirmation', async () => {
-      saveOptions.mockResolvedValue(null);
+      (saveOptions as jest.Mock).mockResolvedValue(null);
       const { result, waitForNextUpdate } = renderHook(() => useOptions());
 
       act(() => {

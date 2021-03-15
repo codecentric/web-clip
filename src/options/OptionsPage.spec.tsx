@@ -1,18 +1,17 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { OptionsPage } from './OptionsPage';
-import { useOptionsStorage } from './useOptionsStorage';
+import { save as saveOptions, load as loadOptions } from './optionsStorageApi';
 
-jest.mock('./useOptionsStorage');
+jest.mock('./optionsStorageApi');
 
 describe('OptionsPage', () => {
   describe('while loading', () => {
     beforeEach(() => {
-      (useOptionsStorage as jest.Mock).mockReturnValue({
-        save: jest.fn().mockResolvedValue(undefined),
-        load: jest.fn().mockReturnValue(new Promise(() => {})),
-      });
+      (saveOptions as jest.Mock).mockResolvedValue(undefined);
+      (loadOptions as jest.Mock).mockReturnValue(new Promise(() => {}));
+
       render(<OptionsPage />);
     });
     it('shows a loading indicator', () => {
@@ -21,14 +20,10 @@ describe('OptionsPage', () => {
   });
 
   describe('after loading', () => {
-    let saveOptions: jest.Mock;
     beforeEach(async () => {
-      saveOptions = jest.fn().mockResolvedValue(undefined);
-      (useOptionsStorage as jest.Mock).mockReturnValue({
-        save: saveOptions,
-        load: jest.fn().mockResolvedValue({
-          providerUrl: 'https://solidcommunity.net',
-        }),
+      (saveOptions as jest.Mock).mockResolvedValue(undefined);
+      (loadOptions as jest.Mock).mockResolvedValue({
+        providerUrl: 'https://solidcommunity.net',
       });
     });
 
