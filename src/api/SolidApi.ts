@@ -45,7 +45,7 @@ export class SolidApi {
 
   login() {
     return login({
-      oidcIssuer: 'https://angelo.veltens.org', // TODO: read from plugin configuration?
+      oidcIssuer: 'https://solidcommunity.net', // TODO: read from plugin configuration?
       redirectUrl: window.location.href,
     });
   }

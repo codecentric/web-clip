@@ -5,15 +5,22 @@ import { usePage } from './usePage';
 import { useProfile } from './useProfile';
 
 export const Toolbar = () => {
-  const { addBookmark } = useBookmark();
+  const {
+    addBookmark,
+    loading: addBookmarkLoading,
+    error: addBookmarkError,
+  } = useBookmark();
   const page = usePage();
-  const { loading, profile } = useProfile();
-  return loading ? (
+  const { loading: profileLoading, profile } = useProfile();
+  return profileLoading ? (
     <p>Loading...</p>
   ) : (
     <>
       <p>{profile.name}</p>
-      <button onClick={() => addBookmark(page)}>Clip it!</button>
+      <button disabled={addBookmarkLoading} onClick={() => addBookmark(page)}>
+        {addBookmarkLoading ? 'Saving...' : 'Clip it!'}
+      </button>
+      {addBookmarkError && <p>{addBookmarkError.message}</p>}
     </>
   );
 };

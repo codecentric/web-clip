@@ -14,6 +14,14 @@ describe('Toolbar', () => {
   beforeEach(() => {
     delete window.location;
     window.location = { ...location };
+    window.location.href = '';
+    window.document.title = '';
+
+    (useProfile as jest.Mock).mockReturnValue({
+      loading: false,
+      profile: { name: 'Jane Doe' },
+    });
+
     addBookmark = jest.fn();
     (useBookmark as jest.Mock).mockReturnValue({
       loading: false,
@@ -35,20 +43,12 @@ describe('Toolbar', () => {
   });
 
   it("renders the user's name", () => {
-    (useProfile as jest.Mock).mockReturnValue({
-      loading: false,
-      profile: { name: 'Jane Doe' },
-    });
     render(<Toolbar />);
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
   });
 
   describe('bookmarking', () => {
     it("saves a web page to the user's pod", () => {
-      (useProfile as jest.Mock).mockReturnValue({
-        loading: false,
-        profile: { name: 'Jane Doe' },
-      });
       window.location.href = 'https://page.example/article';
       window.document.title = 'An interesting article';
       render(<Toolbar />);
@@ -61,6 +61,32 @@ describe('Toolbar', () => {
       });
     });
 
-    it('shows a success message after successful bookmarking', () => {});
+    it('disables the clip it button and shows a saving message while the bookmark is being saved', () => {
+      (useBookmark as jest.Mock).mockReturnValue({
+        loading: true,
+        error: null,
+        addBookmark,
+      });
+
+      render(<Toolbar />);
+
+      expect(screen.queryByText('Clip it!')).not.toBeInTheDocument();
+      const button = screen.getByText('Saving...');
+      expect(button).toBeDisabled();
+    });
+
+    it('shows an error if the bookmark cannot be saved', () => {
+      (useBookmark as jest.Mock).mockReturnValue({
+        loading: false,
+        error: new Error('Pod not available'),
+        addBookmark,
+      });
+
+      render(<Toolbar />);
+
+      expect(screen.getByText('Pod not available')).toBeInTheDocument();
+      const button = screen.getByText('Clip it!');
+      expect(button).not.toBeDisabled();
+    });
   });
 });
