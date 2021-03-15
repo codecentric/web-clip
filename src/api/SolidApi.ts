@@ -4,9 +4,21 @@ import {
   Session,
 } from '@inrupt/solid-client-authn-browser';
 import * as rdf from 'rdflib';
-import { Fetcher, IndexedFormula, NamedNode, sym, UpdateManager } from 'rdflib';
+import {
+  Fetcher,
+  IndexedFormula,
+  lit,
+  NamedNode,
+  st,
+  sym,
+  UpdateManager,
+} from 'rdflib';
 import solidNamespace from 'solid-namespace';
+import urlJoin from 'url-join';
 import { PageMetaData } from '../content/usePage';
+import { generateDatePathForToday } from './generateDatePathForToday';
+import { generateUuid } from './generateUuid';
+import { now } from './now';
 
 export type SessionInfo = Session['info'];
 
@@ -33,7 +45,7 @@ export class SolidApi {
 
   login() {
     return login({
-      oidcIssuer: 'https://solidcommunity.net', // TODO: read from plugin configuration?
+      oidcIssuer: 'https://angelo.veltens.org', // TODO: read from plugin configuration?
       redirectUrl: window.location.href,
     });
   }
@@ -52,7 +64,42 @@ export class SolidApi {
     return { name };
   }
 
-  bookmark(page: PageMetaData): void {
-    console.log('bookmark', page);
+  async bookmark(page: PageMetaData) {
+    const storageUrl = this.store.anyValue(this.me, this.ns.space('storage'));
+
+    if (!storageUrl) {
+      throw new Error('No storage available.');
+    }
+
+    const it = sym(
+      urlJoin(
+        storageUrl,
+        'webclip',
+        generateDatePathForToday(),
+        generateUuid(),
+        '#it'
+      )
+    );
+    const a = this.ns.rdf('type');
+    const BookmarkAction = this.ns.schema('BookmarkAction');
+    const document = it.doc();
+    const object = sym(document.uri + '#object');
+    const WebPage = this.ns.schema('WebPage');
+
+    return this.updater.update(
+      [],
+      [
+        st(it, a, BookmarkAction, document),
+        st(it, this.ns.schema('startTime'), schemaDateTime(now()), document),
+        st(it, this.ns.schema('object'), object, document),
+        st(object, a, WebPage, document),
+        st(object, this.ns.schema('url'), sym(page.url), document),
+        st(object, this.ns.schema('name'), lit(page.name), document),
+      ]
+    );
   }
+}
+
+function schemaDateTime(date: Date) {
+  return lit(date.toISOString(), null, sym('http://schema.org/DateTime'));
 }
