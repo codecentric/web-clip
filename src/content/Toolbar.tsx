@@ -1,11 +1,11 @@
-import React from 'react';
 import * as PropTypes from 'prop-types';
-import { useSolidApi } from '../api/apiContext';
+import React from 'react';
+import { useBookmark } from './useBookmark';
 import { usePage } from './usePage';
 import { useProfile } from './useProfile';
 
 export const Toolbar = () => {
-  const solidApi = useSolidApi();
+  const { addBookmark } = useBookmark();
   const page = usePage();
   const { loading, profile } = useProfile();
   return loading ? (
@@ -13,7 +13,7 @@ export const Toolbar = () => {
   ) : (
     <>
       <p>{profile.name}</p>
-      <button onClick={() => solidApi.bookmark(page)}>Clip it!</button>
+      <button onClick={() => addBookmark(page)}>Clip it!</button>
     </>
   );
 };
