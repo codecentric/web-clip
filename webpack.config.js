@@ -9,6 +9,7 @@ const config = {
   entry: {
     content: path.join(__dirname, './src/content.tsx'),
     background: path.join(__dirname, './src/background.ts'),
+    options: path.join(__dirname, './src/options.tsx'),
   },
   output: {
     path: path.resolve(__dirname, './build'),
@@ -24,15 +25,15 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'boilerplate', // change this to your app title
+      title: 'Webclip', // change this to your app title
       meta: {
         charset: 'utf-8',
         viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
         'theme-color': '#000000',
       },
-      chunks: ['app'],
+      chunks: ['options'],
       manifest: 'manifest.json',
-      filename: 'index.html',
+      filename: 'options.html',
       template: './src/assets/index.html',
       hash: true,
     }),

@@ -22,5 +22,6 @@
     }
   ],
   "permissions": ["tabs"],
-  "web_accessible_resources": []
+  "web_accessible_resources": [],
+  "options_page": "options.html"
 }
