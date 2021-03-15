@@ -13,14 +13,24 @@
     "default_title": "WebTrack"
   },
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "background.js"
+    ]
   },
   "content_scripts": [
     {
-      "matches": ["https://*/*"],
-      "js": ["content.js"]
+      "matches": [
+        "https://*/*"
+      ],
+      "js": [
+        "content.js"
+      ]
     }
   ],
-  "permissions": ["tabs"],
-  "web_accessible_resources": []
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
+  "web_accessible_resources": [],
+  "options_page": "options.html"
 }

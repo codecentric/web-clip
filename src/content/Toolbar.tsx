@@ -1,19 +1,26 @@
-import React from 'react';
 import * as PropTypes from 'prop-types';
-import { useSolidApi } from '../api/apiContext';
+import React from 'react';
+import { useBookmark } from './useBookmark';
 import { usePage } from './usePage';
 import { useProfile } from './useProfile';
 
 export const Toolbar = () => {
-  const solidApi = useSolidApi();
+  const {
+    addBookmark,
+    loading: addBookmarkLoading,
+    error: addBookmarkError,
+  } = useBookmark();
   const page = usePage();
-  const { loading, profile } = useProfile();
-  return loading ? (
+  const { loading: profileLoading, profile } = useProfile();
+  return profileLoading ? (
     <p>Loading...</p>
   ) : (
     <>
       <p>{profile.name}</p>
-      <button onClick={() => solidApi.bookmark(page)}>Clip it!</button>
+      <button disabled={addBookmarkLoading} onClick={() => addBookmark(page)}>
+        {addBookmarkLoading ? 'Saving...' : 'Clip it!'}
+      </button>
+      {addBookmarkError && <p>{addBookmarkError.message}</p>}
     </>
   );
 };

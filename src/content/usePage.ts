@@ -1,5 +1,5 @@
 export interface PageMetaData {
-  type: string;
+  type: 'WebPage';
   url: string;
   name: string;
 }

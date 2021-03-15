@@ -1,7 +1,12 @@
 import React from 'react';
-import { useSolidApi } from '../api/apiContext';
+import { useLogin } from './useLogin';
 
 export const LoginButton = () => {
-  const solidApi = useSolidApi();
-  return <button onClick={solidApi.login}>Login</button>;
+  const { login, error } = useLogin();
+  return (
+    <>
+      <button onClick={login}>Login</button>
+      {error && <p>{error}</p>}
+    </>
+  );
 };
