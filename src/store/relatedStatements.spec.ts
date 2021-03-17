@@ -1,10 +1,5 @@
 import { graph, lit, parse, st, sym } from 'rdflib';
-import {
-  Quad_Graph,
-  Quad_Object,
-  Quad_Predicate,
-  Quad_Subject,
-} from 'rdflib/lib/tf-types';
+import { containingStatement } from '../test/expect';
 import { relatedStatements } from './relatedStatements';
 
 describe('relatedStatements', () => {
@@ -228,12 +223,3 @@ describe('relatedStatements', () => {
     expect(related).toHaveLength(3);
   });
 });
-
-function containingStatement(
-  s: Quad_Subject,
-  p: Quad_Predicate,
-  o: Quad_Object,
-  g: Quad_Graph
-) {
-  return expect.arrayContaining([st(s, p, o, g)]);
-}

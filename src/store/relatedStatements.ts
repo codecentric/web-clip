@@ -6,6 +6,7 @@ import {
   Statement,
   sym,
 } from 'rdflib';
+import { BlankNode } from 'rdflib/lib/tf-types';
 
 export function relatedStatements(
   store: IndexedFormula,
