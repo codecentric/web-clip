@@ -7,12 +7,10 @@ import { subscribeOption } from '../options/optionsStorageApi';
 import { SessionInfo, SolidApi } from './SolidApi';
 import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateUuid } from './generateUuid';
-import { generateDatePathForToday } from './generateDatePathForToday';
 import { now } from './now';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('./generateUuid');
-jest.mock('./generateDatePathForToday');
 jest.mock('./now');
 jest.mock('../options/optionsStorageApi');
 
@@ -122,7 +120,6 @@ describe('SolidApi', () => {
     it("stores a bookmark in the user's pod when storage is available", async () => {
       mockFetchWithResponse('');
       (generateUuid as jest.Mock).mockReturnValue('some-uuid');
-      (generateDatePathForToday as jest.Mock).mockReturnValue('/2021/03/12');
       (now as jest.Mock).mockReturnValue(
         new Date(Date.UTC(2021, 2, 12, 9, 10, 11, 12))
       );
@@ -181,7 +178,6 @@ describe('SolidApi', () => {
     it('throws an exception if no storage is available', async () => {
       mockFetchWithResponse('');
       (generateUuid as jest.Mock).mockReturnValue('some-uuid');
-      (generateDatePathForToday as jest.Mock).mockReturnValue('/2021/03/12');
 
       const store = graph();
 
