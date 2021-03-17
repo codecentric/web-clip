@@ -91,18 +91,17 @@ export class SolidApi {
     const a = this.ns.rdf('type');
     const BookmarkAction = this.ns.schema('BookmarkAction');
     const document = it.doc();
-    const object = sym(document.uri + '#object');
+    const pageUrl = sym(page.url);
     const WebPage = this.ns.schema('WebPage');
-
     return this.updater.update(
       [],
       [
         st(it, a, BookmarkAction, document),
         st(it, this.ns.schema('startTime'), schemaDateTime(now()), document),
-        st(it, this.ns.schema('object'), object, document),
-        st(object, a, WebPage, document),
-        st(object, this.ns.schema('url'), sym(page.url), document),
-        st(object, this.ns.schema('name'), lit(page.name), document),
+        st(it, this.ns.schema('object'), pageUrl, document),
+        st(pageUrl, a, WebPage, document),
+        st(pageUrl, this.ns.schema('url'), pageUrl, document),
+        st(pageUrl, this.ns.schema('name'), lit(page.name), document),
       ]
     );
   }

@@ -167,9 +167,9 @@ describe('SolidApi', () => {
         <https://storage.example/webclip/2021/03/12/some-uuid#it>
           a <http://schema.org/BookmarkAction> ;
           <http://schema.org/startTime> "2021-03-12T09:10:11.012Z"^^<http://schema.org/DateTime> ;
-          <http://schema.org/object> <https://storage.example/webclip/2021/03/12/some-uuid#object>
+          <http://schema.org/object> <https://myfavouriteurl.example>
         .
-        <https://storage.example/webclip/2021/03/12/some-uuid#object>
+        <https://myfavouriteurl.example>
           a <http://schema.org/WebPage> ;
           <http://schema.org/url> <https://myfavouriteurl.example> ;
           <http://schema.org/name> "I love this page" ;
