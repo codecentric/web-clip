@@ -133,6 +133,57 @@ describe('relatedStatements', () => {
     );
     expect(related).toHaveLength(4);
   });
+
+  it('generates a relative uri for every blank node', () => {
+    const store = graph();
+    parse(
+      `
+        [] a <http://schema.org/Product> .
+        [] a <http://schema.org/Hotel> .
+        `,
+      store,
+      'https://page.example/'
+    );
+    const targetDocument = sym('https://pod.example/');
+    const related = relatedStatements(
+      store,
+      sym('https://page.example/'),
+      targetDocument
+    );
+    expect(related).toEqual(
+      containingStatement(
+        sym('https://pod.example/#1'),
+        sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+        sym('http://schema.org/Product'),
+        targetDocument
+      )
+    );
+    expect(related).toEqual(
+      containingStatement(
+        sym('https://page.example/'),
+        sym('http://schema.org/about'),
+        sym('https://pod.example/#1'),
+        targetDocument
+      )
+    );
+    expect(related).toEqual(
+      containingStatement(
+        sym('https://pod.example/#2'),
+        sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+        sym('http://schema.org/Hotel'),
+        targetDocument
+      )
+    );
+    expect(related).toEqual(
+      containingStatement(
+        sym('https://page.example/'),
+        sym('http://schema.org/about'),
+        sym('https://pod.example/#2'),
+        targetDocument
+      )
+    );
+    expect(related).toHaveLength(4);
+  });
 });
 
 function containingStatement(

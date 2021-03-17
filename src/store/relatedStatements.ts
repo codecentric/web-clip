@@ -1,4 +1,11 @@
-import { IndexedFormula, NamedNode, st, Statement, sym } from 'rdflib';
+import {
+  IndexedFormula,
+  isBlankNode,
+  NamedNode,
+  st,
+  Statement,
+  sym,
+} from 'rdflib';
 
 export function relatedStatements(
   store: IndexedFormula,
@@ -20,9 +27,18 @@ function mapPageStatementsToTargetDocument(
   pageUrl: NamedNode,
   targetDocument: NamedNode
 ) {
+  let count = 1;
   return store
     .statementsMatching(null, null, null, pageUrl)
     .map((it: Statement) => {
+      if (isBlankNode(it.subject)) {
+        return st(
+          sym(targetDocument.uri + '#' + count++),
+          it.predicate,
+          it.object,
+          targetDocument
+        );
+      }
       return st(it.subject, it.predicate, it.object, targetDocument);
     });
 }
