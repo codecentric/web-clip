@@ -1,21 +1,12 @@
 import { fetch as authenticatedFetch } from '@inrupt/solid-client-authn-browser';
 import nock from 'nock';
-import rdfDereferencer from 'rdf-dereference';
-import {
-  graph,
-  isLiteral,
-  isNamedNode,
-  lit,
-  namedNode,
-  parse,
-  Store,
-  sym,
-} from 'rdflib';
+import { graph, parse, Store, sym } from 'rdflib';
 import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateDatePathForToday } from '../api/generateDatePathForToday';
 import { generateUuid } from '../api/generateUuid';
 import { now } from '../api/now';
 import { SessionInfo, SolidApi } from '../api/SolidApi';
+import { importToStore } from '../store/importToStore';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('../api/generateUuid');
@@ -38,31 +29,6 @@ describe('extract data from html page', () => {
       'https://pod.example/'
     );
   });
-
-  // TODO: move from test to production code
-  async function importToStore(url: string) {
-    const { quads } = await rdfDereferencer.dereference(url);
-    await new Promise((resolve) => {
-      quads
-        .on('data', (quad) => {
-          // workaround for incompatiblility between rdflib.js and RDF/JS regarding toCanonical and toNT
-          const subject = isNamedNode(quad.subject)
-            ? namedNode(quad.subject.value)
-            : quad.subject;
-          const predicate = isNamedNode(quad.predicate)
-            ? namedNode(quad.predicate.value)
-            : quad.predicate;
-          const object = isNamedNode(quad.object)
-            ? namedNode(quad.object.value)
-            : isLiteral(quad.object)
-            ? lit(quad.object.value, quad.object.lang, quad.object.datatype)
-            : quad.object;
-          store.add(subject, predicate, object, sym(url));
-        })
-        .on('error', (error) => fail(error))
-        .on('end', resolve);
-    });
-  }
 
   it('import JSON-LD to rdflib store', async () => {
     nock('https://shop.example').get('/product/0816.html').reply(
@@ -94,7 +60,7 @@ describe('extract data from html page', () => {
         'Content-Type': 'text/html',
       }
     );
-    await importToStore('https://shop.example/product/0816.html');
+    await importToStore('https://shop.example/product/0816.html', store);
 
     // then the data is imported fully
     const statements = store.statementsMatching(
