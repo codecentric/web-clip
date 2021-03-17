@@ -1,7 +1,16 @@
 import { fetch as authenticatedFetch } from '@inrupt/solid-client-authn-browser';
-import rdfDereferencer from 'rdf-dereference';
-import { graph, parse, Store, sym } from 'rdflib';
 import nock from 'nock';
+import rdfDereferencer from 'rdf-dereference';
+import {
+  graph,
+  isLiteral,
+  isNamedNode,
+  lit,
+  namedNode,
+  parse,
+  Store,
+  sym,
+} from 'rdflib';
 import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateDatePathForToday } from '../api/generateDatePathForToday';
 import { generateUuid } from '../api/generateUuid';
@@ -42,7 +51,18 @@ describe('extract data from html page', () => {
               return sym(this.value).toCanonical();
             };
           }
-          store.add(quad);
+          const subject = isNamedNode(quad.subject)
+            ? namedNode(quad.subject.value)
+            : quad.subject;
+          const predicate = isNamedNode(quad.predicate)
+            ? namedNode(quad.predicate.value)
+            : quad.predicate;
+          const object = isNamedNode(quad.object)
+            ? namedNode(quad.object.value)
+            : isLiteral(quad.object)
+            ? lit(quad.object.value, quad.object.lang, quad.object.datatype)
+            : quad.object;
+          store.add(subject, predicate, object, sym(url));
         })
         .on('error', (error) => fail(error))
         .on('end', resolve);
@@ -82,7 +102,13 @@ describe('extract data from html page', () => {
     await importToStore('https://shop.example/product/0816.html');
 
     // then the data is imported fully
-    expect(store.statements.length).toEqual(4);
+    const statements = store.statementsMatching(
+      null,
+      null,
+      null,
+      sym('https://shop.example/product/0816.html')
+    );
+    expect(statements.length).toEqual(3);
     const product = store.anyStatementMatching(
       null,
       sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
@@ -141,11 +167,11 @@ describe('extract data from html page', () => {
                 <https://shop.example/product/0816.html> a <http://schema.org/WebPage> ;
                     <http://schema.org/url> <https://shop.example/product/0816.html> ;
                     <http://schema.org/name> "Shop Example - WiFi cable - Product page" ;
-                    <http://schema.org/about> [
-                      a <http://schema:Product> ;
+                    <http://schema.org/about> <https://storage.example/webclip/2021/03/12/some-uuid#1> .
+                    <https://storage.example/webclip/2021/03/12/some-uuid#1> a <http://schema.org/Product> ;
                       <http://schema.org/name> "WiFi cable" ;
                       <http://schema.org/description> "Increase your WiFi range with this 10m thin-air cable" ;
-                    ].
+                    .
             }`) as Update;
     expect(actualQuery).toEqual(expectedQuery);
   });
