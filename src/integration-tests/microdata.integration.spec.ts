@@ -45,12 +45,7 @@ describe('extract data from html page', () => {
     await new Promise((resolve) => {
       quads
         .on('data', (quad) => {
-          if (quad.object.datatype) {
-            // workaround for incompatiblility between rdflib.js and RDF/JS regarding toCanonical
-            quad.object.datatype.toCanonical = function () {
-              return sym(this.value).toCanonical();
-            };
-          }
+          // workaround for incompatiblility between rdflib.js and RDF/JS regarding toCanonical and toNT
           const subject = isNamedNode(quad.subject)
             ? namedNode(quad.subject.value)
             : quad.subject;
