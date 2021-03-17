@@ -2,7 +2,7 @@ import {
   fetch as authenticatedFetch,
   login,
 } from '@inrupt/solid-client-authn-browser';
-import { graph, parse } from 'rdflib';
+import { graph, parse, Store } from 'rdflib';
 import { subscribeOption } from '../options/optionsStorageApi';
 import { SessionInfo, SolidApi } from './SolidApi';
 import { Parser as SparqlParser, Update } from 'sparqljs';
@@ -13,6 +13,10 @@ jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('./generateUuid');
 jest.mock('./now');
 jest.mock('../options/optionsStorageApi');
+
+interface MockStore extends Store {
+  and: (base: string, turtle: string) => MockStore;
+}
 
 describe('SolidApi', () => {
   beforeEach(() => {
@@ -118,9 +122,13 @@ describe('SolidApi', () => {
     });
   });
 
-  function givenStoreContaining(base: string, turtle: string) {
-    const store = graph();
+  function givenStoreContaining(base: string, turtle: string): MockStore {
+    const store = graph() as MockStore;
     parse(turtle, store, base);
+    store.and = (base: string, turtle: string) => {
+      parse(turtle, store, base);
+      return store;
+    };
     return store;
   }
 
@@ -191,6 +199,62 @@ describe('SolidApi', () => {
           name: 'I love this page',
         })
       ).rejects.toThrow('No storage available.');
+    });
+
+    it('relates the bookmarked page to blank node found on that page', async () => {
+      mockFetchWithResponse('');
+      givenGeneratedUuidWillBe('some-uuid');
+      givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
+
+      const store = givenStoreContaining(
+        'https://pod.example/',
+        `
+                @prefix space: <http://www.w3.org/ns/pim/space#> .
+                <#me> space:storage <https://storage.example/>.
+                `
+      ).and(
+        'https://shop.example/product/0815.html',
+        `
+          @prefix schema: <http://schema.org/> .
+          [] a schema:Product ;
+             schema:name "WiFi cable" .
+        `
+      );
+
+      const solidApi = new SolidApi(
+        {
+          webId: 'https://pod.example/#me',
+          isLoggedIn: true,
+        } as SessionInfo,
+        store
+      );
+
+      await solidApi.bookmark({
+        type: 'WebPage',
+        url: 'https://shop.example/product/0815.html',
+        name: 'WiFi cable at Example Shop - Product Details',
+      });
+
+      thenSparqlUpdateIsSentToUrl(
+        'https://storage.example/webclip/2021/03/12/some-uuid',
+        `
+      INSERT DATA {
+        <https://storage.example/webclip/2021/03/12/some-uuid#it>
+          a <http://schema.org/BookmarkAction> ;
+          <http://schema.org/startTime> "2021-03-12T09:10:11.012Z"^^<http://schema.org/DateTime> ;
+          <http://schema.org/object> <https://shop.example/product/0815.html>
+        .
+        <https://shop.example/product/0815.html>
+          a <http://schema.org/WebPage> ;
+          <http://schema.org/url> <https://shop.example/product/0815.html> ;
+          <http://schema.org/name> "WiFi cable at Example Shop - Product Details" ;
+          <http://schema.org/about> [
+              a <http://schema.org/Product> ;
+              <http://schema.org/name> "WiFi cable"
+          ]
+        .
+      }`
+      );
     });
   });
 });
