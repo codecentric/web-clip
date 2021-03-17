@@ -28,7 +28,7 @@ describe('relatedStatements', () => {
     expect(related).toHaveLength(0);
   });
 
-  it('all statements from page in question are found', () => {
+  it('all statements from page in question are found and linked via schema:about', () => {
     const store = graph();
     parse(
       `
@@ -54,6 +54,12 @@ describe('relatedStatements', () => {
     expect(related).toEqual(
       expect.arrayContaining([
         st(
+          sym('https://page.example/'),
+          sym('http://schema.org/about'),
+          sym('https://page.example/#it'),
+          targetDocument
+        ),
+        st(
           sym('https://page.example/#it'),
           sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
           sym('http://schema.org/Product'),
@@ -67,6 +73,6 @@ describe('relatedStatements', () => {
         ),
       ])
     );
-    expect(related).toHaveLength(2);
+    expect(related).toHaveLength(3);
   });
 });

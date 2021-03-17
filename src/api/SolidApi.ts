@@ -105,13 +105,9 @@ export class SolidApi {
       st(pageUrl, a, WebPage, document),
       st(pageUrl, this.ns.schema('url'), pageUrl, document),
       st(pageUrl, this.ns.schema('name'), lit(page.name), document),
+      ...about,
     ];
-    if (about.length > 0) {
-      insertions.push(
-        st(pageUrl, this.ns.schema('about'), about[0].subject, document)
-      );
-      insertions.push(...about);
-    }
+
     return this.updater.update([], insertions);
   }
 }
