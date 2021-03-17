@@ -15,10 +15,10 @@ import {
  */
 export async function importToStore(url: string, store: IndexedFormula) {
   const { quads } = await rdfDereferencer.dereference(url);
-  await new Promise((resolve) => {
+  await new Promise((resolve, reject) => {
     quads
       .on('data', (quad) => {
-        // workaround for incompatiblility between rdflib.js and RDF/JS regarding toCanonical and toNT
+        // workaround for incompatibility between rdflib.js and RDF/JS regarding toCanonical and toNT
         const subject = isNamedNode(quad.subject)
           ? namedNode(quad.subject.value)
           : quad.subject;
@@ -32,7 +32,7 @@ export async function importToStore(url: string, store: IndexedFormula) {
           : quad.object;
         store.add(subject, predicate, object, sym(url));
       })
-      .on('error', (error) => fail(error))
+      .on('error', (error) => reject(error))
       .on('end', resolve);
   });
 }
