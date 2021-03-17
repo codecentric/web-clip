@@ -1,6 +1,8 @@
 import rdfDereferencer from 'rdf-dereference';
 import {
+  blankNode,
   IndexedFormula,
+  isBlankNode,
   isLiteral,
   isNamedNode,
   lit,
@@ -22,20 +24,22 @@ export async function importToStore(url: string, store: IndexedFormula) {
         if (quad.object.datatype) {
           quad.object.datatype = sym(quad.object.datatype.value);
         }
-        const subject = isNamedNode(quad.subject)
-          ? namedNode(quad.subject.value)
-          : quad.subject;
-        const predicate = isNamedNode(quad.predicate)
-          ? namedNode(quad.predicate.value)
-          : quad.predicate;
-        const object = isNamedNode(quad.object)
-          ? namedNode(quad.object.value)
-          : isLiteral(quad.object)
-          ? lit(quad.object.value, quad.object.lang, quad.object.datatype)
-          : quad.object;
+        const subject = makeCompatibleToRdflib(quad.subject);
+        const predicate = makeCompatibleToRdflib(quad.predicate);
+        const object = makeCompatibleToRdflib(quad.object);
         store.add(subject, predicate, object, sym(url));
       })
       .on('error', (error) => reject(error))
       .on('end', resolve);
   });
+}
+
+function makeCompatibleToRdflib(term: any) {
+  return isNamedNode(term)
+    ? namedNode(term.value)
+    : isLiteral(term)
+    ? lit(term.value, term.language, term.datatype)
+    : isBlankNode(term)
+    ? blankNode(term.value)
+    : term;
 }

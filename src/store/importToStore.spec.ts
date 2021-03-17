@@ -193,4 +193,54 @@ describe('importToStore', () => {
     expect(startDate.value).toBe('2011-04-09T20:00:00Z');
     expect(startDate.datatype).toEqual(sym('http://schema.org/DateTime'));
   });
+
+  it('all nodes have toNT and toCanonical methods', async () => {
+    const store = graph();
+    nock('https://shop.example').get('/product/0816.html').reply(
+      200,
+      `
+                <!doctype html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport"
+                          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+                    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                    <title>Shop Example - WiFi cable - Product page</title>
+                    <script type="application/ld+json">
+                    {
+                      "@context": "http://schema.org",
+                      "@type": "WebSite",
+                      "name": "BestShop",
+                      "url": "https://shop.example",
+                      "publisher": {
+                        "@type": "Organization",
+                        "name": "BestShop"
+                      }
+                    }
+                    </script>
+                </head>
+                <body>
+                </body>
+                </html>
+            `,
+      {
+        'Content-Type': 'text/html',
+      }
+    );
+    await importToStore('https://shop.example/product/0816.html', store);
+
+    const document = sym('https://shop.example/product/0816.html');
+    const statements = store.statementsMatching(null, null, null, document);
+    expect(statements.length).toBe(6);
+
+    statements.forEach((it) => {
+      expect(it.subject.toNT).toBeDefined();
+      expect(it.object.toNT).toBeDefined();
+      expect(it.predicate.toNT).toBeDefined();
+      expect(it.subject.toCanonical).toBeDefined();
+      expect(it.object.toCanonical).toBeDefined();
+      expect(it.predicate.toCanonical).toBeDefined();
+    });
+  });
 });
