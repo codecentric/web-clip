@@ -21,6 +21,7 @@ import { subscribeOption } from '../options/optionsStorageApi';
 import { generateDatePathForToday } from './generateDatePathForToday';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
+import { relatedStatements } from '../store/relatedStatements';
 
 export type SessionInfo = Session['info'];
 
@@ -95,11 +96,7 @@ export class SolidApi {
     const pageUrl = sym(page.url);
     const WebPage = this.ns.schema('WebPage');
 
-    const about: Statement[] = this.store
-      .statementsMatching(null, null, null, pageUrl)
-      .map((it) => {
-        return st(it.subject, it.predicate, it.object, document);
-      });
+    const about: Statement[] = relatedStatements(this.store, pageUrl, document);
 
     const insertions = [
       st(it, a, BookmarkAction, document),
