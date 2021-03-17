@@ -28,12 +28,22 @@ function mapPageStatementsToTargetDocument(
   targetDocument: NamedNode
 ) {
   let count = 1;
+  const ids: { [key: string]: NamedNode } = {};
+
+  function nodeNameFor(blankNode: BlankNode) {
+    const value = blankNode.value;
+    if (!ids[value]) {
+      ids[value] = sym(targetDocument.uri + '#' + count++);
+    }
+    return ids[value];
+  }
+
   return store
     .statementsMatching(null, null, null, pageUrl)
     .map((it: Statement) => {
       if (isBlankNode(it.subject)) {
         return st(
-          sym(targetDocument.uri + '#' + count++),
+          nodeNameFor(it.subject),
           it.predicate,
           it.object,
           targetDocument
