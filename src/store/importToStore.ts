@@ -18,7 +18,10 @@ export async function importToStore(url: string, store: IndexedFormula) {
   await new Promise((resolve, reject) => {
     quads
       .on('data', (quad) => {
-        // workaround for incompatibility between rdflib.js and RDF/JS regarding toCanonical and toNT
+        // workarounds for incompatibility between rdflib.js and RDF/JS regarding toCanonical and toNT
+        if (quad.object.datatype) {
+          quad.object.datatype = sym(quad.object.datatype.value);
+        }
         const subject = isNamedNode(quad.subject)
           ? namedNode(quad.subject.value)
           : quad.subject;
