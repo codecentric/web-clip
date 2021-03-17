@@ -21,10 +21,8 @@ describe('SolidApi', () => {
 
   describe('login', () => {
     it('logs in against the configured provider url', async () => {
-      (subscribeOption as jest.Mock).mockImplementation((key, callback) => {
-        expect(key).toBe('providerUrl');
-        callback('https://pod.provider.example');
-      });
+      givenMyPodProviderIs('https://pod.provider.example');
+      // when I log in
       const solidApi = new SolidApi(
         {
           isLoggedIn: false,
@@ -32,6 +30,7 @@ describe('SolidApi', () => {
         graph()
       );
       await solidApi.login();
+      // then I can log in at that pod provider and am redirected to the current page after that
       expect(login).toHaveBeenCalledWith({
         oidcIssuer: 'https://pod.provider.example',
         redirectUrl: 'http://localhost/',
@@ -39,12 +38,15 @@ describe('SolidApi', () => {
     });
 
     it('login fails if provider url is not present yet', async () => {
+      givenMyPodProviderIs(undefined);
+      // when I try to log in
       const solidApi = new SolidApi(
         {
           isLoggedIn: false,
         } as SessionInfo,
         graph()
       );
+      // then I see this error
       await expect(() => solidApi.login()).rejects.toEqual(
         new Error('No pod provider URL configured')
       );
@@ -116,22 +118,24 @@ describe('SolidApi', () => {
     });
   });
 
+  function givenStoreContaining(base: string, turtle: string) {
+    const store = graph();
+    parse(turtle, store, base);
+    return store;
+  }
+
   describe('bookmark', () => {
     it("stores a bookmark in the user's pod when storage is available", async () => {
       mockFetchWithResponse('');
-      (generateUuid as jest.Mock).mockReturnValue('some-uuid');
-      (now as jest.Mock).mockReturnValue(
-        new Date(Date.UTC(2021, 2, 12, 9, 10, 11, 12))
-      );
+      givenGeneratedUuidWillBe('some-uuid');
+      givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
 
-      const store = graph();
-      parse(
+      const store = givenStoreContaining(
+        'https://pod.example/',
         `
-          <https://pod.example/#me>
+          <#me>
             <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
-          `,
-        store,
-        'https://pod.example/'
+          `
       );
 
       const solidApi = new SolidApi(
@@ -148,18 +152,9 @@ describe('SolidApi', () => {
         name: 'I love this page',
       });
 
-      expect(authenticatedFetch).toHaveBeenCalled();
-
-      const parser = new SparqlParser();
-
-      const sparqlUpdateCall = (authenticatedFetch as jest.Mock).mock.calls[1];
-
-      const uri = sparqlUpdateCall[0];
-      expect(uri).toBe('https://storage.example/webclip/2021/03/12/some-uuid');
-
-      const body = sparqlUpdateCall[1].body;
-      const actualQuery = parser.parse(body) as Update;
-      const expectedQuery = parser.parse(`
+      thenSparqlUpdateIsSentToUrl(
+        'https://storage.example/webclip/2021/03/12/some-uuid',
+        `
       INSERT DATA {
         <https://storage.example/webclip/2021/03/12/some-uuid#it>
           a <http://schema.org/BookmarkAction> ;
@@ -171,8 +166,8 @@ describe('SolidApi', () => {
           <http://schema.org/url> <https://myfavouriteurl.example> ;
           <http://schema.org/name> "I love this page" ;
         .
-      }`) as Update;
-      expect(actualQuery).toEqual(expectedQuery);
+      }`
+      );
     });
 
     it('throws an exception if no storage is available', async () => {
@@ -212,4 +207,35 @@ function mockFetchWithResponse(bodyText: string) {
     statusText: 'OK',
     text: async () => bodyText,
   });
+}
+
+function givenMyPodProviderIs(example: string) {
+  (subscribeOption as jest.Mock).mockImplementation((key, callback) => {
+    expect(key).toBe('providerUrl');
+    callback(example);
+  });
+}
+
+function givenGeneratedUuidWillBe(value: string) {
+  (generateUuid as jest.Mock).mockReturnValue(value);
+}
+
+function givenNowIs(timestamp: number) {
+  (now as jest.Mock).mockReturnValue(new Date(timestamp));
+}
+
+function thenSparqlUpdateIsSentToUrl(url: string, query: string) {
+  expect(authenticatedFetch).toHaveBeenCalled();
+
+  const parser = new SparqlParser();
+
+  const sparqlUpdateCall = (authenticatedFetch as jest.Mock).mock.calls[1];
+
+  const uri = sparqlUpdateCall[0];
+  expect(uri).toBe(url);
+
+  const body = sparqlUpdateCall[1].body;
+  const actualQuery = parser.parse(body) as Update;
+  const expectedQuery = parser.parse(query) as Update;
+  expect(actualQuery).toEqual(expectedQuery);
 }
