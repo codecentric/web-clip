@@ -10,6 +10,7 @@ import {
   lit,
   NamedNode,
   st,
+  Statement,
   sym,
   UpdateManager,
 } from 'rdflib';
@@ -93,17 +94,28 @@ export class SolidApi {
     const document = it.doc();
     const pageUrl = sym(page.url);
     const WebPage = this.ns.schema('WebPage');
-    return this.updater.update(
-      [],
-      [
-        st(it, a, BookmarkAction, document),
-        st(it, this.ns.schema('startTime'), schemaDateTime(now()), document),
-        st(it, this.ns.schema('object'), pageUrl, document),
-        st(pageUrl, a, WebPage, document),
-        st(pageUrl, this.ns.schema('url'), pageUrl, document),
-        st(pageUrl, this.ns.schema('name'), lit(page.name), document),
-      ]
-    );
+
+    const about: Statement[] = this.store
+      .statementsMatching(null, null, null, pageUrl)
+      .map((it) => {
+        return st(it.subject, it.predicate, it.object, document);
+      });
+
+    const insertions = [
+      st(it, a, BookmarkAction, document),
+      st(it, this.ns.schema('startTime'), schemaDateTime(now()), document),
+      st(it, this.ns.schema('object'), pageUrl, document),
+      st(pageUrl, a, WebPage, document),
+      st(pageUrl, this.ns.schema('url'), pageUrl, document),
+      st(pageUrl, this.ns.schema('name'), lit(page.name), document),
+    ];
+    if (about.length > 0) {
+      insertions.push(
+        st(pageUrl, this.ns.schema('about'), about[0].subject, document)
+      );
+      insertions.push(...about);
+    }
+    return this.updater.update([], insertions);
   }
 }
 

@@ -201,7 +201,7 @@ describe('SolidApi', () => {
       ).rejects.toThrow('No storage available.');
     });
 
-    it('relates the bookmarked page to blank node found on that page', async () => {
+    it('relates the bookmarked page to named node found on that page', async () => {
       mockFetchWithResponse('');
       givenGeneratedUuidWillBe('some-uuid');
       givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
@@ -216,7 +216,7 @@ describe('SolidApi', () => {
         'https://shop.example/product/0815.html',
         `
           @prefix schema: <http://schema.org/> .
-          [] a schema:Product ;
+          <#0815> a schema:Product ;
              schema:name "WiFi cable" .
         `
       );
@@ -248,10 +248,11 @@ describe('SolidApi', () => {
           a <http://schema.org/WebPage> ;
           <http://schema.org/url> <https://shop.example/product/0815.html> ;
           <http://schema.org/name> "WiFi cable at Example Shop - Product Details" ;
-          <http://schema.org/about> [
-              a <http://schema.org/Product> ;
-              <http://schema.org/name> "WiFi cable"
-          ]
+          <http://schema.org/about> <https://shop.example/product/0815.html#0815>
+        .
+        <https://shop.example/product/0815.html#0815>
+          a <http://schema.org/Product> ;
+          <http://schema.org/name> "WiFi cable"
         .
       }`
       );
