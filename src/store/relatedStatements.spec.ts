@@ -1,4 +1,10 @@
 import { graph, lit, parse, st, sym } from 'rdflib';
+import {
+  Quad_Graph,
+  Quad_Object,
+  Quad_Predicate,
+  Quad_Subject,
+} from 'rdflib/lib/tf-types';
 import { relatedStatements } from './relatedStatements';
 
 describe('relatedStatements', () => {
@@ -75,4 +81,65 @@ describe('relatedStatements', () => {
     );
     expect(related).toHaveLength(3);
   });
+
+  it('find all related nodes in page and relate them via schema:about', () => {
+    const store = graph();
+    parse(
+      `
+        <#product> a <http://schema.org/Product> .
+        <#hotel> a <http://schema.org/Hotel> .
+        `,
+      store,
+      'https://page.example/'
+    );
+
+    const targetDocument = sym('https://pod.example/');
+    const related = relatedStatements(
+      store,
+      sym('https://page.example/'),
+      targetDocument
+    );
+    expect(related).toEqual(
+      containingStatement(
+        sym('https://page.example/#product'),
+        sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+        sym('http://schema.org/Product'),
+        targetDocument
+      )
+    );
+    expect(related).toEqual(
+      containingStatement(
+        sym('https://page.example/'),
+        sym('http://schema.org/about'),
+        sym('https://page.example/#product'),
+        targetDocument
+      )
+    );
+    expect(related).toEqual(
+      containingStatement(
+        sym('https://page.example/#hotel'),
+        sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+        sym('http://schema.org/Hotel'),
+        targetDocument
+      )
+    );
+    expect(related).toEqual(
+      containingStatement(
+        sym('https://page.example/'),
+        sym('http://schema.org/about'),
+        sym('https://page.example/#hotel'),
+        targetDocument
+      )
+    );
+    expect(related).toHaveLength(4);
+  });
 });
+
+function containingStatement(
+  s: Quad_Subject,
+  p: Quad_Predicate,
+  o: Quad_Object,
+  g: Quad_Graph
+) {
+  return expect.arrayContaining([st(s, p, o, g)]);
+}

@@ -13,13 +13,11 @@ export function relatedStatements(
   if (statements.length === 0) {
     return [];
   }
-  return [
-    st(
-      pageUrl,
-      sym('http://schema.org/about'),
-      statements[0].subject,
-      targetDocument
-    ),
-    ...statements,
-  ];
+  const uniqueSubjects = Array.from(
+    new Set(statements.map((it) => it.subject))
+  );
+  const about = uniqueSubjects.map((it) =>
+    st(pageUrl, sym('http://schema.org/about'), it, targetDocument)
+  );
+  return [...about, ...statements];
 }
