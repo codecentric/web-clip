@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { Toolbar } from './Toolbar';
+import { ToolbarContainer } from './ToolbarContainer';
 import { useBookmark } from './useBookmark';
 import { useProfile } from './useProfile';
 
 jest.mock('./useProfile');
 jest.mock('./useBookmark');
 
-describe('Toolbar', () => {
+describe('ToolbarContainer', () => {
   const { location } = window;
 
   let addBookmark: jest.Mock;
@@ -38,12 +38,12 @@ describe('Toolbar', () => {
       loading: true,
       profile: null,
     });
-    render(<Toolbar />);
+    render(<ToolbarContainer />);
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
   it("renders the user's name", () => {
-    render(<Toolbar />);
+    render(<ToolbarContainer />);
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
   });
 
@@ -51,7 +51,7 @@ describe('Toolbar', () => {
     it("saves a web page to the user's pod", () => {
       window.location.href = 'https://page.example/article';
       window.document.title = 'An interesting article';
-      render(<Toolbar />);
+      render(<ToolbarContainer />);
       const button = screen.getByText('Clip it!');
       fireEvent.click(button);
       expect(addBookmark).toHaveBeenCalledWith({
@@ -68,7 +68,7 @@ describe('Toolbar', () => {
         addBookmark,
       });
 
-      render(<Toolbar />);
+      render(<ToolbarContainer />);
 
       expect(screen.queryByText('Clip it!')).not.toBeInTheDocument();
       const button = screen.getByText('Saving...');
@@ -82,7 +82,7 @@ describe('Toolbar', () => {
         addBookmark,
       });
 
-      render(<Toolbar />);
+      render(<ToolbarContainer />);
 
       expect(screen.getByText('Pod not available')).toBeInTheDocument();
       const button = screen.getByText('Clip it!');

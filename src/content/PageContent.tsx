@@ -3,7 +3,7 @@ import React from 'react';
 import { SolidApiContext } from '../api/apiContext';
 import { SessionInfo, SolidApi } from '../api/SolidApi';
 import { LoginButton } from './LoginButton';
-import { Toolbar } from './Toolbar';
+import { ToolbarContainer } from './ToolbarContainer';
 
 interface PageContentProps {
   sessionInfo: SessionInfo;
@@ -16,7 +16,7 @@ export const PageContent = ({ sessionInfo }: PageContentProps) => {
       <div className="paperclip" />
       <h1>WebClip</h1>
       <SolidApiContext.Provider value={solidApi}>
-        {sessionInfo.isLoggedIn ? <Toolbar /> : <LoginButton />}
+        {sessionInfo.isLoggedIn ? <ToolbarContainer /> : <LoginButton />}
       </SolidApiContext.Provider>
     </div>
   );
