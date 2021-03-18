@@ -1,12 +1,14 @@
 import { fetch as authenticatedFetch } from '@inrupt/solid-client-authn-browser';
+import { act, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import nock from 'nock';
-import { graph, parse } from 'rdflib';
+import React from 'react';
 import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateDatePathForToday } from '../api/generateDatePathForToday';
 import { generateUuid } from '../api/generateUuid';
 import { now } from '../api/now';
-import { SessionInfo, SolidApi } from '../api/SolidApi';
-import { Store } from '../store/Store';
+import { SessionInfo } from '../api/SolidApi';
+import { PageContent } from '../content/PageContent';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('../api/generateUuid');
@@ -15,23 +17,28 @@ jest.mock('../api/now');
 jest.mock('../options/optionsStorageApi');
 
 describe('extract data from html page', () => {
-  let store: Store;
+  const { location } = window;
+
   beforeEach(() => {
     jest.resetAllMocks();
-    const rdflibStore = graph();
-    parse(
-      `
-                <https://pod.example/#me>
-                <http://www.w3.org/ns/pim/space#storage>
-                <https://storage.example/> .
-            `,
-      rdflibStore,
-      'https://pod.example/'
-    );
-    store = new Store(rdflibStore);
+    delete window.location;
+    window.location = { ...location };
+    window.location.href = '';
+    window.document.title = '';
+  });
+
+  afterEach(() => {
+    window.location = location;
   });
 
   it('import JSON-LD to rdflib store', async () => {
+    window.location.href = 'https://shop.example/product/0816.html';
+    window.document.title = 'Shop Example - WiFi cable - Product page';
+    (generateUuid as jest.Mock).mockReturnValue('some-uuid');
+    (generateDatePathForToday as jest.Mock).mockReturnValue('/2021/03/12');
+    (now as jest.Mock).mockReturnValue(
+      new Date(Date.UTC(2021, 2, 12, 9, 10, 11, 12))
+    );
     nock('https://shop.example').get('/product/0816.html').reply(
       200,
       `
@@ -62,39 +69,46 @@ describe('extract data from html page', () => {
       }
     );
 
-    await store.importFromUrl('https://shop.example/product/0816.html');
+    mockFetchWithResponse(`
+                <https://pod.example/#me>
+                <http://www.w3.org/ns/pim/space#storage>
+                <https://storage.example/> .
+            `);
+
+    await act(async () => {
+      await render(
+        <PageContent
+          sessionInfo={
+            {
+              isLoggedIn: true,
+              webId: 'https://pod.example/#me',
+            } as SessionInfo
+          }
+        />
+      );
+    });
+
+    const clipItButton = await screen.findByText('Clip it!');
+
+    await act(async () => {
+      await userEvent.click(clipItButton);
+    });
 
     // when the page is bookmarked
-    mockFetchWithResponse('');
-    (generateUuid as jest.Mock).mockReturnValue('some-uuid');
-    (generateDatePathForToday as jest.Mock).mockReturnValue('/2021/03/12');
-    (now as jest.Mock).mockReturnValue(
-      new Date(Date.UTC(2021, 2, 12, 9, 10, 11, 12))
-    );
-    const api = new SolidApi(
-      {
-        isLoggedIn: true,
-        webId: 'https://pod.example/#me',
-      } as SessionInfo,
-      store
-    );
-    await api.bookmark({
-      type: 'WebPage',
-      url: 'https://shop.example/product/0816.html',
-      name: 'Shop Example - WiFi cable - Product page',
-    });
 
     // then the stored data is stored in the Pod
     expect(authenticatedFetch).toHaveBeenCalled();
-
     const parser = new SparqlParser();
 
-    const sparqlUpdateCall = (authenticatedFetch as jest.Mock).mock.calls[1];
+    const calls = (authenticatedFetch as jest.Mock).mock.calls;
+
+    const sparqlUpdateCall = calls[2];
 
     const uri = sparqlUpdateCall[0];
     expect(uri).toBe('https://storage.example/webclip/2021/03/12/some-uuid');
 
     const body = sparqlUpdateCall[1].body;
+    expect(body).toBeDefined();
     const actualQuery = parser.parse(body) as Update;
     const expectedQuery = parser.parse(`
            INSERT DATA {
