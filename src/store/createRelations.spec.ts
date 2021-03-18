@@ -1,11 +1,11 @@
 import { graph, lit, parse, st, sym } from 'rdflib';
 import { containingStatement } from '../test/expect';
-import { relatedStatements } from './relatedStatements';
+import { createRelations } from './createRelations';
 
-describe('relatedStatements', () => {
+describe('create relations', () => {
   it('nothing is found in empty store', () => {
     const store = graph();
-    const related = relatedStatements(
+    const related = createRelations(
       store,
       sym('https://page.example/'),
       sym('https://pod.example/')
@@ -21,7 +21,7 @@ describe('relatedStatements', () => {
       store,
       'https://other-page.example/'
     );
-    const related = relatedStatements(
+    const related = createRelations(
       store,
       sym('https://page.example/'),
       sym('https://pod.example/')
@@ -47,7 +47,7 @@ describe('relatedStatements', () => {
       'https://other-page.example/'
     );
     const targetDocument = sym('https://pod.example/');
-    const related = relatedStatements(
+    const related = createRelations(
       store,
       sym('https://page.example/'),
       targetDocument
@@ -89,7 +89,7 @@ describe('relatedStatements', () => {
     );
 
     const targetDocument = sym('https://pod.example/');
-    const related = relatedStatements(
+    const related = createRelations(
       store,
       sym('https://page.example/'),
       targetDocument
@@ -143,7 +143,7 @@ describe('relatedStatements', () => {
       'https://page.example/'
     );
     const targetDocument = sym('https://pod.example/');
-    const related = relatedStatements(
+    const related = createRelations(
       store,
       sym('https://page.example/'),
       targetDocument
@@ -218,7 +218,7 @@ describe('relatedStatements', () => {
       'https://page.example/'
     );
     const targetDocument = sym('https://pod.example/');
-    const related = relatedStatements(
+    const related = createRelations(
       store,
       sym('https://page.example/'),
       targetDocument

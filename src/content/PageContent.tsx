@@ -2,6 +2,7 @@ import { graph } from 'rdflib';
 import React from 'react';
 import { SolidApiContext } from '../api/apiContext';
 import { SessionInfo, SolidApi } from '../api/SolidApi';
+import { Store } from '../store/Store';
 import { LoginButton } from './LoginButton';
 import { ToolbarContainer } from './ToolbarContainer';
 
@@ -10,7 +11,8 @@ interface PageContentProps {
 }
 
 export const PageContent = ({ sessionInfo }: PageContentProps) => {
-  const solidApi = new SolidApi(sessionInfo, graph());
+  const store = new Store(graph());
+  const solidApi = new SolidApi(sessionInfo, store);
   return (
     <div className="overlay">
       <div className="paperclip" />

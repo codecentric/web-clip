@@ -10,11 +10,6 @@ import {
   sym,
 } from 'rdflib';
 
-/**
- * Import all data found at the given url to the provided store
- * @param url - The url to fetch and extract data from
- * @param store - The store to add the data to
- */
 export async function importToStore(url: string, store: IndexedFormula) {
   const { quads } = await rdfDereferencer.dereference(url);
   await new Promise((resolve, reject) => {

@@ -2,8 +2,9 @@ import {
   fetch as authenticatedFetch,
   login,
 } from '@inrupt/solid-client-authn-browser';
-import { graph, parse, Store } from 'rdflib';
+import { graph, parse, Store as RdflibStore } from 'rdflib';
 import { subscribeOption } from '../options/optionsStorageApi';
+import { Store } from '../store/Store';
 import { SessionInfo, SolidApi } from './SolidApi';
 import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateUuid } from './generateUuid';
@@ -14,7 +15,7 @@ jest.mock('./generateUuid');
 jest.mock('./now');
 jest.mock('../options/optionsStorageApi');
 
-interface MockStore extends Store {
+interface MockStore extends RdflibStore {
   and: (base: string, turtle: string) => MockStore;
 }
 
@@ -31,7 +32,7 @@ describe('SolidApi', () => {
         {
           isLoggedIn: false,
         } as SessionInfo,
-        graph()
+        new Store()
       );
       await solidApi.login();
       // then I can log in at that pod provider and am redirected to the current page after that
@@ -48,7 +49,7 @@ describe('SolidApi', () => {
         {
           isLoggedIn: false,
         } as SessionInfo,
-        graph()
+        new Store()
       );
       // then I see this error
       await expect(() => solidApi.login()).rejects.toEqual(
@@ -67,7 +68,7 @@ describe('SolidApi', () => {
             webId: 'https://pod.example/#me',
             isLoggedIn: true,
           } as SessionInfo,
-          graph()
+          new Store()
         );
 
         const result = await solidApi.loadProfile();
@@ -93,7 +94,7 @@ describe('SolidApi', () => {
             webId: 'https://pod.example/#me',
             isLoggedIn: true,
           } as SessionInfo,
-          graph()
+          new Store()
         );
 
         const result = await solidApi.loadProfile();
@@ -113,7 +114,7 @@ describe('SolidApi', () => {
         {
           isLoggedIn: false,
         } as SessionInfo,
-        graph()
+        new Store()
       );
 
       await expect(solidApi.loadProfile()).rejects.toThrow(
@@ -151,7 +152,7 @@ describe('SolidApi', () => {
           webId: 'https://pod.example/#me',
           isLoggedIn: true,
         } as SessionInfo,
-        store
+        new Store(store)
       );
 
       await solidApi.bookmark({
@@ -182,7 +183,7 @@ describe('SolidApi', () => {
       mockFetchWithResponse('');
       (generateUuid as jest.Mock).mockReturnValue('some-uuid');
 
-      const store = graph();
+      const store = new Store();
 
       const solidApi = new SolidApi(
         {
@@ -226,7 +227,7 @@ describe('SolidApi', () => {
           webId: 'https://pod.example/#me',
           isLoggedIn: true,
         } as SessionInfo,
-        store
+        new Store(store)
       );
 
       await solidApi.bookmark({

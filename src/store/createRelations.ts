@@ -8,7 +8,7 @@ import {
 } from 'rdflib';
 import { BlankNode } from 'rdflib/lib/tf-types';
 
-export function relatedStatements(
+export function createRelations(
   store: IndexedFormula,
   pageUrl: NamedNode,
   targetDocument: NamedNode

@@ -1,12 +1,12 @@
 import { fetch as authenticatedFetch } from '@inrupt/solid-client-authn-browser';
 import nock from 'nock';
-import { graph, parse, Store, sym } from 'rdflib';
+import { graph, parse } from 'rdflib';
 import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateDatePathForToday } from '../api/generateDatePathForToday';
 import { generateUuid } from '../api/generateUuid';
 import { now } from '../api/now';
 import { SessionInfo, SolidApi } from '../api/SolidApi';
-import { importToStore } from '../store/importToStore';
+import { Store } from '../store/Store';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('../api/generateUuid');
@@ -18,16 +18,17 @@ describe('extract data from html page', () => {
   let store: Store;
   beforeEach(() => {
     jest.resetAllMocks();
-    store = graph();
+    const rdflibStore = graph();
     parse(
       `
                 <https://pod.example/#me>
                 <http://www.w3.org/ns/pim/space#storage>
                 <https://storage.example/> .
             `,
-      store,
+      rdflibStore,
       'https://pod.example/'
     );
+    store = new Store(rdflibStore);
   });
 
   it('import JSON-LD to rdflib store', async () => {
@@ -60,32 +61,8 @@ describe('extract data from html page', () => {
         'Content-Type': 'text/html',
       }
     );
-    await importToStore('https://shop.example/product/0816.html', store);
 
-    // then the data is imported fully
-    const statements = store.statementsMatching(
-      null,
-      null,
-      null,
-      sym('https://shop.example/product/0816.html')
-    );
-    expect(statements.length).toEqual(3);
-    const product = store.anyStatementMatching(
-      null,
-      sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-      sym('http://schema.org/Product')
-    ).subject;
-    expect(product).not.toBeNull();
-    expect(product.termType).toEqual('BlankNode');
-    const name = store.anyValue(product, sym('http://schema.org/name'));
-    expect(name).toEqual('WiFi cable');
-    const description = store.anyValue(
-      product,
-      sym('http://schema.org/description')
-    );
-    expect(description).toEqual(
-      'Increase your WiFi range with this 10m thin-air cable'
-    );
+    await store.importFromUrl('https://shop.example/product/0816.html');
 
     // when the page is bookmarked
     mockFetchWithResponse('');
