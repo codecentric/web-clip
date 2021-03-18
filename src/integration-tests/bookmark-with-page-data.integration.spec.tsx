@@ -16,7 +16,7 @@ jest.mock('../api/generateDatePathForToday');
 jest.mock('../api/now');
 jest.mock('../options/optionsStorageApi');
 
-describe('extract data from html page', () => {
+describe('bookmarking an html page with embedded data', () => {
   const { location } = window;
 
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('extract data from html page', () => {
     window.location = location;
   });
 
-  it('import JSON-LD to rdflib store', async () => {
+  it('copies all data found on the page to the pod', async () => {
     window.location.href = 'https://shop.example/product/0816.html';
     window.document.title = 'Shop Example - WiFi cable - Product page';
     (generateUuid as jest.Mock).mockReturnValue('some-uuid');
