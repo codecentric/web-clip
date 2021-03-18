@@ -133,7 +133,10 @@ describe('relatedStatements', () => {
     const store = graph();
     parse(
       `
-        [] a <http://schema.org/Product> .
+        [] a <http://schema.org/Product> ;
+           <http://schema.org/provider> [
+             a <http://schema.org/Organization>
+           ] .
         [] a <http://schema.org/Hotel> .
         `,
       store,
@@ -155,6 +158,14 @@ describe('relatedStatements', () => {
     );
     expect(related).toEqual(
       containingStatement(
+        sym('https://pod.example/#1'),
+        sym('http://schema.org/provider'),
+        sym('https://pod.example/#2'),
+        targetDocument
+      )
+    );
+    expect(related).toEqual(
+      containingStatement(
         sym('https://page.example/'),
         sym('http://schema.org/about'),
         sym('https://pod.example/#1'),
@@ -165,7 +176,7 @@ describe('relatedStatements', () => {
       containingStatement(
         sym('https://pod.example/#2'),
         sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-        sym('http://schema.org/Hotel'),
+        sym('http://schema.org/Organization'),
         targetDocument
       )
     );
@@ -177,7 +188,23 @@ describe('relatedStatements', () => {
         targetDocument
       )
     );
-    expect(related).toHaveLength(4);
+    expect(related).toEqual(
+      containingStatement(
+        sym('https://pod.example/#3'),
+        sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+        sym('http://schema.org/Hotel'),
+        targetDocument
+      )
+    );
+    expect(related).toEqual(
+      containingStatement(
+        sym('https://page.example/'),
+        sym('http://schema.org/about'),
+        sym('https://pod.example/#3'),
+        targetDocument
+      )
+    );
+    expect(related).toHaveLength(7);
   });
 
   it('only generate one uri per blank node', () => {

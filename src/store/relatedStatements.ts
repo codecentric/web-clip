@@ -42,15 +42,15 @@ function mapPageStatementsToTargetDocument(
   return store
     .statementsMatching(null, null, null, pageUrl)
     .map((it: Statement) => {
-      if (isBlankNode(it.subject)) {
-        return st(
-          nodeNameFor(it.subject),
-          it.predicate,
-          it.object,
-          targetDocument
-        );
-      }
-      return st(it.subject, it.predicate, it.object, targetDocument);
+      const subject = isBlankNode(it.subject)
+        ? nodeNameFor(it.subject)
+        : it.subject;
+
+      const object = isBlankNode(it.object)
+        ? nodeNameFor(it.object)
+        : it.object;
+
+      return st(subject, it.predicate, object, targetDocument);
     });
 }
 
