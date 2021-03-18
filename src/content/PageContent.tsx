@@ -2,6 +2,7 @@ import { graph } from 'rdflib';
 import React from 'react';
 import { SolidApiContext } from '../api/apiContext';
 import { SessionInfo, SolidApi } from '../api/SolidApi';
+import { StoreContext } from '../store/context';
 import { Store } from '../store/Store';
 import { LoginButton } from './LoginButton';
 import { ToolbarContainer } from './ToolbarContainer';
@@ -17,9 +18,11 @@ export const PageContent = ({ sessionInfo }: PageContentProps) => {
     <div className="overlay">
       <div className="paperclip" />
       <h1>WebClip</h1>
-      <SolidApiContext.Provider value={solidApi}>
-        {sessionInfo.isLoggedIn ? <ToolbarContainer /> : <LoginButton />}
-      </SolidApiContext.Provider>
+      <StoreContext.Provider value={store}>
+        <SolidApiContext.Provider value={solidApi}>
+          {sessionInfo.isLoggedIn ? <ToolbarContainer /> : <LoginButton />}
+        </SolidApiContext.Provider>
+      </StoreContext.Provider>
     </div>
   );
 };

@@ -2,10 +2,14 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { ToolbarContainer } from './ToolbarContainer';
 import { useBookmark } from './useBookmark';
+import { usePage } from './usePage';
 import { useProfile } from './useProfile';
+import { usePageData } from './usePageData';
 
 jest.mock('./useProfile');
 jest.mock('./useBookmark');
+jest.mock('./usePageData');
+jest.mock('./usePage');
 
 describe('ToolbarContainer', () => {
   const { location } = window;
@@ -22,10 +26,15 @@ describe('ToolbarContainer', () => {
       profile: { name: 'Jane Doe' },
     });
 
+    (usePage as jest.Mock).mockReturnValue({});
+
     addBookmark = jest.fn();
     (useBookmark as jest.Mock).mockReturnValue({
       loading: false,
       addBookmark,
+    });
+    (usePageData as jest.Mock).mockReturnValue({
+      loading: false,
     });
   });
 
@@ -33,13 +42,25 @@ describe('ToolbarContainer', () => {
     window.location = location;
   });
 
-  it('renders loading indicator', () => {
+  it('renders loading indicator while profile is loading', () => {
     (useProfile as jest.Mock).mockReturnValue({
       loading: true,
       profile: null,
     });
     render(<ToolbarContainer />);
     expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
+
+  it('renders loading indicator while page data is loading', () => {
+    (usePage as jest.Mock).mockReturnValue({
+      url: 'https://page.example/',
+    });
+    (usePageData as jest.Mock).mockReturnValue({
+      loading: true,
+    });
+    render(<ToolbarContainer />);
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(usePageData).toHaveBeenCalledWith('https://page.example/');
   });
 
   it("renders the user's name", () => {
@@ -49,8 +70,11 @@ describe('ToolbarContainer', () => {
 
   describe('bookmarking', () => {
     it("saves a web page to the user's pod", () => {
-      window.location.href = 'https://page.example/article';
-      window.document.title = 'An interesting article';
+      (usePage as jest.Mock).mockReturnValue({
+        type: 'WebPage',
+        url: 'https://page.example/article',
+        name: 'An interesting article',
+      });
       render(<ToolbarContainer />);
       const button = screen.getByText('Clip it!');
       fireEvent.click(button);
