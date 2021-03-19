@@ -2,19 +2,21 @@ import * as PropTypes from 'prop-types';
 import React from 'react';
 import { useBookmark } from './useBookmark';
 import { usePage } from './usePage';
-import { useProfile } from './useProfile';
 
-export const Toolbar = () => {
+interface Props {
+  profile: {
+    name: string;
+  };
+}
+
+export const Toolbar = ({ profile }: Props) => {
   const {
     addBookmark,
     loading: addBookmarkLoading,
     error: addBookmarkError,
   } = useBookmark();
   const page = usePage();
-  const { loading: profileLoading, profile } = useProfile();
-  return profileLoading ? (
-    <p>Loading...</p>
-  ) : (
+  return (
     <>
       <p>{profile.name}</p>
       <button disabled={addBookmarkLoading} onClick={() => addBookmark(page)}>

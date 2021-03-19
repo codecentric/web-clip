@@ -10,6 +10,7 @@ import {
   lit,
   NamedNode,
   st,
+  Statement,
   sym,
   UpdateManager,
 } from 'rdflib';
@@ -17,6 +18,7 @@ import solidNamespace from 'solid-namespace';
 import urlJoin from 'url-join';
 import { PageMetaData } from '../content/usePage';
 import { subscribeOption } from '../options/optionsStorageApi';
+import { Store } from '../store/Store';
 import { generateDatePathForToday } from './generateDatePathForToday';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
@@ -30,21 +32,28 @@ export interface Profile {
 export class SolidApi {
   private readonly me: NamedNode;
   private readonly sessionInfo: SessionInfo;
-  private readonly store: IndexedFormula;
+  private readonly store: Store;
+
+  /**
+   * @deprecated Use this.store instead
+   * @private
+   */
+  private readonly graph: IndexedFormula;
   private readonly fetcher: Fetcher;
   private readonly updater: UpdateManager;
   private readonly ns: Record<string, (alias: string) => NamedNode>;
   private providerUrl: string;
 
-  constructor(sessionInfo: SessionInfo, store: IndexedFormula) {
+  constructor(sessionInfo: SessionInfo, store: Store) {
     subscribeOption('providerUrl', (value) => {
       this.providerUrl = value;
     });
     this.sessionInfo = sessionInfo;
     this.me = sessionInfo.isLoggedIn ? sym(sessionInfo.webId) : null;
     this.store = store;
-    this.fetcher = new Fetcher(this.store, { fetch: authenticatedFetch });
-    this.updater = new UpdateManager(this.store);
+    this.graph = store.getGraph();
+    this.fetcher = new Fetcher(this.graph, { fetch: authenticatedFetch });
+    this.updater = new UpdateManager(this.graph);
     this.ns = solidNamespace(rdf);
   }
 
@@ -68,12 +77,12 @@ export class SolidApi {
 
   private getProfile(): Profile {
     const name: string =
-      this.store.anyValue(this.me, this.ns.vcard('fn')) || 'Anonymous';
+      this.graph.anyValue(this.me, this.ns.vcard('fn')) || 'Anonymous';
     return { name };
   }
 
   async bookmark(page: PageMetaData) {
-    const storageUrl = this.store.anyValue(this.me, this.ns.space('storage'));
+    const storageUrl = this.graph.anyValue(this.me, this.ns.space('storage'));
 
     if (!storageUrl) {
       throw new Error('No storage available.');
@@ -91,20 +100,22 @@ export class SolidApi {
     const a = this.ns.rdf('type');
     const BookmarkAction = this.ns.schema('BookmarkAction');
     const document = it.doc();
-    const object = sym(document.uri + '#object');
+    const pageUrl = sym(page.url);
     const WebPage = this.ns.schema('WebPage');
 
-    return this.updater.update(
-      [],
-      [
-        st(it, a, BookmarkAction, document),
-        st(it, this.ns.schema('startTime'), schemaDateTime(now()), document),
-        st(it, this.ns.schema('object'), object, document),
-        st(object, a, WebPage, document),
-        st(object, this.ns.schema('url'), sym(page.url), document),
-        st(object, this.ns.schema('name'), lit(page.name), document),
-      ]
-    );
+    const about: Statement[] = this.store.createRelations(pageUrl, document);
+
+    const insertions = [
+      st(it, a, BookmarkAction, document),
+      st(it, this.ns.schema('startTime'), schemaDateTime(now()), document),
+      st(it, this.ns.schema('object'), pageUrl, document),
+      st(pageUrl, a, WebPage, document),
+      st(pageUrl, this.ns.schema('url'), pageUrl, document),
+      st(pageUrl, this.ns.schema('name'), lit(page.name), document),
+      ...about,
+    ];
+
+    return this.updater.update([], insertions);
   }
 }
 

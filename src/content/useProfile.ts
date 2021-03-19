@@ -20,7 +20,7 @@ export const useProfile = () => {
         value: profile,
       });
     });
-  }, []);
+  }, [solidApi]);
 
   return { loading, profile: value };
 };
