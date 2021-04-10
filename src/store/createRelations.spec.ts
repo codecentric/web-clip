@@ -99,7 +99,7 @@ describe('create relations', () => {
     const store = graph();
     parse(
       `
-        <#it> <https://ogp.me/ns#type> "article" .
+        <#it> <http://ogp.me/ns#type> "article" .
         `,
       store,
       'https://page.example/'
@@ -114,7 +114,7 @@ describe('create relations', () => {
       expect.arrayContaining([
         st(
           sym('https://page.example/#it'),
-          sym('https://ogp.me/ns#type'),
+          sym('http://ogp.me/ns#type'),
           lit('article'),
           targetDocument
         ),

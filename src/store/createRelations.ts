@@ -29,7 +29,7 @@ function hasType(store: IndexedFormula, it: Statement): boolean {
     it.subject,
     sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
   );
-  const ogpType = store.anyValue(it.subject, sym('https://ogp.me/ns#type'));
+  const ogpType = store.anyValue(it.subject, sym('http://ogp.me/ns#type'));
   return !!(rdfType || ogpType);
 }
 
