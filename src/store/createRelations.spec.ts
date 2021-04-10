@@ -262,14 +262,6 @@ describe('create relations', () => {
     );
     expect(related).toEqual(
       containingStatement(
-        sym('https://page.example/'),
-        sym('http://schema.org/about'),
-        sym('https://pod.example/#2'),
-        targetDocument
-      )
-    );
-    expect(related).toEqual(
-      containingStatement(
         sym('https://pod.example/#3'),
         sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
         sym('http://schema.org/Hotel'),
@@ -284,7 +276,7 @@ describe('create relations', () => {
         targetDocument
       )
     );
-    expect(related).toHaveLength(7);
+    expect(related).toHaveLength(6);
   });
 
   it('only generate one uri per blank node', () => {
