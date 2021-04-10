@@ -17,14 +17,26 @@ export function createAboutStatements(
   statements: Statement[],
   targetDocument: NamedNode
 ) {
-  const uniqueSubjects = findUniqueSubjects(statements).filter(
-    (it) => !isSameThing(it, pageUrl)
-  );
-  return uniqueSubjects.map((it) =>
+  const topLevelSubjects = findTopLevelSubject(pageUrl, statements);
+  return topLevelSubjects.map((it) =>
     st(pageUrl, sym('http://schema.org/about'), it, targetDocument)
   );
 }
 
-function findUniqueSubjects(statements: Statement[]) {
-  return Array.from(new Set(statements.map((it) => it.subject)));
+function findTopLevelSubject(pageUrl: NamedNode, statements: Statement[]) {
+  const uniqueSubjects = findUniqueThings(pageUrl, statements);
+  const referencedThings = findThingsReferencedByOthers(statements);
+  return uniqueSubjects.filter(
+    (subject) => !referencedThings.includes(subject)
+  );
+}
+
+function findUniqueThings(pageUrl: NamedNode, statements: Statement[]) {
+  return Array.from(new Set(statements.map((it) => it.subject))).filter(
+    (it) => !isSameThing(it, pageUrl)
+  );
+}
+
+function findThingsReferencedByOthers(statements: Statement[]) {
+  return Array.from(new Set(statements.map((it) => it.object)));
 }

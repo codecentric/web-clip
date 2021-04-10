@@ -33,6 +33,30 @@ describe('create about statements', () => {
     ]);
   });
 
+  it('no about statement is created if the thing is object of another statement', () => {
+    const thing = sym('https://page.example/#secondlevel');
+    const abouts = createAboutStatements(
+      sym('https://page.example/'),
+      [
+        st(thing, sym('http://any.example'), lit('anything')),
+        st(
+          sym('https://page.example/#toplevel'),
+          sym('http://other.example'),
+          thing
+        ),
+      ],
+      sym('https://pod.example/webclip/1')
+    );
+    expect(abouts).toEqual([
+      st(
+        sym('https://page.example/'),
+        sym('http://schema.org/about'),
+        sym('https://page.example/#toplevel'),
+        sym('https://pod.example/webclip/1')
+      ),
+    ]);
+  });
+
   it('only one about statement is created if there are several statements about a thing', () => {
     const thing = sym('https://page.example/#thing');
     const abouts = createAboutStatements(
