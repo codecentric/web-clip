@@ -7,6 +7,7 @@ import {
   sym,
 } from 'rdflib';
 import { BlankNode } from 'rdflib/lib/tf-types';
+import { createAboutStatements } from './createAboutStatements';
 
 export function createRelations(
   store: IndexedFormula,
@@ -42,6 +43,13 @@ function mapPageStatementsToTargetDocument(
   return store
     .statementsMatching(null, null, null, pageUrl)
     .map((it: Statement) => {
+      const types = store.anyValue(
+        it.subject,
+        sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+      );
+
+      if (!types && it.subject.value !== pageUrl.value) return null;
+
       const subject = isBlankNode(it.subject)
         ? nodeNameFor(it.subject)
         : it.subject;
@@ -51,20 +59,6 @@ function mapPageStatementsToTargetDocument(
         : it.object;
 
       return st(subject, it.predicate, object, targetDocument);
-    });
-}
-
-function createAboutStatements(
-  pageUrl: NamedNode,
-  statements: Statement[],
-  targetDocument: NamedNode
-) {
-  const uniqueSubjects = findUniqueSubjects(statements);
-  return uniqueSubjects.map((it) =>
-    st(pageUrl, sym('http://schema.org/about'), it, targetDocument)
-  );
-}
-
-function findUniqueSubjects(statements: Statement[]) {
-  return Array.from(new Set(statements.map((it) => it.subject)));
+    })
+    .filter((it) => it !== null);
 }

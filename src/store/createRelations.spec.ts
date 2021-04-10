@@ -77,6 +77,52 @@ describe('create relations', () => {
     expect(related).toHaveLength(3);
   });
 
+  it('blank nodes without a type are not linked via schema:about', () => {
+    const store = graph();
+    parse(
+      `
+        [] <http://schema.org/name> "not interesting" .
+        `,
+      store,
+      'https://page.example/'
+    );
+    const targetDocument = sym('https://pod.example/');
+    const related = createRelations(
+      store,
+      sym('https://page.example/'),
+      targetDocument
+    );
+    expect(related).toHaveLength(0);
+  });
+
+  it('statements about the page are included, even if the page does not have an explicit type', () => {
+    const store = graph();
+    parse(
+      `
+        <> <http://schema.org/name> "Page name" .
+        `,
+      store,
+      'https://page.example/'
+    );
+    const targetDocument = sym('https://pod.example/');
+    const related = createRelations(
+      store,
+      sym('https://page.example/'),
+      targetDocument
+    );
+    expect(related).toEqual(
+      expect.arrayContaining([
+        st(
+          sym('https://page.example/'),
+          sym('http://schema.org/name'),
+          lit('Page name'),
+          targetDocument
+        ),
+      ])
+    );
+    expect(related).toHaveLength(1);
+  });
+
   it('find all related nodes in page and relate them via schema:about', () => {
     const store = graph();
     parse(
