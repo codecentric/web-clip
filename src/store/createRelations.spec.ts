@@ -77,7 +77,7 @@ describe('create relations', () => {
     expect(related).toHaveLength(3);
   });
 
-  it('blank nodes without a type are not linked via schema:about', () => {
+  it('nodes without a rdf or ogp type are not included', () => {
     const store = graph();
     parse(
       `
@@ -93,6 +93,40 @@ describe('create relations', () => {
       targetDocument
     );
     expect(related).toHaveLength(0);
+  });
+
+  it('nodes with ogp type are included', () => {
+    const store = graph();
+    parse(
+      `
+        <#it> <https://ogp.me/ns#type> "article" .
+        `,
+      store,
+      'https://page.example/'
+    );
+    const targetDocument = sym('https://pod.example/');
+    const related = createRelations(
+      store,
+      sym('https://page.example/'),
+      targetDocument
+    );
+    expect(related).toEqual(
+      expect.arrayContaining([
+        st(
+          sym('https://page.example/#it'),
+          sym('https://ogp.me/ns#type'),
+          lit('article'),
+          targetDocument
+        ),
+        st(
+          sym('https://page.example/'),
+          sym('http://schema.org/about'),
+          sym('https://page.example/#it'),
+          targetDocument
+        ),
+      ])
+    );
+    expect(related).toHaveLength(2);
   });
 
   it('statements about the page are included, even if the page does not have an explicit type', () => {

@@ -24,6 +24,15 @@ export function createRelations(
   return [...about, ...related];
 }
 
+function hasType(store: IndexedFormula, it: Statement): boolean {
+  const rdfType = store.anyValue(
+    it.subject,
+    sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+  );
+  const ogpType = store.anyValue(it.subject, sym('https://ogp.me/ns#type'));
+  return !!(rdfType || ogpType);
+}
+
 function mapPageStatementsToTargetDocument(
   store: IndexedFormula,
   pageUrl: NamedNode,
@@ -43,12 +52,9 @@ function mapPageStatementsToTargetDocument(
   return store
     .statementsMatching(null, null, null, pageUrl)
     .map((it: Statement) => {
-      const types = store.anyValue(
-        it.subject,
-        sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
-      );
+      const typed = hasType(store, it);
 
-      if (!types && it.subject.value !== pageUrl.value) return null;
+      if (!typed && it.subject.value !== pageUrl.value) return null;
 
       const subject = isBlankNode(it.subject)
         ? nodeNameFor(it.subject)
