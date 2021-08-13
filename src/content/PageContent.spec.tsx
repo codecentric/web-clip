@@ -15,6 +15,17 @@ describe('PageContent', () => {
   });
   describe('close icon', () => {
     it('is present', () => {
+      render(
+        <PageContent
+          sessionInfo={{ isLoggedIn: false } as ISessionInfo}
+          close={() => null}
+        />
+      );
+      const closeButton = screen.queryByLabelText('Close');
+      expect(closeButton).toBeInTheDocument();
+    });
+
+    it('calls the close callback when clicked', () => {
       const close = jest.fn();
       render(
         <PageContent
@@ -23,7 +34,10 @@ describe('PageContent', () => {
         />
       );
       const closeButton = screen.queryByLabelText('Close');
-      expect(closeButton).toBeInTheDocument();
-    });
+
+      closeButton.click();
+
+      expect(close).toHaveBeenCalled();
+    })
   });
 });

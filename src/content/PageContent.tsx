@@ -15,7 +15,7 @@ export const PageContent = ({ sessionInfo, close }: PageContentProps) => {
   const { store, solidApi } = useSolid(sessionInfo);
   return (
     <div className="overlay">
-      <button aria-label="Close">X</button>
+      <button aria-label="Close" onClick={close}>X</button>
       <div className="paperclip" />
       <h1>WebClip</h1>
       <StoreContext.Provider value={store}>
