@@ -9,7 +9,7 @@
     background-color: #fff;
     height: auto;
     padding: 1rem;
-    z-index: 1000;
+    z-index: 2147483647;
     box-shadow: -5px 5px 5px 0 rgba(0,0,0,0.26);
 }
 
