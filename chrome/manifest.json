@@ -1,16 +1,15 @@
 {
   "manifest_version": 2,
-  "name": "WebTrack - Keep track yourself",
-  "short_name": "WebTrack",
-  "version": "1.0.0",
-  "description": "Your extensions description",
+  "name": "WebClip - Clip all the things",
+  "short_name": "WebClip",
+  "description": "Store all the interesting things around the Web on your personal online datastore",
   "icons": {
     "16": "icons/16.png",
     "48": "icons/48.png",
     "128": "icons/128.png"
   },
   "browser_action": {
-    "default_title": "WebTrack"
+    "default_title": "WebClip"
   },
   "background": {
     "scripts": [

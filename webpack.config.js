@@ -34,7 +34,6 @@ const config = {
         'theme-color': '#000000',
       },
       chunks: ['options'],
-      manifest: 'manifest.json',
       filename: 'options.html',
       template: './src/assets/index.html',
       hash: true,
@@ -51,6 +50,7 @@ const config = {
       config: {
         base: baseManifest,
       },
+      pkgJsonProps: ['version'],
     }),
   ],
   module: {

@@ -1,6 +1,6 @@
 {
   "name": "webclip-chrome-ext",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "main": "src/content.tsx",
   "scripts": {
@@ -67,6 +67,6 @@
     "typescript": "^4.2.3",
     "webpack": "^5.24.3",
     "webpack-cli": "^4.5.0",
-    "webpack-extension-manifest-plugin": "^0.6.0"
+    "webpack-extension-manifest-plugin": "^0.8.0"
   }
 }
