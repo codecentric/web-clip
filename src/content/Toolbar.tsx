@@ -19,7 +19,7 @@ export const Toolbar = ({ profile }: Props) => {
   return (
     <>
       <p>{profile.name}</p>
-      <button disabled={addBookmarkLoading} onClick={() => addBookmark(page)}>
+      <button className="primary" disabled={addBookmarkLoading} onClick={() => addBookmark(page)}>
         {addBookmarkLoading ? 'Saving...' : 'Clip it!'}
       </button>
       {addBookmarkError && <p>{addBookmarkError.message}</p>}

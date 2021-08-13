@@ -13,14 +13,14 @@
     box-shadow: -5px 5px 5px 0 rgba(0,0,0,0.26);
 }
 
-#webclip .overlay button {
+#webclip .overlay button.primary {
     padding: 1rem;
     background-color: var(--primary-color);
     color: #000;
     font-weight: bold;
 }
 
-#webclip .overlay button {
+#webclip .overlay button.primary {
     box-shadow:inset 0 39px 0 -24px var(--primary-color);
     background-color: #00b5d4;
     border-radius:4px;
@@ -33,12 +33,36 @@
     text-decoration:none;
     text-shadow:0 1px 0 var(--primary-color);
 }
-#webclip .overlay button:hover {
+#webclip .overlay button.primary:hover {
     background-color:var(--primary-color);
 }
-#webclip .overlay button:active {
+#webclip .overlay button.primary:active {
     position:relative;
     top:1px;
+}
+
+#webclip .overlay .close-container {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#webclip .overlay button.close {
+    position: relative;
+    right: -1rem;
+    top: -0.5rem;
+    line-height: 0;
+    color: #80808066;
+    background-color: unset;
+    cursor: pointer;
+    border: none;
+    font-size: 2rem;
+}
+
+#webclip .overlay button.close:hover {
+    color: #808080cf;
 }
 
 #webclip .paperclip {
