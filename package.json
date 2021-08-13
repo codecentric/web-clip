@@ -1,12 +1,13 @@
 {
-  "name": "webtrack-chrome-ext",
+  "name": "webclip-chrome-ext",
   "version": "0.1.0",
   "description": "",
   "main": "src/content.tsx",
   "scripts": {
     "test": "jest",
     "lint": "eslint ./src",
-    "start": "NODE_ENV=development webpack --mode development --watch"
+    "start": "NODE_ENV=development webpack --mode development --watch",
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",

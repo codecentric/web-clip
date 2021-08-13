@@ -1,0 +1,62 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 16.x ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - name: Save build
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: |
+            build
+            package.json
+          retention-days: 1
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build
+
+      - name: Extract version
+        id: extract_version
+        uses: Saionaro/extract-package-version@v1.0.6
+
+      - name: Create archive
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: webclip-${{ steps.extract_version.outputs.version }}.zip
+          directory: 'build'
+
+      - name: Create draft release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.extract_version.outputs.version }}
+          commit: ${{ github.sha }}
+          prerelease: true
+          draft: true
+          allowUpdates: true
+          artifacts: "build/*.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
