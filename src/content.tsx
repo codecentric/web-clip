@@ -37,5 +37,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 function renderApp(session: Session) {
-  ReactDOM.render(<PageContent sessionInfo={session.info} />, root);
+  ReactDOM.render(
+    <PageContent close={unmountApp} sessionInfo={session.info} />,
+    root
+  );
+}
+
+function unmountApp() {
+  ReactDOM.unmountComponentAtNode(root);
 }

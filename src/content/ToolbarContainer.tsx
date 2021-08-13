@@ -1,4 +1,3 @@
-import * as PropTypes from 'prop-types';
 import React from 'react';
 import { Toolbar } from './Toolbar';
 import { usePage } from './usePage';
@@ -14,8 +13,4 @@ export const ToolbarContainer = () => {
   ) : (
     <Toolbar profile={profile} />
   );
-};
-
-ToolbarContainer.propTypes = {
-  webId: PropTypes.string,
 };

@@ -1,21 +1,21 @@
-import { graph } from 'rdflib';
 import React from 'react';
 import { SolidApiContext } from '../api/apiContext';
-import { SessionInfo, SolidApi } from '../api/SolidApi';
+import { SessionInfo } from '../api/SolidApi';
 import { StoreContext } from '../store/context';
-import { Store } from '../store/Store';
 import { LoginButton } from './LoginButton';
 import { ToolbarContainer } from './ToolbarContainer';
+import { useSolid } from './useSolid';
 
 interface PageContentProps {
   sessionInfo: SessionInfo;
+  close: () => void;
 }
 
-export const PageContent = ({ sessionInfo }: PageContentProps) => {
-  const store = new Store(graph());
-  const solidApi = new SolidApi(sessionInfo, store);
+export const PageContent = ({ sessionInfo, close }: PageContentProps) => {
+  const { store, solidApi } = useSolid(sessionInfo);
   return (
     <div className="overlay">
+      <button aria-label="Close">X</button>
       <div className="paperclip" />
       <h1>WebClip</h1>
       <StoreContext.Provider value={store}>

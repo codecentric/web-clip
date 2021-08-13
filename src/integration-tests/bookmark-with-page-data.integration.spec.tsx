@@ -78,6 +78,7 @@ describe('bookmarking an html page with embedded data', () => {
     await act(async () => {
       await render(
         <PageContent
+          close={() => null}
           sessionInfo={
             {
               isLoggedIn: true,
