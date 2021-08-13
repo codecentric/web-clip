@@ -5,7 +5,7 @@ import { save as saveOptions, load as loadOptions } from './optionsStorageApi';
 jest.mock('./optionsStorageApi');
 
 describe('useOptions', () => {
-  let renderResult: RenderResult<any>;
+  let renderResult: RenderResult<ReturnType<typeof useOptions>>;
 
   beforeEach(async () => {
     (saveOptions as jest.Mock).mockResolvedValue(undefined);

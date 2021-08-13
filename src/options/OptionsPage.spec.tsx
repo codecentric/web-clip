@@ -10,7 +10,7 @@ describe('OptionsPage', () => {
   describe('while loading', () => {
     beforeEach(() => {
       (saveOptions as jest.Mock).mockResolvedValue(undefined);
-      (loadOptions as jest.Mock).mockReturnValue(new Promise(() => {}));
+      (loadOptions as jest.Mock).mockReturnValue(new Promise(() => null));
 
       render(<OptionsPage />);
     });

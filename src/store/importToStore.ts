@@ -29,6 +29,7 @@ export async function importToStore(url: string, store: IndexedFormula) {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function makeCompatibleToRdflib(term: any) {
   return isNamedNode(term)
     ? namedNode(term.value)
