@@ -13,7 +13,10 @@ const config = {
     publicPath: '/',
   },
   devServer: {
-    contentBase: './dist',
+    hot: true,
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '*'],
