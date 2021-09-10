@@ -111,3 +111,12 @@
     border-radius: 90px 90px 0 0;
     border-bottom: none;
 }
+
+#webclip .overlay a {
+    text-decoration: underline;
+    color: var(--primary-color);
+}
+
+#webclip .overlay p {
+    padding: 0.5rem 0;
+}

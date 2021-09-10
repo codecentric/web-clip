@@ -28,9 +28,11 @@ export const Toolbar = ({ profile }: Props) => {
       </button>
       {addBookmarkError && <p>{addBookmarkError.message}</p>}
       {bookmark && (
-        <a href={bookmark.uri} target="_blank" rel="noreferrer">
-          Show in pod
-        </a>
+        <p>
+          <a href={bookmark.uri} target="_blank" rel="noreferrer">
+            Show in pod
+          </a>
+        </p>
       )}
     </>
   );
