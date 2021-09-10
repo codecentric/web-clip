@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { ProvidePlugin } = require('webpack');
 const config = {
   mode: 'development',
   devtool: 'cheap-module-source-map',
@@ -26,6 +27,9 @@ const config = {
     },
   },
   plugins: [
+    new ProvidePlugin({
+      process: 'process',
+    }),
     new HtmlWebpackPlugin({
       title: 'WebClip (dev)',
       meta: {
