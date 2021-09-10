@@ -42,21 +42,42 @@ describe('useBookmark', () => {
     expect(solidApi.bookmark).toHaveBeenCalledWith(page);
   });
 
-  it('returns no error and stops loading indicator after successful bookmarking', async () => {
-    mockSolidApi();
-    const { result } = renderHook(() => useBookmark());
-    await act(async () => {
-      await result.current.addBookmark({
-        name: 'any',
-        url: 'any',
-        type: 'WebPage',
+  describe('after successful bookmarking', () => {
+    it('returns no error and stops loading indicator', async () => {
+      mockSolidApi();
+      const { result } = renderHook(() => useBookmark());
+      await act(async () => {
+        await result.current.addBookmark({
+          name: 'any',
+          url: 'any',
+          type: 'WebPage',
+        });
       });
+      expect(result.all[2]).toMatchObject({
+        loading: false,
+        error: null,
+      });
+      expect(result.all).toHaveLength(3);
     });
-    expect(result.all[2]).toMatchObject({
-      loading: false,
-      error: null,
+
+    it('returns the saved bookmark', async () => {
+      const mockApi = mockSolidApi();
+      mockApi.bookmark.mockResolvedValue({
+        uri: 'https://storage.example/bookmark#it',
+      });
+      const { result } = renderHook(() => useBookmark());
+      await act(async () => {
+        await result.current.addBookmark({
+          name: 'any',
+          url: 'any',
+          type: 'WebPage',
+        });
+      });
+      expect(result.all[2]).toMatchObject({
+        bookmark: { uri: 'https://storage.example/bookmark#it' },
+      });
+      expect(result.all).toHaveLength(3);
     });
-    expect(result.all).toHaveLength(3);
   });
 
   it('returns error and stops loading indicator after unsuccessful bookmarking', async () => {
