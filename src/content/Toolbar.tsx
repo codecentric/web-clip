@@ -1,4 +1,3 @@
-import * as PropTypes from 'prop-types';
 import React from 'react';
 import { useBookmark } from './useBookmark';
 import { usePage } from './usePage';
@@ -14,19 +13,25 @@ export const Toolbar = ({ profile }: Props) => {
     addBookmark,
     loading: addBookmarkLoading,
     error: addBookmarkError,
+    bookmark,
   } = useBookmark();
   const page = usePage();
   return (
     <>
       <p>{profile.name}</p>
-      <button className="primary" disabled={addBookmarkLoading} onClick={() => addBookmark(page)}>
+      <button
+        className="primary"
+        disabled={addBookmarkLoading}
+        onClick={() => addBookmark(page)}
+      >
         {addBookmarkLoading ? 'Saving...' : 'Clip it!'}
       </button>
       {addBookmarkError && <p>{addBookmarkError.message}</p>}
+      {bookmark && (
+        <a href={bookmark.uri} target="_blank" rel="noreferrer">
+          Show in pod
+        </a>
+      )}
     </>
   );
-};
-
-Toolbar.propTypes = {
-  webId: PropTypes.string,
 };

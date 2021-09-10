@@ -67,5 +67,19 @@ describe('Toolbar', () => {
       const button = screen.getByText('Clip it!');
       expect(button).not.toBeDisabled();
     });
+
+    it('shows a link to the bookmark after it has been saved', () => {
+      (useBookmark as jest.Mock).mockReturnValue({
+        loading: false,
+        bookmark: { uri: 'https://storage.example/bookmark#it' },
+        addBookmark,
+      });
+
+      render(<Toolbar profile={{ name: 'Jane Doe' }} />);
+
+      expect(screen.getByText('Show in pod').getAttribute('href')).toBe(
+        'https://storage.example/bookmark#it'
+      );
+    });
   });
 });
