@@ -258,6 +258,38 @@ describe('SolidApi', () => {
       }`
       );
     });
+
+    it('returns the uri for the bookmark action', async () => {
+      mockFetchWithResponse('');
+      givenGeneratedUuidWillBe('some-uuid');
+      givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
+
+      const store = givenStoreContaining(
+        'https://pod.example/',
+        `
+          <#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `
+      );
+
+      const solidApi = new SolidApi(
+        {
+          webId: 'https://pod.example/#me',
+          isLoggedIn: true,
+        } as SessionInfo,
+        new Store(store)
+      );
+
+      const result = await solidApi.bookmark({
+        type: 'WebPage',
+        url: 'https://myfavouriteurl.example',
+        name: 'I love this page',
+      });
+
+      expect(result).toEqual({
+        uri: 'https://storage.example/webclip/2021/03/12/some-uuid#it',
+      });
+    });
   });
 });
 

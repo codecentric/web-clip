@@ -29,6 +29,10 @@ export interface Profile {
   name: string;
 }
 
+export interface Bookmark {
+  uri: string;
+}
+
 export class SolidApi {
   private readonly me: NamedNode;
   private readonly sessionInfo: SessionInfo;
@@ -81,7 +85,7 @@ export class SolidApi {
     return { name };
   }
 
-  async bookmark(page: PageMetaData) {
+  async bookmark(page: PageMetaData): Promise<Bookmark> {
     const storageUrl = this.graph.anyValue(this.me, this.ns.space('storage'));
 
     if (!storageUrl) {
@@ -115,7 +119,8 @@ export class SolidApi {
       ...about,
     ];
 
-    return this.updater.update([], insertions);
+    await this.updater.update([], insertions);
+    return { uri: it.uri };
   }
 }
 
