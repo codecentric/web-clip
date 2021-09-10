@@ -10,7 +10,19 @@ First install all dependencies by running
 npm install
 ```
 
-To start webpack in watch mode run run
+### Content page via Webpack dev server
+
+To run an example page with the plugins content page run
+
+```shell
+npm run dev
+```
+
+You can use the WebClip popup on the example page with a login on solidcommunity.net. The Options page and the browser integration can not be tested this way, see below how to start the full plugin locally.
+
+### Full extension via chrome
+
+To start webpack in watch mode run
 
 ```shell
 npm start
