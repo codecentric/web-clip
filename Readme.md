@@ -32,4 +32,8 @@ In Chrome:
 
 1. visit chrome://extensions/ 
 2. enable the developer mode
-3. Load unpacked extension (choose the project's build folder) 
+3. Load unpacked extension (choose the project's build folder)
+
+## Release on Chrome Web Store
+
+All commits to the main branch trigger a Github Actions CI/CD build, that creates or [updates a draft release](https://github.com/codecentric/web-clip/releases) with the version from package.json. The ZIP file can then be downloaded locally and uploaded manually via the [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole/ee35c951-053f-4723-80b8-e4420a571f64/mfgjcggbpdkbnnpgllaicoeplfgkfnkj/edit/package?hl=de).
