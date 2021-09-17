@@ -7,7 +7,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { PageContent } from '../src/content/PageContent';
 
-import '../src/assets/content.css';
+import contentCss from '../src/assets/content.css';
+
 import StorageChange = chrome.storage.StorageChange;
 import AreaName = chrome.storage.AreaName;
 
@@ -43,9 +44,12 @@ handleRedirectAfterLogin().then((session: Session) => {
 });
 
 const root = document.getElementById('webclip');
-const shadowDom = root.attachShadow({ mode: 'closed' });
-const shadowRoot = document.createElement('div');
-shadowDom.appendChild(shadowRoot);
+const shadowRoot = root.attachShadow({ mode: 'open' });
+const container = document.createElement('div');
+const styleTag = document.createElement('style');
+styleTag.innerHTML = contentCss;
+shadowRoot.appendChild(styleTag);
+shadowRoot.appendChild(container);
 
 function renderApp(session: Session) {
   ReactDOM.render(
@@ -53,6 +57,6 @@ function renderApp(session: Session) {
       close={() => alert('cannot close in dev mode')}
       sessionInfo={session.info}
     />,
-    shadowRoot
+    container
   );
 }
