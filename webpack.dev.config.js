@@ -1,5 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+
 const config = {
   mode: 'development',
   devtool: 'cheap-module-source-map',
@@ -17,14 +19,9 @@ const config = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '*'],
-    fallback: {
-      stream: require.resolve('stream-browserify'),
-      crypto: require.resolve('crypto-browserify'),
-      url: require.resolve('url/'),
-      querystring: require.resolve('querystring-es3'),
-    },
   },
   plugins: [
+    new NodePolyfillPlugin(),
     new HtmlWebpackPlugin({
       title: 'WebClip (dev)',
       meta: {
