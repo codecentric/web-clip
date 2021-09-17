@@ -11,7 +11,7 @@ import '../src/assets/content.css';
 import StorageChange = chrome.storage.StorageChange;
 import AreaName = chrome.storage.AreaName;
 
-chrome.storage = ({
+chrome.storage = {
   onChanged: {
     addListener: (
       listener: (
@@ -31,7 +31,7 @@ chrome.storage = ({
     },
   },
   sync: { get: (): null => null },
-} as unknown) as typeof chrome.storage;
+} as unknown as typeof chrome.storage;
 
 async function handleRedirectAfterLogin() {
   await handleIncomingRedirect();
@@ -42,12 +42,17 @@ handleRedirectAfterLogin().then((session: Session) => {
   renderApp(session);
 });
 
+const root = document.getElementById('webclip');
+const shadowDom = root.attachShadow({ mode: 'closed' });
+const shadowRoot = document.createElement('div');
+shadowDom.appendChild(shadowRoot);
+
 function renderApp(session: Session) {
   ReactDOM.render(
     <PageContent
       close={() => alert('cannot close in dev mode')}
       sessionInfo={session.info}
     />,
-    document.getElementById('webclip')
+    shadowRoot
   );
 }
