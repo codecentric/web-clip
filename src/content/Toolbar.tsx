@@ -20,7 +20,7 @@ export const Toolbar = ({ profile }: Props) => {
     <>
       <p>{profile.name}</p>
       <button
-        className="primary"
+        className="px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold"
         disabled={addBookmarkLoading}
         onClick={() => addBookmark(page)}
       >

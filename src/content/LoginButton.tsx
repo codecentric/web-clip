@@ -5,7 +5,12 @@ export const LoginButton = () => {
   const { login, error } = useLogin();
   return (
     <>
-      <button className="primary" onClick={login}>Login</button>
+      <button
+        className="px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold"
+        onClick={login}
+      >
+        Login
+      </button>
       {error && <p>{error}</p>}
     </>
   );
