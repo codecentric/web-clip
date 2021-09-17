@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const baseManifest = require('./chrome/manifest.json');
 const WebpackExtensionManifestPlugin = require('webpack-extension-manifest-plugin');
-const { ProvidePlugin } = require('webpack');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 const config = {
   mode: 'development',
@@ -20,18 +20,9 @@ const config = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '*'],
-    fallback: {
-      stream: require.resolve('stream-browserify'),
-      crypto: require.resolve('crypto-browserify'),
-      url: require.resolve('url/'),
-      querystring: require.resolve('querystring-es3'),
-      buffer: require.resolve('buffer/'),
-    },
   },
   plugins: [
-    new ProvidePlugin({
-      process: 'process',
-    }),
+    new NodePolyfillPlugin(),
     new HtmlWebpackPlugin({
       title: 'Webclip', // change this to your app title
       meta: {
