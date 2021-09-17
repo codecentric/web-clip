@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@inrupt/solid-client-authn-browser": "^1.11.2",
