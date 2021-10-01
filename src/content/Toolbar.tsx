@@ -18,9 +18,9 @@ export const Toolbar = ({ profile }: Props) => {
   const page = usePage();
   return (
     <>
-      <p>{profile.name}</p>
+      <p className="my-1">{profile.name}</p>
       <button
-        className="primary"
+        className="my-1 px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold"
         disabled={addBookmarkLoading}
         onClick={() => addBookmark(page)}
       >
@@ -28,7 +28,7 @@ export const Toolbar = ({ profile }: Props) => {
       </button>
       {addBookmarkError && <p>{addBookmarkError.message}</p>}
       {bookmark && (
-        <p>
+        <p className="my-1 text-blue-400 opacity-90 hover:opacity-100">
           <a href={bookmark.uri} target="_blank" rel="noreferrer">
             Show in pod
           </a>

@@ -5,14 +5,20 @@ import {
 } from '@inrupt/solid-client-authn-browser';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import './assets/content.css';
 import { PageContent } from './content/PageContent';
 import { MessageType } from './messages';
+
+import contentCss from './assets/content.css';
 
 const root = document.createElement('div');
 root.id = 'webclip';
 document.body.appendChild(root);
+const shadowRoot = root.attachShadow({ mode: 'open' });
+const container = document.createElement('div');
+const styleTag = document.createElement('style');
+styleTag.innerHTML = contentCss;
+shadowRoot.appendChild(styleTag);
+shadowRoot.appendChild(container);
 
 async function handleRedirectAfterLogin() {
   await handleIncomingRedirect();
@@ -39,10 +45,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 function renderApp(session: Session) {
   ReactDOM.render(
     <PageContent close={unmountApp} sessionInfo={session.info} />,
-    root
+    container
   );
 }
 
 function unmountApp() {
-  ReactDOM.unmountComponentAtNode(root);
+  ReactDOM.unmountComponentAtNode(container);
 }

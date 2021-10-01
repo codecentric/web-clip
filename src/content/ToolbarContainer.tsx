@@ -9,7 +9,7 @@ export const ToolbarContainer = () => {
   const { url } = usePage();
   const { loading: dataLoading } = usePageData(url);
   return profileLoading || dataLoading ? (
-    <p>Loading...</p>
+    <p className="my-1">Loading...</p>
   ) : (
     <Toolbar profile={profile} />
   );
