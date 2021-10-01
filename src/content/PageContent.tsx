@@ -14,7 +14,7 @@ interface PageContentProps {
 export const PageContent = ({ sessionInfo, close }: PageContentProps) => {
   const { store, solidApi } = useSolid(sessionInfo);
   return (
-    <div className="font-sans text-gray-700 z-50 fixed top-0 right-0 m-8 shadow rounded w-auto h-auto p-4 bg-white flex flex-col items-center">
+    <div className="font-sans text-gray-700 z-max fixed top-0 right-0 m-8 shadow rounded w-auto h-auto p-4 bg-white flex flex-col items-center">
       <div className="flex w-full justify-end items-center">
         <button
           className="text-gray-300 text-3xl hover:text-gray-500 relative w-4 h-4 -top-4"
