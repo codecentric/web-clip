@@ -2,6 +2,10 @@
 
 A Chrome extension to extract structured data from any web page and store it to a Solid Pod.
 
+## Install
+
+You can install the extension easily [via the Chrome Web Store](https://chrome.google.com/webstore/detail/webclip-clip-all-the-thin/mfgjcggbpdkbnnpgllaicoeplfgkfnkj).
+
 ## Start locally
 
 First install all dependencies by running
