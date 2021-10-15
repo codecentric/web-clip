@@ -8,7 +8,8 @@
     "lint": "eslint ./src",
     "start": "NODE_ENV=development webpack --mode development --watch",
     "build": "webpack",
-    "dev": "webpack serve --open --config webpack.dev.config.js "
+    "dev": "webpack serve --open --config webpack.dev.config.js ",
+    "pod": "community-solid-server --config @css:config/file.json --rootFilePath ./dev/pod"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +20,7 @@
     "@inrupt/vocab-common-rdf": "^1.0.1",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "rdf-dereference": "^1.9.0",
-    "rdflib": "^2.2.0",
+    "rdflib": "^2.2.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "solid-namespace": "^0.5.1",
@@ -31,6 +32,7 @@
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.15.0",
+    "@solid/community-server": "^2.0.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.0",
     "@testing-library/react-hooks": "^7.0.2",

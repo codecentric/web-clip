@@ -22,7 +22,24 @@ To run an example page with the plugins content page run
 npm run dev
 ```
 
-You can use the WebClip popup on the example page with a login on solidcommunity.net. The Options page and the browser integration can not be tested this way, see below how to start the full plugin locally.
+You can use the WebClip popup on the example page with a login to the local development pod (see [below](#local-pod-for-testing)).
+
+The Options page and the browser integration can not be tested this way, see section ["Full extension via chrome"](#full-extension-via-chrome) how to start the full plugin locally.
+
+### Local pod for testing
+
+To start a Community Solid Server instance localy for testing run:
+
+```shell
+npm run pod
+```
+
+The server is running on http://localhost:3000. The data of it is stored at `./dev/pod`.
+
+| Log in   |                   |
+| -------- | ----------------- |
+| email    | webclip@mail.test |
+| password | webclip-dev-pod   |
 
 ### Full extension via chrome
 
@@ -34,7 +51,7 @@ npm start
 
 In Chrome:
 
-1. visit chrome://extensions/ 
+1. visit chrome://extensions/
 2. enable the developer mode
 3. Load unpacked extension (choose the project's build folder)
 

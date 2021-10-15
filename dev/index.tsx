@@ -24,7 +24,7 @@ chrome.storage = {
         {
           providerUrl: {
             oldValue: '',
-            newValue: 'https://solidcommunity.net',
+            newValue: 'http://localhost:3000',
           },
         },
         'sync'
