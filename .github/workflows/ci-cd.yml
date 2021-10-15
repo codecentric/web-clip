@@ -31,7 +31,7 @@ jobs:
             package.json
           retention-days: 1
 
-  release:
+  pre-release:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -50,13 +50,41 @@ jobs:
           filename: webclip-${{ steps.extract_version.outputs.version }}.zip
           directory: 'build'
 
+      - name: Save zip
+        uses: actions/upload-artifact@v2
+        with:
+          name: zip
+          path: build/webclip-${{ steps.extract_version.outputs.version }}.zip
+          retention-days: 30
+
+      - name: Create pre-release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.extract_version.outputs.version }}-dev
+          commit: ${{ github.sha }}
+          prerelease: true
+          allowUpdates: true
+          artifacts: "build/*.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    needs: pre-release
+    environment: prod
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: zip
+
+      - name: Extract version
+        id: extract_version
+        uses: Saionaro/extract-package-version@v1.0.6
+
       - name: Create draft release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.extract_version.outputs.version }}
           commit: ${{ github.sha }}
-          prerelease: true
-          draft: true
-          allowUpdates: true
+          allowUpdates: false
           artifacts: "build/*.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
