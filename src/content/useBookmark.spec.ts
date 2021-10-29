@@ -107,6 +107,24 @@ describe('useBookmark', () => {
       });
       expect(result.all).toHaveLength(2);
     });
+
+    it('returns an error after unsuccessful loading', async () => {
+      const error = new Error('Unexpected error');
+      solidApi.loadBookmark.mockRejectedValue(error);
+
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useBookmark({
+          name: 'any',
+          url: 'any',
+          type: 'WebPage',
+        })
+      );
+      await waitForNextUpdate();
+      expect(result.all[RenderCycle.DONE_LOADING]).toMatchObject({
+        error,
+      });
+      expect(result.all).toHaveLength(2);
+    });
   });
 
   describe('while bookmarking', () => {

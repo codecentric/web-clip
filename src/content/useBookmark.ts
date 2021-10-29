@@ -21,14 +21,23 @@ export const useBookmark = (page: PageMetaData) => {
   });
 
   useEffect(() => {
-    solidApi.loadBookmark(page).then((bookmark) => {
-      setState((state) => ({
-        ...state,
-        loading: false,
-        error: null,
-        result: bookmark,
-      }));
-    });
+    solidApi
+      .loadBookmark(page)
+      .then((bookmark) => {
+        setState((state) => ({
+          ...state,
+          loading: false,
+          error: null,
+          result: bookmark,
+        }));
+      })
+      .catch((error) => {
+        setState((state) => ({
+          ...state,
+          loading: false,
+          error,
+        }));
+      });
   }, [solidApi]);
 
   return {
