@@ -10,8 +10,9 @@ describe('useBookmark', () => {
 
   enum RenderCycle {
     INITIAL,
-    LOADING,
-    DONE,
+    DONE_LOADING,
+    SAVING,
+    DONE_SAVING,
   }
 
   describe('initial state', () => {
@@ -26,7 +27,7 @@ describe('useBookmark', () => {
       expect(result.all[RenderCycle.INITIAL]).toMatchObject({
         saving: false,
       });
-      expect(result.all).toHaveLength(1);
+      expect(result.all).toHaveLength(2);
     });
 
     it('returns loading true', () => {
@@ -40,7 +41,23 @@ describe('useBookmark', () => {
       expect(result.all[RenderCycle.INITIAL]).toMatchObject({
         loading: true,
       });
-      expect(result.all).toHaveLength(1);
+      expect(result.all).toHaveLength(2);
+    });
+  });
+
+  describe('after checking for existing bookmark', () => {
+    it('returns loading false', () => {
+      const { result } = renderHook(() =>
+        useBookmark({
+          name: 'any',
+          url: 'any',
+          type: 'WebPage',
+        })
+      );
+      expect(result.all[RenderCycle.DONE_LOADING]).toMatchObject({
+        loading: false,
+      });
+      expect(result.all).toHaveLength(2);
     });
   });
 
@@ -57,10 +74,10 @@ describe('useBookmark', () => {
       await act(async () => {
         await result.current.addBookmark();
       });
-      expect(result.all[RenderCycle.LOADING]).toMatchObject({
+      expect(result.all[RenderCycle.SAVING]).toMatchObject({
         saving: true,
       });
-      expect(result.all).toHaveLength(3);
+      expect(result.all).toHaveLength(4);
     });
 
     it('calls solid api to create a bookmark', async () => {
@@ -87,11 +104,11 @@ describe('useBookmark', () => {
       await act(async () => {
         await result.current.addBookmark();
       });
-      expect(result.all[RenderCycle.DONE]).toMatchObject({
+      expect(result.all[RenderCycle.DONE_SAVING]).toMatchObject({
         saving: false,
         error: null,
       });
-      expect(result.all).toHaveLength(3);
+      expect(result.all).toHaveLength(4);
     });
 
     it('returns the saved bookmark', async () => {
@@ -109,10 +126,10 @@ describe('useBookmark', () => {
       await act(async () => {
         await result.current.addBookmark();
       });
-      expect(result.all[RenderCycle.DONE]).toMatchObject({
+      expect(result.all[RenderCycle.DONE_SAVING]).toMatchObject({
         bookmark: { uri: 'https://storage.example/bookmark#it' },
       });
-      expect(result.all).toHaveLength(3);
+      expect(result.all).toHaveLength(4);
     });
   });
 
@@ -130,10 +147,10 @@ describe('useBookmark', () => {
     await act(async () => {
       await result.current.addBookmark();
     });
-    expect(result.all[RenderCycle.DONE]).toMatchObject({
+    expect(result.all[RenderCycle.DONE_SAVING]).toMatchObject({
       saving: false,
       error: new Error('Pod not available'),
     });
-    expect(result.all).toHaveLength(3);
+    expect(result.all).toHaveLength(4);
   });
 });

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSolidApi } from '../api/apiContext';
 import { Bookmark } from '../api/SolidApi';
 import { PageMetaData } from './usePage';
@@ -17,8 +17,19 @@ export const useBookmark = (page: PageMetaData) => {
     loading: false,
     error: null,
   });
-  return {
+  const [{ loading }, loadBookmarkResult] = useState<AsyncState<Bookmark>>({
     loading: true,
+    error: null,
+  });
+
+  useEffect(() => {
+    const fetch = async () => {
+      loadBookmarkResult({ loading: false, error: null, result: null });
+    };
+    fetch();
+  }, []);
+  return {
+    loading,
     saving,
     error,
     bookmark: result,
