@@ -2,22 +2,18 @@ import {
   fetch as authenticatedFetch,
   login,
 } from '@inrupt/solid-client-authn-browser';
-import { graph, parse, Store as RdflibStore } from 'rdflib';
+import { Parser as SparqlParser, Update } from 'sparqljs';
 import { subscribeOption } from '../options/optionsStorageApi';
 import { Store } from '../store/Store';
-import { Bookmark, SessionInfo, SolidApi } from './SolidApi';
-import { Parser as SparqlParser, Update } from 'sparqljs';
+import { givenStoreContaining } from '../test/givenStoreContaining';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
+import { Bookmark, SessionInfo, SolidApi } from './SolidApi';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('./generateUuid');
 jest.mock('./now');
 jest.mock('../options/optionsStorageApi');
-
-interface MockStore extends RdflibStore {
-  and: (base: string, turtle: string) => MockStore;
-}
 
 describe('SolidApi', () => {
   beforeEach(() => {
@@ -122,16 +118,6 @@ describe('SolidApi', () => {
       );
     });
   });
-
-  function givenStoreContaining(base: string, turtle: string): MockStore {
-    const store = graph() as MockStore;
-    parse(turtle, store, base);
-    store.and = (base: string, turtle: string) => {
-      parse(turtle, store, base);
-      return store;
-    };
-    return store;
-  }
 
   describe('bookmark', () => {
     it("stores a bookmark in the user's pod when storage is available", async () => {
