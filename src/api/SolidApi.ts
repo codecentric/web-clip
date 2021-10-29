@@ -33,6 +33,10 @@ export interface Bookmark {
   uri: string;
 }
 
+function getIndex(storageUrl: string): NamedNode {
+  return sym(urlJoin(storageUrl, 'webclip', 'index.ttl'));
+}
+
 export class SolidApi {
   private readonly me: NamedNode;
   private readonly sessionInfo: SessionInfo;
@@ -86,11 +90,7 @@ export class SolidApi {
   }
 
   async bookmark(page: PageMetaData): Promise<Bookmark> {
-    const storageUrl = this.graph.anyValue(this.me, this.ns.space('storage'));
-
-    if (!storageUrl) {
-      throw new Error('No storage available.');
-    }
+    const storageUrl = this.getStorageUrl();
 
     const clip = sym(
       urlJoin(
@@ -102,12 +102,21 @@ export class SolidApi {
       )
     );
 
-    const index = sym(urlJoin(storageUrl, 'webclip', 'index.ttl'));
+    const index = getIndex(storageUrl);
 
     await this.savePageData(clip, page);
     await this.updateIndex(index, clip, page);
 
     return { uri: clip.uri };
+  }
+
+
+  private getStorageUrl() {
+    const storageUrl = this.graph.anyValue(this.me, this.ns.space('storage'));
+    if (!storageUrl) {
+      throw new Error('No storage available.');
+    }
+    return storageUrl;
   }
 
   private async savePageData(clip: NamedNode, page: PageMetaData) {
@@ -149,7 +158,13 @@ export class SolidApi {
   }
 
   async loadBookmark(page: PageMetaData): Promise<Bookmark> {
-    throw new Error('Not implemented');
+    const index = getIndex(this.getStorageUrl());
+    try {
+      await this.fetcher.load(index);
+    } catch (err) {
+      // no index found, that's ok
+    }
+    return null;
   }
 }
 

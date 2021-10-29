@@ -5,7 +5,7 @@ import {
 import { graph, parse, Store as RdflibStore } from 'rdflib';
 import { subscribeOption } from '../options/optionsStorageApi';
 import { Store } from '../store/Store';
-import { SessionInfo, SolidApi } from './SolidApi';
+import { Bookmark, SessionInfo, SolidApi } from './SolidApi';
 import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
@@ -327,6 +327,58 @@ describe('SolidApi', () => {
 
       expect(result).toEqual({
         uri: 'https://storage.example/webclip/2021/03/12/some-uuid#it',
+      });
+    });
+  });
+
+  describe('load bookmark', () => {
+    describe('when no index is found', () => {
+      let result: Bookmark;
+      beforeEach(async () => {
+        (authenticatedFetch as jest.Mock).mockResolvedValue({
+          ok: true,
+          headers: new Headers({
+            'Content-Type': 'text/plain',
+            'wac-allow': 'user="read write append control",public=""',
+            'ms-author-via': 'SPARQL',
+          }),
+          status: 404,
+          statusText: 'Not Found',
+          text: async () => 'Cannot find requested file',
+        });
+
+        const store = givenStoreContaining(
+          'https://pod.example/',
+          `
+          <#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `
+        );
+
+        const solidApi = new SolidApi(
+          {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          } as SessionInfo,
+          new Store(store)
+        );
+
+        result = await solidApi.loadBookmark({
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        });
+      });
+
+      it('it returns null', async () => {
+        expect(result).toEqual(null);
+      });
+
+      it('has tried to load the index document', () => {
+        expect(authenticatedFetch).toHaveBeenCalledWith(
+          'https://storage.example/webclip/index.ttl',
+          expect.anything()
+        );
       });
     });
   });
