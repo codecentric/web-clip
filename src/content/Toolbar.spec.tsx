@@ -21,12 +21,12 @@ describe('Toolbar', () => {
       expect(screen.getByText('Jane Doe')).toBeInTheDocument();
     });
 
-    it('disables the clip it button', () => {
+    it('hides the clip it button', () => {
       render(<Toolbar profile={{ name: 'Jane Doe' }} />);
 
-      expect(screen.queryByText('Clip it!')).toBeInTheDocument();
-      const button = screen.getByText('Clip it!');
-      expect(button).toBeDisabled();
+      const button = screen.queryByRole('button');
+      expect(button).not.toBeInTheDocument();
+      expect(screen.queryByText('Clip it!')).not.toBeInTheDocument();
     });
   });
 
@@ -91,6 +91,7 @@ describe('Toolbar', () => {
       it('shows an error if the bookmark cannot be saved', () => {
         (useBookmark as jest.Mock).mockReturnValue({
           saving: false,
+          loading: false,
           error: new Error('Pod not available'),
           addBookmark,
         });

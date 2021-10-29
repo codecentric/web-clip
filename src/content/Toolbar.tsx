@@ -11,16 +11,19 @@ interface Props {
 export const Toolbar = ({ profile }: Props) => {
   const page = usePage();
   const { addBookmark, loading, saving, error, bookmark } = useBookmark(page);
+  const waiting = loading || saving;
   return (
     <>
       <p className="my-1">{profile.name}</p>
-      <button
-        className="my-1 px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold"
-        disabled={loading || saving}
-        onClick={() => addBookmark()}
-      >
-        {saving ? 'Saving...' : 'Clip it!'}
-      </button>
+      {loading ? null : (
+        <button
+          className="my-1 px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold"
+          disabled={waiting}
+          onClick={() => addBookmark()}
+        >
+          {saving ? 'Saving...' : 'Clip it!'}
+        </button>
+      )}
       {error && <p>{error.message}</p>}
       {bookmark && (
         <p className="my-1 text-blue-400 opacity-90 hover:opacity-100">
