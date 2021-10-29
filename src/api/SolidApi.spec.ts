@@ -179,6 +179,46 @@ describe('SolidApi', () => {
       );
     });
 
+    it('adds the bookmark to the webclip index', async () => {
+      mockFetchWithResponse('');
+      givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
+      givenGeneratedUuidWillBe('some-uuid');
+
+      const store = givenStoreContaining(
+        'https://pod.example/',
+        `
+          <#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `
+      );
+
+      const solidApi = new SolidApi(
+        {
+          webId: 'https://pod.example/#me',
+          isLoggedIn: true,
+        } as SessionInfo,
+        new Store(store)
+      );
+
+      await solidApi.bookmark({
+        type: 'WebPage',
+        url: 'https://myfavouriteurl.example',
+        name: 'I love this page',
+      });
+
+      thenSparqlUpdateIsSentToUrl(
+        'https://storage.example/webclip/index.ttl',
+        `
+      INSERT DATA {
+        <https://storage.example/webclip/2021/03/12/some-uuid#it>
+          a <http://schema.org/BookmarkAction> ;
+          <http://schema.org/object> <https://myfavouriteurl.example>
+        .
+      }`,
+        3
+      );
+    });
+
     it('throws an exception if no storage is available', async () => {
       mockFetchWithResponse('');
       (generateUuid as jest.Mock).mockReturnValue('some-uuid');
@@ -322,12 +362,18 @@ function givenNowIs(timestamp: number) {
   (now as jest.Mock).mockReturnValue(new Date(timestamp));
 }
 
-function thenSparqlUpdateIsSentToUrl(url: string, query: string) {
+function thenSparqlUpdateIsSentToUrl(
+  url: string,
+  query: string,
+  callNumber = 1
+) {
   expect(authenticatedFetch).toHaveBeenCalled();
 
   const parser = new SparqlParser();
 
-  const sparqlUpdateCall = (authenticatedFetch as jest.Mock).mock.calls[1];
+  const sparqlUpdateCall = (authenticatedFetch as jest.Mock).mock.calls[
+    callNumber
+  ];
 
   const uri = sparqlUpdateCall[0];
   expect(uri).toBe(url);

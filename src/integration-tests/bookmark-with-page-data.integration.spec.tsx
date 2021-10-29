@@ -39,9 +39,11 @@ describe('bookmarking an html page with embedded data', () => {
     (now as jest.Mock).mockReturnValue(
       new Date(Date.UTC(2021, 2, 12, 9, 10, 11, 12))
     );
-    nock('https://shop.example').get('/product/0816.html').reply(
-      200,
-      `
+    nock('https://shop.example')
+      .get('/product/0816.html')
+      .reply(
+        200,
+        `
                 <!doctype html>
                 <html lang="en">
                 <head>
@@ -64,10 +66,10 @@ describe('bookmarking an html page with embedded data', () => {
                 </body>
                 </html>
             `,
-      {
-        'Content-Type': 'text/html',
-      }
-    );
+        {
+          'Content-Type': 'text/html',
+        }
+      );
 
     mockFetchWithResponse(`
                 <https://pod.example/#me>
@@ -91,11 +93,10 @@ describe('bookmarking an html page with embedded data', () => {
 
     const clipItButton = await screen.findByText('Clip it!');
 
+    // when the page is bookmarked
     await act(async () => {
       await userEvent.click(clipItButton);
     });
-
-    // when the page is bookmarked
 
     // then the stored data is stored in the Pod
     expect(authenticatedFetch).toHaveBeenCalled();
@@ -125,6 +126,96 @@ describe('bookmarking an html page with embedded data', () => {
                       <http://schema.org/name> "WiFi cable" ;
                       <http://schema.org/description> "Increase your WiFi range with this 10m thin-air cable" ;
                     .
+            }`) as Update;
+    expect(actualQuery).toEqual(expectedQuery);
+  });
+
+  it('adds the page to the webclip index in the pod', async () => {
+    window.location.href = 'https://shop.example/product/0816.html';
+    window.document.title = 'Shop Example - WiFi cable - Product page';
+    (generateUuid as jest.Mock).mockReturnValue('some-uuid');
+    (generateDatePathForToday as jest.Mock).mockReturnValue('/2021/03/12');
+    (now as jest.Mock).mockReturnValue(
+      new Date(Date.UTC(2021, 2, 12, 9, 10, 11, 12))
+    );
+    nock('https://shop.example')
+      .get('/product/0816.html')
+      .reply(
+        200,
+        `
+                <!doctype html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport"
+                          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+                    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                    <title>Shop Example - WiFi cable - Product page</title>
+                    <script type="application/ld+json">
+                    {
+                      "@context": "https://schema.org/",
+                      "@type": "Product",
+                      "name": "WiFi cable",
+                      "description": "Increase your WiFi range with this 10m thin-air cable",
+                    }
+                    
+                    </script>
+                </head>
+                <body>
+                </body>
+                </html>
+            `,
+        {
+          'Content-Type': 'text/html',
+        }
+      );
+
+    mockFetchWithResponse(`
+                <https://pod.example/#me>
+                <http://www.w3.org/ns/pim/space#storage>
+                <https://storage.example/> .
+            `);
+
+    await act(async () => {
+      await render(
+        <PageContent
+          close={() => null}
+          sessionInfo={
+            {
+              isLoggedIn: true,
+              webId: 'https://pod.example/#me',
+            } as SessionInfo
+          }
+        />
+      );
+    });
+
+    const clipItButton = await screen.findByText('Clip it!');
+
+    // when the page is bookmarked
+    await act(async () => {
+      await userEvent.click(clipItButton);
+    });
+
+    // then the page is indexed in the Pod
+    expect(authenticatedFetch).toHaveBeenCalled();
+    const parser = new SparqlParser();
+
+    const calls = (authenticatedFetch as jest.Mock).mock.calls;
+
+    const sparqlUpdateIndexCall = calls[4];
+
+    const uri = sparqlUpdateIndexCall[0];
+    expect(uri).toBe('https://storage.example/webclip/index.ttl');
+
+    const body = sparqlUpdateIndexCall[1].body;
+    expect(body).toBeDefined();
+    const actualQuery = parser.parse(body) as Update;
+    const expectedQuery = parser.parse(`
+           INSERT DATA {
+                <https://storage.example/webclip/2021/03/12/some-uuid#it>
+                    a <http://schema.org/BookmarkAction> ;
+                    <http://schema.org/object> <https://shop.example/product/0816.html> .
             }`) as Update;
     expect(actualQuery).toEqual(expectedQuery);
   });

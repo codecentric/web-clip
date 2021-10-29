@@ -120,6 +120,16 @@ export class SolidApi {
     ];
 
     await this.updater.update([], insertions);
+
+    const indexDocument = sym(urlJoin(storageUrl, 'webclip', 'index.ttl'));
+
+    const indexUpdate = [
+      st(it, a, BookmarkAction, indexDocument),
+      st(it, this.ns.schema('object'), pageUrl, indexDocument),
+    ];
+
+    await this.updater.update([], indexUpdate);
+
     return { uri: it.uri };
   }
 }
