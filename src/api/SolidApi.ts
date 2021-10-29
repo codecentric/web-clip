@@ -92,7 +92,7 @@ export class SolidApi {
       throw new Error('No storage available.');
     }
 
-    const it = sym(
+    const clip = sym(
       urlJoin(
         storageUrl,
         'webclip',
@@ -101,18 +101,27 @@ export class SolidApi {
         '#it'
       )
     );
+
+    const index = sym(urlJoin(storageUrl, 'webclip', 'index.ttl'));
+
+    await this.savePageData(clip, page);
+    await this.updateIndex(index, clip, page);
+
+    return { uri: clip.uri };
+  }
+
+  private async savePageData(clip: NamedNode, page: PageMetaData) {
     const a = this.ns.rdf('type');
     const BookmarkAction = this.ns.schema('BookmarkAction');
-    const document = it.doc();
     const pageUrl = sym(page.url);
+    const document = clip.doc();
     const WebPage = this.ns.schema('WebPage');
-
     const about: Statement[] = this.store.createRelations(pageUrl, document);
 
     const insertions = [
-      st(it, a, BookmarkAction, document),
-      st(it, this.ns.schema('startTime'), schemaDateTime(now()), document),
-      st(it, this.ns.schema('object'), pageUrl, document),
+      st(clip, a, BookmarkAction, document),
+      st(clip, this.ns.schema('startTime'), schemaDateTime(now()), document),
+      st(clip, this.ns.schema('object'), pageUrl, document),
       st(pageUrl, a, WebPage, document),
       st(pageUrl, this.ns.schema('url'), pageUrl, document),
       st(pageUrl, this.ns.schema('name'), lit(page.name), document),
@@ -120,17 +129,23 @@ export class SolidApi {
     ];
 
     await this.updater.update([], insertions);
+  }
 
-    const indexDocument = sym(urlJoin(storageUrl, 'webclip', 'index.ttl'));
+  private async updateIndex(
+    index: NamedNode,
+    it: NamedNode,
+    page: PageMetaData
+  ) {
+    const a = this.ns.rdf('type');
+    const BookmarkAction = this.ns.schema('BookmarkAction');
+    const pageUrl = sym(page.url);
 
     const indexUpdate = [
-      st(it, a, BookmarkAction, indexDocument),
-      st(it, this.ns.schema('object'), pageUrl, indexDocument),
+      st(it, a, BookmarkAction, index),
+      st(it, this.ns.schema('object'), pageUrl, index),
     ];
 
     await this.updater.update([], indexUpdate);
-
-    return { uri: it.uri };
   }
 }
 
