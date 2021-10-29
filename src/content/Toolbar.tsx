@@ -10,13 +10,13 @@ interface Props {
 
 export const Toolbar = ({ profile }: Props) => {
   const page = usePage();
-  const { addBookmark, saving, error, bookmark } = useBookmark(page);
+  const { addBookmark, loading, saving, error, bookmark } = useBookmark(page);
   return (
     <>
       <p className="my-1">{profile.name}</p>
       <button
         className="my-1 px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold"
-        disabled={saving}
+        disabled={loading || saving}
         onClick={() => addBookmark()}
       >
         {saving ? 'Saving...' : 'Clip it!'}
