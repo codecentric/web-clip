@@ -1,11 +1,14 @@
 import { act, renderHook } from '@testing-library/react-hooks';
-import { mockSolidApi } from '../test/solidApiMock';
+import { mockSolidApi, SolidApiMock } from '../test/solidApiMock';
 import { useBookmark } from './useBookmark';
 import { PageMetaData } from './usePage';
 
 describe('useBookmark', () => {
+  let solidApi: SolidApiMock;
+
   beforeEach(() => {
     jest.resetAllMocks();
+    solidApi = mockSolidApi();
   });
 
   enum RenderCycle {
@@ -16,6 +19,10 @@ describe('useBookmark', () => {
   }
 
   describe('initial state', () => {
+    beforeEach(() => {
+      solidApi.loadBookmark.mockReturnValue(new Promise(() => null));
+    });
+
     it('returns saving false', () => {
       const { result } = renderHook(() =>
         useBookmark({
@@ -27,7 +34,7 @@ describe('useBookmark', () => {
       expect(result.all[RenderCycle.INITIAL]).toMatchObject({
         saving: false,
       });
-      expect(result.all).toHaveLength(2);
+      expect(result.all).toHaveLength(1);
     });
 
     it('returns loading true', () => {
@@ -41,19 +48,26 @@ describe('useBookmark', () => {
       expect(result.all[RenderCycle.INITIAL]).toMatchObject({
         loading: true,
       });
-      expect(result.all).toHaveLength(2);
+      expect(result.all).toHaveLength(1);
+    });
+
+    it('calls solid api to check for existing bookmark', async () => {
+      const page: PageMetaData = { name: 'any', url: 'any', type: 'WebPage' };
+      renderHook(() => useBookmark(page));
+      expect(solidApi.loadBookmark).toHaveBeenCalledWith(page);
     });
   });
 
   describe('after checking for existing bookmark', () => {
-    it('returns loading false', () => {
-      const { result } = renderHook(() =>
+    it('returns loading false', async () => {
+      const { result, waitForNextUpdate } = renderHook(() =>
         useBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
         })
       );
+      await waitForNextUpdate();
       expect(result.all[RenderCycle.DONE_LOADING]).toMatchObject({
         loading: false,
       });

@@ -147,6 +147,10 @@ export class SolidApi {
 
     await this.updater.update([], indexUpdate);
   }
+
+  async loadBookmark(page: PageMetaData) {
+    return Promise.resolve();
+  }
 }
 
 function schemaDateTime(date: Date) {

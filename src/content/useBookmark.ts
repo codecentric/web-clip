@@ -11,35 +11,35 @@ interface AsyncState<T> {
 
 export const useBookmark = (page: PageMetaData) => {
   const solidApi = useSolidApi();
-  const [{ loading: saving, error, result }, setState] = useState<
+  const [{ loading: saving, error, result }, setSavingState] = useState<
     AsyncState<Bookmark>
   >({
     loading: false,
     error: null,
   });
-  const [{ loading }, loadBookmarkResult] = useState<AsyncState<Bookmark>>({
+  const [{ loading }, setLoadBookmarkState] = useState<AsyncState<Bookmark>>({
     loading: true,
     error: null,
   });
 
   useEffect(() => {
-    const fetch = async () => {
-      loadBookmarkResult({ loading: false, error: null, result: null });
-    };
-    fetch();
-  }, []);
+    solidApi.loadBookmark(page).then(() => {
+      setLoadBookmarkState({ loading: false, error: null, result: null });
+    });
+  }, [solidApi]);
+
   return {
     loading,
     saving,
     error,
     bookmark: result,
     addBookmark: async () => {
-      setState({ loading: true, error: null });
+      setSavingState({ loading: true, error: null });
       try {
         const bookmark = await solidApi.bookmark(page);
-        setState({ loading: false, error: null, result: bookmark });
+        setSavingState({ loading: false, error: null, result: bookmark });
       } catch (error) {
-        setState({ loading: false, error });
+        setSavingState({ loading: false, error });
       }
     },
   };
