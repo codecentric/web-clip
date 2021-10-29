@@ -11,14 +11,14 @@ interface AsyncState<T> {
 
 export const useBookmark = (page: PageMetaData) => {
   const solidApi = useSolidApi();
-  const [{ loading, error, result }, setState] = useState<AsyncState<Bookmark>>(
-    {
-      loading: false,
-      error: null,
-    }
-  );
+  const [{ loading: saving, error, result }, setState] = useState<
+    AsyncState<Bookmark>
+  >({
+    loading: false,
+    error: null,
+  });
   return {
-    loading,
+    saving,
     error,
     bookmark: result,
     addBookmark: async () => {

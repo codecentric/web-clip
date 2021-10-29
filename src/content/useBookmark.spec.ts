@@ -8,7 +8,7 @@ describe('useBookmark', () => {
     jest.resetAllMocks();
   });
 
-  it('returns loading false initially', () => {
+  it('returns saving false initially', () => {
     const { result } = renderHook(() =>
       useBookmark({
         name: 'any',
@@ -17,12 +17,12 @@ describe('useBookmark', () => {
       })
     );
     expect(result.all[0]).toMatchObject({
-      loading: false,
+      saving: false,
     });
     expect(result.all).toHaveLength(1);
   });
 
-  it('returns loading true while bookmarking', async () => {
+  it('returns saving true while bookmarking', async () => {
     mockSolidApi();
     const { result } = renderHook(() =>
       useBookmark({
@@ -35,7 +35,7 @@ describe('useBookmark', () => {
       await result.current.addBookmark();
     });
     expect(result.all[1]).toMatchObject({
-      loading: true,
+      saving: true,
     });
     expect(result.all).toHaveLength(3);
   });
@@ -51,7 +51,7 @@ describe('useBookmark', () => {
   });
 
   describe('after successful bookmarking', () => {
-    it('returns no error and stops loading indicator', async () => {
+    it('returns no error and stops saving indicator', async () => {
       mockSolidApi();
       const { result } = renderHook(() =>
         useBookmark({
@@ -64,7 +64,7 @@ describe('useBookmark', () => {
         await result.current.addBookmark();
       });
       expect(result.all[2]).toMatchObject({
-        loading: false,
+        saving: false,
         error: null,
       });
       expect(result.all).toHaveLength(3);
@@ -92,7 +92,7 @@ describe('useBookmark', () => {
     });
   });
 
-  it('returns error and stops loading indicator after unsuccessful bookmarking', async () => {
+  it('returns error and stops saving indicator after unsuccessful bookmarking', async () => {
     const solidApi = mockSolidApi();
     solidApi.bookmark.mockRejectedValue(new Error('Pod not available'));
 
@@ -107,7 +107,7 @@ describe('useBookmark', () => {
       await result.current.addBookmark();
     });
     expect(result.all[2]).toMatchObject({
-      loading: false,
+      saving: false,
       error: new Error('Pod not available'),
     });
     expect(result.all).toHaveLength(3);

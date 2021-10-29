@@ -13,7 +13,7 @@ describe('Toolbar', () => {
   beforeEach(() => {
     addBookmark = jest.fn();
     (useBookmark as jest.Mock).mockReturnValue({
-      loading: false,
+      saving: false,
       addBookmark,
     });
   });
@@ -52,7 +52,7 @@ describe('Toolbar', () => {
 
     it('disables the clip it button and shows a saving message while the bookmark is being saved', () => {
       (useBookmark as jest.Mock).mockReturnValue({
-        loading: true,
+        saving: true,
         error: null,
         addBookmark,
       });
@@ -66,7 +66,7 @@ describe('Toolbar', () => {
 
     it('shows an error if the bookmark cannot be saved', () => {
       (useBookmark as jest.Mock).mockReturnValue({
-        loading: false,
+        saving: false,
         error: new Error('Pod not available'),
         addBookmark,
       });
@@ -80,7 +80,7 @@ describe('Toolbar', () => {
 
     it('shows a link to the bookmark after it has been saved', () => {
       (useBookmark as jest.Mock).mockReturnValue({
-        loading: false,
+        saving: false,
         bookmark: { uri: 'https://storage.example/bookmark#it' },
         addBookmark,
       });
