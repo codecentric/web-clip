@@ -129,7 +129,6 @@ describe('useBookmark', () => {
 
   describe('while bookmarking', () => {
     it('returns saving true', async () => {
-      mockSolidApi();
       const { result } = renderHook(() =>
         useBookmark({
           name: 'any',
@@ -147,13 +146,27 @@ describe('useBookmark', () => {
     });
 
     it('calls solid api to create a bookmark', async () => {
-      const solidApi = mockSolidApi();
       const page: PageMetaData = { name: 'any', url: 'any', type: 'WebPage' };
-      const { result } = renderHook(() => useBookmark(page));
+      const { result, waitForNextUpdate } = renderHook(() => useBookmark(page));
+      await waitForNextUpdate();
       await act(async () => {
         await result.current.addBookmark();
       });
-      expect(solidApi.bookmark).toHaveBeenCalledWith(page);
+      expect(solidApi.bookmark).toHaveBeenCalledWith(page, undefined);
+    });
+
+    it('passes existing bookmark to solid api', async () => {
+      const existing = {
+        uri: 'https://storage.example/existing/bookmark#it',
+      };
+      solidApi.loadBookmark.mockResolvedValue(existing);
+      const page: PageMetaData = { name: 'any', url: 'any', type: 'WebPage' };
+      const { result, waitForNextUpdate } = renderHook(() => useBookmark(page));
+      await waitForNextUpdate();
+      await act(async () => {
+        await result.current.addBookmark();
+      });
+      expect(solidApi.bookmark).toHaveBeenCalledWith(page, existing);
     });
   });
 

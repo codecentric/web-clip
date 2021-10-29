@@ -48,12 +48,12 @@ export const useBookmark = (page: PageMetaData) => {
     addBookmark: async () => {
       setState((state) => ({ ...state, saving: true }));
       try {
-        const bookmark = await solidApi.bookmark(page);
+        const saved = await solidApi.bookmark(page, bookmark);
         setState((state) => ({
           ...state,
           saving: false,
           error: null,
-          result: bookmark,
+          result: saved,
         }));
       } catch (error) {
         setState((state) => ({ ...state, saving: false, error }));
