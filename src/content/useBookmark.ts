@@ -18,6 +18,7 @@ export const useBookmark = (page: PageMetaData) => {
     error: null,
   });
   return {
+    loading: true,
     saving,
     error,
     bookmark: result,
