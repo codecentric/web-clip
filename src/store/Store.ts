@@ -4,6 +4,7 @@ import { importToStore } from './importToStore';
 
 export class Store {
   private readonly graph: IndexedFormula;
+
   constructor(store?: IndexedFormula) {
     this.graph = store ?? graph();
   }
@@ -34,5 +35,9 @@ export class Store {
    */
   getGraph() {
     return this.graph;
+  }
+
+  getIndexedBookmark(bookmarkedObject: NamedNode, index: NamedNode) {
+    return this.graph.any(null, null, bookmarkedObject, index);
   }
 }

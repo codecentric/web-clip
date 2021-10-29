@@ -110,7 +110,6 @@ export class SolidApi {
     return { uri: clip.uri };
   }
 
-
   private getStorageUrl() {
     const storageUrl = this.graph.anyValue(this.me, this.ns.space('storage'));
     if (!storageUrl) {
@@ -164,7 +163,8 @@ export class SolidApi {
     } catch (err) {
       // no index found, that's ok
     }
-    return null;
+    const bookmarkNode = this.store.getIndexedBookmark(sym(page.url), index);
+    return bookmarkNode ? { uri: bookmarkNode.value } : null;
   }
 }
 

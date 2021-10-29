@@ -388,7 +388,7 @@ describe('SolidApi', () => {
         mockFetchWithResponse(`
           @prefix schema: <http://schema.org/> .
           
-          <http://storage.example/webclip/irrelevant#it> schema:object <https://irrelevant.example> .
+          <http://storage.example/webclip/irrelevant#it> a schema:BookmarkAction; schema:object <https://irrelevant.example> .
         `);
 
         const store = givenStoreContaining(
@@ -416,6 +416,52 @@ describe('SolidApi', () => {
 
       it('it returns null', async () => {
         expect(result).toEqual(null);
+      });
+
+      it('has tried to load the index document', () => {
+        expect(authenticatedFetch).toHaveBeenCalledWith(
+          'https://storage.example/webclip/index.ttl',
+          expect.anything()
+        );
+      });
+    });
+
+    describe('when page is found at the index', () => {
+      let result: Bookmark;
+      beforeEach(async () => {
+        mockFetchWithResponse(`
+          @prefix schema: <http://schema.org/> .
+          
+          <http://storage.example/webclip/relevant#it> a schema:BookmarkAction; schema:object <https://myfavouriteurl.example> .
+        `);
+
+        const store = givenStoreContaining(
+          'https://pod.example/',
+          `
+          <#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `
+        );
+
+        const solidApi = new SolidApi(
+          {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          } as SessionInfo,
+          new Store(store)
+        );
+
+        result = await solidApi.loadBookmark({
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        });
+      });
+
+      it('it returns the existing bookmark', async () => {
+        expect(result).toEqual({
+          uri: 'http://storage.example/webclip/relevant#it',
+        });
       });
 
       it('has tried to load the index document', () => {
