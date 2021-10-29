@@ -24,6 +24,20 @@ describe('Toolbar', () => {
   });
 
   describe('bookmarking', () => {
+    it('uses data from page to bookmark', () => {
+      (usePage as jest.Mock).mockReturnValue({
+        type: 'WebPage',
+        url: 'https://page.example/article',
+        name: 'An interesting article',
+      });
+      render(<Toolbar profile={{ name: 'Jane Doe' }} />);
+      expect(useBookmark).toHaveBeenCalledWith({
+        type: 'WebPage',
+        url: 'https://page.example/article',
+        name: 'An interesting article',
+      });
+    });
+
     it("saves a web page to the user's pod", () => {
       (usePage as jest.Mock).mockReturnValue({
         type: 'WebPage',
@@ -33,11 +47,7 @@ describe('Toolbar', () => {
       render(<Toolbar profile={{ name: 'Jane Doe' }} />);
       const button = screen.getByText('Clip it!');
       fireEvent.click(button);
-      expect(addBookmark).toHaveBeenCalledWith({
-        type: 'WebPage',
-        url: 'https://page.example/article',
-        name: 'An interesting article',
-      });
+      expect(addBookmark).toHaveBeenCalledWith();
     });
 
     it('disables the clip it button and shows a saving message while the bookmark is being saved', () => {

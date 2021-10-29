@@ -9,7 +9,13 @@ describe('useBookmark', () => {
   });
 
   it('returns loading false initially', () => {
-    const { result } = renderHook(() => useBookmark());
+    const { result } = renderHook(() =>
+      useBookmark({
+        name: 'any',
+        url: 'any',
+        type: 'WebPage',
+      })
+    );
     expect(result.all[0]).toMatchObject({
       loading: false,
     });
@@ -18,13 +24,15 @@ describe('useBookmark', () => {
 
   it('returns loading true while bookmarking', async () => {
     mockSolidApi();
-    const { result } = renderHook(() => useBookmark());
-    await act(async () => {
-      await result.current.addBookmark({
+    const { result } = renderHook(() =>
+      useBookmark({
         name: 'any',
         url: 'any',
         type: 'WebPage',
-      });
+      })
+    );
+    await act(async () => {
+      await result.current.addBookmark();
     });
     expect(result.all[1]).toMatchObject({
       loading: true,
@@ -35,9 +43,9 @@ describe('useBookmark', () => {
   it('calls solid api to create a bookmark', async () => {
     const solidApi = mockSolidApi();
     const page: PageMetaData = { name: 'any', url: 'any', type: 'WebPage' };
-    const { result } = renderHook(() => useBookmark());
+    const { result } = renderHook(() => useBookmark(page));
     await act(async () => {
-      await result.current.addBookmark(page);
+      await result.current.addBookmark();
     });
     expect(solidApi.bookmark).toHaveBeenCalledWith(page);
   });
@@ -45,13 +53,15 @@ describe('useBookmark', () => {
   describe('after successful bookmarking', () => {
     it('returns no error and stops loading indicator', async () => {
       mockSolidApi();
-      const { result } = renderHook(() => useBookmark());
-      await act(async () => {
-        await result.current.addBookmark({
+      const { result } = renderHook(() =>
+        useBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
-        });
+        })
+      );
+      await act(async () => {
+        await result.current.addBookmark();
       });
       expect(result.all[2]).toMatchObject({
         loading: false,
@@ -65,13 +75,15 @@ describe('useBookmark', () => {
       mockApi.bookmark.mockResolvedValue({
         uri: 'https://storage.example/bookmark#it',
       });
-      const { result } = renderHook(() => useBookmark());
-      await act(async () => {
-        await result.current.addBookmark({
+      const { result } = renderHook(() =>
+        useBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
-        });
+        })
+      );
+      await act(async () => {
+        await result.current.addBookmark();
       });
       expect(result.all[2]).toMatchObject({
         bookmark: { uri: 'https://storage.example/bookmark#it' },
@@ -84,13 +96,15 @@ describe('useBookmark', () => {
     const solidApi = mockSolidApi();
     solidApi.bookmark.mockRejectedValue(new Error('Pod not available'));
 
-    const { result } = renderHook(() => useBookmark());
-    await act(async () => {
-      await result.current.addBookmark({
+    const { result } = renderHook(() =>
+      useBookmark({
         name: 'any',
         url: 'any',
         type: 'WebPage',
-      });
+      })
+    );
+    await act(async () => {
+      await result.current.addBookmark();
     });
     expect(result.all[2]).toMatchObject({
       loading: false,

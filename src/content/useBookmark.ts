@@ -9,7 +9,7 @@ interface AsyncState<T> {
   result?: T;
 }
 
-export const useBookmark = () => {
+export const useBookmark = (page: PageMetaData) => {
   const solidApi = useSolidApi();
   const [{ loading, error, result }, setState] = useState<AsyncState<Bookmark>>(
     {
@@ -21,7 +21,7 @@ export const useBookmark = () => {
     loading,
     error,
     bookmark: result,
-    addBookmark: async (page: PageMetaData) => {
+    addBookmark: async () => {
       setState({ loading: true, error: null });
       try {
         const bookmark = await solidApi.bookmark(page);
