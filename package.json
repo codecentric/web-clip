@@ -5,6 +5,8 @@
   "main": "src/content.tsx",
   "scripts": {
     "test": "jest",
+    "test:unit": "jest src --testPathIgnorePatterns=src/integration-tests",
+    "test:integration": "jest src/integration-tests",
     "lint": "eslint ./src",
     "start": "NODE_ENV=development webpack --mode development --watch",
     "build": "webpack",
