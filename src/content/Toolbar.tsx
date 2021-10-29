@@ -10,23 +10,18 @@ interface Props {
 
 export const Toolbar = ({ profile }: Props) => {
   const page = usePage();
-  const {
-    addBookmark,
-    saving: addBookmarkSaving,
-    error: addBookmarkError,
-    bookmark,
-  } = useBookmark(page);
+  const { addBookmark, saving, error, bookmark } = useBookmark(page);
   return (
     <>
       <p className="my-1">{profile.name}</p>
       <button
         className="my-1 px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold"
-        disabled={addBookmarkSaving}
+        disabled={saving}
         onClick={() => addBookmark()}
       >
-        {addBookmarkSaving ? 'Saving...' : 'Clip it!'}
+        {saving ? 'Saving...' : 'Clip it!'}
       </button>
-      {addBookmarkError && <p>{addBookmarkError.message}</p>}
+      {error && <p>{error.message}</p>}
       {bookmark && (
         <p className="my-1 text-blue-400 opacity-90 hover:opacity-100">
           <a href={bookmark.uri} target="_blank" rel="noreferrer">
