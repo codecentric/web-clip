@@ -148,8 +148,8 @@ export class SolidApi {
     await this.updater.update([], indexUpdate);
   }
 
-  async loadBookmark(page: PageMetaData) {
-    return Promise.resolve();
+  async loadBookmark(page: PageMetaData): Promise<Bookmark> {
+    throw new Error('Not implemented');
   }
 }
 

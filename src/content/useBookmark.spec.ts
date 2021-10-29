@@ -73,6 +73,40 @@ describe('useBookmark', () => {
       });
       expect(result.all).toHaveLength(2);
     });
+
+    it('returns the loaded bookmark if available', async () => {
+      solidApi.loadBookmark.mockResolvedValue({ uri: 'any#it' });
+
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useBookmark({
+          name: 'any',
+          url: 'any',
+          type: 'WebPage',
+        })
+      );
+      await waitForNextUpdate();
+      expect(result.all[RenderCycle.DONE_LOADING]).toMatchObject({
+        bookmark: { uri: 'any#it' },
+      });
+      expect(result.all).toHaveLength(2);
+    });
+
+    it('returns null when no bookmark is available', async () => {
+      solidApi.loadBookmark.mockResolvedValue(null);
+
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useBookmark({
+          name: 'any',
+          url: 'any',
+          type: 'WebPage',
+        })
+      );
+      await waitForNextUpdate();
+      expect(result.all[RenderCycle.DONE_LOADING]).toMatchObject({
+        bookmark: null,
+      });
+      expect(result.all).toHaveLength(2);
+    });
   });
 
   describe('while bookmarking', () => {
