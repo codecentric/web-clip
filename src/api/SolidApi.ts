@@ -104,10 +104,12 @@ export class SolidApi {
           )
         );
 
-    const index = getIndex(storageUrl);
-
     await this.savePageData(clip, page);
-    await this.updateIndex(index, clip, page);
+
+    if (!existing) {
+      const index = getIndex(storageUrl);
+      await this.updateIndex(index, clip, page);
+    }
 
     return { uri: clip.uri };
   }
