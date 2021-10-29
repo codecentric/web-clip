@@ -89,18 +89,20 @@ export class SolidApi {
     return { name };
   }
 
-  async bookmark(page: PageMetaData): Promise<Bookmark> {
+  async bookmark(page: PageMetaData, existing?: Bookmark): Promise<Bookmark> {
     const storageUrl = this.getStorageUrl();
 
-    const clip = sym(
-      urlJoin(
-        storageUrl,
-        'webclip',
-        generateDatePathForToday(),
-        generateUuid(),
-        '#it'
-      )
-    );
+    const clip = existing
+      ? sym(existing.uri)
+      : sym(
+          urlJoin(
+            storageUrl,
+            'webclip',
+            generateDatePathForToday(),
+            generateUuid(),
+            '#it'
+          )
+        );
 
     const index = getIndex(storageUrl);
 

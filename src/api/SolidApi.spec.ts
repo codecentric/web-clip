@@ -315,6 +315,56 @@ describe('SolidApi', () => {
         uri: 'https://storage.example/webclip/2021/03/12/some-uuid#it',
       });
     });
+
+    it('updates an existing bookmark, instead of creating a new one', async () => {
+      mockFetchWithResponse('');
+      givenGeneratedUuidWillBe('some-uuid');
+      givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
+
+      const store = givenStoreContaining(
+        'https://pod.example/',
+        `
+          <#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `
+      );
+
+      const solidApi = new SolidApi(
+        {
+          webId: 'https://pod.example/#me',
+          isLoggedIn: true,
+        } as SessionInfo,
+        new Store(store)
+      );
+
+      await solidApi.bookmark(
+        {
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        },
+        {
+          uri: 'https://storage.example/existing/bookmark#it',
+        }
+      );
+
+      thenSparqlUpdateIsSentToUrl(
+        'https://storage.example/existing/bookmark',
+        `
+      INSERT DATA {
+        <https://storage.example/existing/bookmark#it>
+          a <http://schema.org/BookmarkAction> ;
+          <http://schema.org/startTime> "2021-03-12T09:10:11.012Z"^^<http://schema.org/DateTime> ;
+          <http://schema.org/object> <https://myfavouriteurl.example>
+        .
+        <https://myfavouriteurl.example>
+          a <http://schema.org/WebPage> ;
+          <http://schema.org/url> <https://myfavouriteurl.example> ;
+          <http://schema.org/name> "I love this page" ;
+        .
+      }`
+      );
+    });
   });
 
   describe('load bookmark', () => {
