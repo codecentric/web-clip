@@ -104,10 +104,10 @@ describe('bookmarking an html page with embedded data', () => {
 
     const calls = (authenticatedFetch as jest.Mock).mock.calls;
 
-    const sparqlUpdateCall = calls[2];
-
-    const uri = sparqlUpdateCall[0];
-    expect(uri).toBe('https://storage.example/webclip/2021/03/12/some-uuid');
+    const sparqlUpdateCall = findPatchRequest(
+      calls,
+      'https://storage.example/webclip/2021/03/12/some-uuid'
+    );
 
     const body = sparqlUpdateCall[1].body;
     expect(body).toBeDefined();
@@ -203,10 +203,10 @@ describe('bookmarking an html page with embedded data', () => {
 
     const calls = (authenticatedFetch as jest.Mock).mock.calls;
 
-    const sparqlUpdateIndexCall = calls[4];
-
-    const uri = sparqlUpdateIndexCall[0];
-    expect(uri).toBe('https://storage.example/webclip/index.ttl');
+    const sparqlUpdateIndexCall = findPatchRequest(
+      calls,
+      'https://storage.example/webclip/index.ttl'
+    );
 
     const body = sparqlUpdateIndexCall[1].body;
     expect(body).toBeDefined();
@@ -220,6 +220,13 @@ describe('bookmarking an html page with embedded data', () => {
     expect(actualQuery).toEqual(expectedQuery);
   });
 });
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function findPatchRequest(calls: any[], url: string) {
+  const call = calls.find((it) => it[0] === url && it[1].method === 'PATCH');
+  expect(call).toBeDefined();
+  return call;
+}
 
 function mockFetchWithResponse(bodyText: string) {
   (authenticatedFetch as jest.Mock).mockResolvedValue({

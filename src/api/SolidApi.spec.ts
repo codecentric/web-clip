@@ -214,8 +214,7 @@ describe('SolidApi', () => {
           a <http://schema.org/BookmarkAction> ;
           <http://schema.org/object> <https://myfavouriteurl.example>
         .
-      }`,
-        3
+      }`
       );
     });
 
@@ -362,21 +361,17 @@ function givenNowIs(timestamp: number) {
   (now as jest.Mock).mockReturnValue(new Date(timestamp));
 }
 
-function thenSparqlUpdateIsSentToUrl(
-  url: string,
-  query: string,
-  callNumber = 1
-) {
+function thenSparqlUpdateIsSentToUrl(url: string, query: string) {
   expect(authenticatedFetch).toHaveBeenCalled();
 
   const parser = new SparqlParser();
 
-  const sparqlUpdateCall = (authenticatedFetch as jest.Mock).mock.calls[
-    callNumber
-  ];
+  const calls = (authenticatedFetch as jest.Mock).mock.calls;
+  const sparqlUpdateCall = calls.find(
+    (it) => it[0] === url && it[1].method === 'PATCH'
+  );
 
-  const uri = sparqlUpdateCall[0];
-  expect(uri).toBe(url);
+  expect(sparqlUpdateCall).toBeDefined();
 
   const body = sparqlUpdateCall[1].body;
   const actualQuery = parser.parse(body) as Update;
