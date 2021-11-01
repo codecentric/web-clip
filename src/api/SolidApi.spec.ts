@@ -2,22 +2,18 @@ import {
   fetch as authenticatedFetch,
   login,
 } from '@inrupt/solid-client-authn-browser';
-import { graph, parse, Store as RdflibStore } from 'rdflib';
+import { Parser as SparqlParser, Update } from 'sparqljs';
 import { subscribeOption } from '../options/optionsStorageApi';
 import { Store } from '../store/Store';
-import { SessionInfo, SolidApi } from './SolidApi';
-import { Parser as SparqlParser, Update } from 'sparqljs';
+import { givenStoreContaining } from '../test/givenStoreContaining';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
+import { Bookmark, SessionInfo, SolidApi } from './SolidApi';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('./generateUuid');
 jest.mock('./now');
 jest.mock('../options/optionsStorageApi');
-
-interface MockStore extends RdflibStore {
-  and: (base: string, turtle: string) => MockStore;
-}
 
 describe('SolidApi', () => {
   beforeEach(() => {
@@ -123,16 +119,6 @@ describe('SolidApi', () => {
     });
   });
 
-  function givenStoreContaining(base: string, turtle: string): MockStore {
-    const store = graph() as MockStore;
-    parse(turtle, store, base);
-    store.and = (base: string, turtle: string) => {
-      parse(turtle, store, base);
-      return store;
-    };
-    return store;
-  }
-
   describe('bookmark', () => {
     it("stores a bookmark in the user's pod when storage is available", async () => {
       mockFetchWithResponse('');
@@ -174,6 +160,45 @@ describe('SolidApi', () => {
           a <http://schema.org/WebPage> ;
           <http://schema.org/url> <https://myfavouriteurl.example> ;
           <http://schema.org/name> "I love this page" ;
+        .
+      }`
+      );
+    });
+
+    it('adds the bookmark to the webclip index', async () => {
+      mockFetchWithResponse('');
+      givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
+      givenGeneratedUuidWillBe('some-uuid');
+
+      const store = givenStoreContaining(
+        'https://pod.example/',
+        `
+          <#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `
+      );
+
+      const solidApi = new SolidApi(
+        {
+          webId: 'https://pod.example/#me',
+          isLoggedIn: true,
+        } as SessionInfo,
+        new Store(store)
+      );
+
+      await solidApi.bookmark({
+        type: 'WebPage',
+        url: 'https://myfavouriteurl.example',
+        name: 'I love this page',
+      });
+
+      thenSparqlUpdateIsSentToUrl(
+        'https://storage.example/webclip/index.ttl',
+        `
+      INSERT DATA {
+        <https://storage.example/webclip/2021/03/12/some-uuid#it>
+          a <http://schema.org/BookmarkAction> ;
+          <http://schema.org/object> <https://myfavouriteurl.example>
         .
       }`
       );
@@ -290,6 +315,235 @@ describe('SolidApi', () => {
         uri: 'https://storage.example/webclip/2021/03/12/some-uuid#it',
       });
     });
+
+    it('updates an existing bookmark, instead of creating a new one', async () => {
+      mockFetchWithResponse('');
+      givenGeneratedUuidWillBe('some-uuid');
+      givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
+
+      const store = givenStoreContaining(
+        'https://pod.example/',
+        `
+          <#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `
+      );
+
+      const solidApi = new SolidApi(
+        {
+          webId: 'https://pod.example/#me',
+          isLoggedIn: true,
+        } as SessionInfo,
+        new Store(store)
+      );
+
+      await solidApi.bookmark(
+        {
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        },
+        {
+          uri: 'https://storage.example/existing/bookmark#it',
+        }
+      );
+
+      thenSparqlUpdateIsSentToUrl(
+        'https://storage.example/existing/bookmark',
+        `
+      INSERT DATA {
+        <https://storage.example/existing/bookmark#it>
+          a <http://schema.org/BookmarkAction> ;
+          <http://schema.org/startTime> "2021-03-12T09:10:11.012Z"^^<http://schema.org/DateTime> ;
+          <http://schema.org/object> <https://myfavouriteurl.example>
+        .
+        <https://myfavouriteurl.example>
+          a <http://schema.org/WebPage> ;
+          <http://schema.org/url> <https://myfavouriteurl.example> ;
+          <http://schema.org/name> "I love this page" ;
+        .
+      }`
+      );
+    });
+
+    it('does not update the index, since it already exists for existing bookmark', async () => {
+      mockFetchWithResponse('');
+      givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
+      givenGeneratedUuidWillBe('some-uuid');
+
+      const store = givenStoreContaining(
+        'https://pod.example/',
+        `
+          <#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `
+      );
+
+      const solidApi = new SolidApi(
+        {
+          webId: 'https://pod.example/#me',
+          isLoggedIn: true,
+        } as SessionInfo,
+        new Store(store)
+      );
+
+      await solidApi.bookmark(
+        {
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        },
+        {
+          uri: 'https://storage.example/existing/bookmark#it',
+        }
+      );
+
+      thenNoSparqlUpdateIsSentToUrl(
+        'https://storage.example/webclip/index.ttl'
+      );
+    });
+  });
+
+  describe('load bookmark', () => {
+    describe('when no index is found', () => {
+      let result: Bookmark;
+      beforeEach(async () => {
+        (authenticatedFetch as jest.Mock).mockResolvedValue({
+          ok: true,
+          headers: new Headers({
+            'Content-Type': 'text/plain',
+            'wac-allow': 'user="read write append control",public=""',
+            'ms-author-via': 'SPARQL',
+          }),
+          status: 404,
+          statusText: 'Not Found',
+          text: async () => 'Cannot find requested file',
+        });
+
+        const store = givenStoreContaining(
+          'https://pod.example/',
+          `
+          <#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `
+        );
+
+        const solidApi = new SolidApi(
+          {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          } as SessionInfo,
+          new Store(store)
+        );
+
+        result = await solidApi.loadBookmark({
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        });
+      });
+
+      it('it returns null', async () => {
+        expect(result).toEqual(null);
+      });
+
+      it('has tried to load the index document', () => {
+        expect(authenticatedFetch).toHaveBeenCalledWith(
+          'https://storage.example/webclip/index.ttl',
+          expect.anything()
+        );
+      });
+    });
+
+    describe('when page is not found at the index', () => {
+      let result: Bookmark;
+      beforeEach(async () => {
+        mockFetchWithResponse(`
+          @prefix schema: <http://schema.org/> .
+          
+          <http://storage.example/webclip/irrelevant#it> a schema:BookmarkAction; schema:object <https://irrelevant.example> .
+        `);
+
+        const store = givenStoreContaining(
+          'https://pod.example/',
+          `
+          <#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `
+        );
+
+        const solidApi = new SolidApi(
+          {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          } as SessionInfo,
+          new Store(store)
+        );
+
+        result = await solidApi.loadBookmark({
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        });
+      });
+
+      it('it returns null', async () => {
+        expect(result).toEqual(null);
+      });
+
+      it('has tried to load the index document', () => {
+        expect(authenticatedFetch).toHaveBeenCalledWith(
+          'https://storage.example/webclip/index.ttl',
+          expect.anything()
+        );
+      });
+    });
+
+    describe('when page is found at the index', () => {
+      let result: Bookmark;
+      beforeEach(async () => {
+        mockFetchWithResponse(`
+          @prefix schema: <http://schema.org/> .
+          
+          <http://storage.example/webclip/relevant#it> a schema:BookmarkAction; schema:object <https://myfavouriteurl.example> .
+        `);
+
+        const store = givenStoreContaining(
+          'https://pod.example/',
+          `
+          <#me>
+            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
+          `
+        );
+
+        const solidApi = new SolidApi(
+          {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          } as SessionInfo,
+          new Store(store)
+        );
+
+        result = await solidApi.loadBookmark({
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        });
+      });
+
+      it('it returns the existing bookmark', async () => {
+        expect(result).toEqual({
+          uri: 'http://storage.example/webclip/relevant#it',
+        });
+      });
+
+      it('has tried to load the index document', () => {
+        expect(authenticatedFetch).toHaveBeenCalledWith(
+          'https://storage.example/webclip/index.ttl',
+          expect.anything()
+        );
+      });
+    });
   });
 });
 
@@ -327,13 +581,24 @@ function thenSparqlUpdateIsSentToUrl(url: string, query: string) {
 
   const parser = new SparqlParser();
 
-  const sparqlUpdateCall = (authenticatedFetch as jest.Mock).mock.calls[1];
+  const calls = (authenticatedFetch as jest.Mock).mock.calls;
+  const sparqlUpdateCall = calls.find(
+    (it) => it[0] === url && it[1].method === 'PATCH'
+  );
 
-  const uri = sparqlUpdateCall[0];
-  expect(uri).toBe(url);
+  expect(sparqlUpdateCall).toBeDefined();
 
   const body = sparqlUpdateCall[1].body;
   const actualQuery = parser.parse(body) as Update;
   const expectedQuery = parser.parse(query) as Update;
   expect(actualQuery).toEqual(expectedQuery);
+}
+
+function thenNoSparqlUpdateIsSentToUrl(url: string) {
+  const calls = (authenticatedFetch as jest.Mock).mock.calls;
+  const sparqlUpdateCall = calls.find(
+    (it) => it[0] === url && it[1].method === 'PATCH'
+  );
+
+  expect(sparqlUpdateCall).not.toBeDefined();
 }

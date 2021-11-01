@@ -1,10 +1,10 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { ToolbarContainer } from './ToolbarContainer';
-import { usePage } from './usePage';
-import { useProfile } from './useProfile';
-import { usePageData } from './usePageData';
 import { useBookmark } from './useBookmark';
+import { usePage } from './usePage';
+import { usePageData } from './usePageData';
+import { useProfile } from './useProfile';
 
 jest.mock('./useProfile');
 jest.mock('./useBookmark');

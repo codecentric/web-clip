@@ -1,11 +1,16 @@
+import * as rdf from 'rdflib';
 import { graph, IndexedFormula, NamedNode, Statement } from 'rdflib';
+import solidNamespace from 'solid-namespace';
 import { createRelations } from './createRelations';
 import { importToStore } from './importToStore';
 
 export class Store {
   private readonly graph: IndexedFormula;
+  private ns: Record<string, (alias: string) => NamedNode>;
+
   constructor(store?: IndexedFormula) {
     this.graph = store ?? graph();
+    this.ns = solidNamespace(rdf);
   }
 
   /**
@@ -34,5 +39,21 @@ export class Store {
    */
   getGraph() {
     return this.graph;
+  }
+
+  getIndexedBookmark(bookmarkedObject: NamedNode, index: NamedNode) {
+    const matchingSubject = this.graph.any(
+      null,
+      this.ns.schema('object'),
+      bookmarkedObject,
+      index
+    );
+    const isBookmark = this.graph.holds(
+      matchingSubject,
+      this.ns.rdf('type'),
+      this.ns.schema('BookmarkAction'),
+      index
+    );
+    return isBookmark ? matchingSubject : null;
   }
 }

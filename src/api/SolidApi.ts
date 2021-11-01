@@ -33,6 +33,10 @@ export interface Bookmark {
   uri: string;
 }
 
+function getIndex(storageUrl: string): NamedNode {
+  return sym(urlJoin(storageUrl, 'webclip', 'index.ttl'));
+}
+
 export class SolidApi {
   private readonly me: NamedNode;
   private readonly sessionInfo: SessionInfo;
@@ -85,34 +89,51 @@ export class SolidApi {
     return { name };
   }
 
-  async bookmark(page: PageMetaData): Promise<Bookmark> {
-    const storageUrl = this.graph.anyValue(this.me, this.ns.space('storage'));
+  async bookmark(page: PageMetaData, existing?: Bookmark): Promise<Bookmark> {
+    const storageUrl = this.getStorageUrl();
 
+    const clip = existing
+      ? sym(existing.uri)
+      : sym(
+          urlJoin(
+            storageUrl,
+            'webclip',
+            generateDatePathForToday(),
+            generateUuid(),
+            '#it'
+          )
+        );
+
+    await this.savePageData(clip, page);
+
+    if (!existing) {
+      const index = getIndex(storageUrl);
+      await this.updateIndex(index, clip, page);
+    }
+
+    return { uri: clip.uri };
+  }
+
+  private getStorageUrl() {
+    const storageUrl = this.graph.anyValue(this.me, this.ns.space('storage'));
     if (!storageUrl) {
       throw new Error('No storage available.');
     }
+    return storageUrl;
+  }
 
-    const it = sym(
-      urlJoin(
-        storageUrl,
-        'webclip',
-        generateDatePathForToday(),
-        generateUuid(),
-        '#it'
-      )
-    );
+  private async savePageData(clip: NamedNode, page: PageMetaData) {
     const a = this.ns.rdf('type');
     const BookmarkAction = this.ns.schema('BookmarkAction');
-    const document = it.doc();
     const pageUrl = sym(page.url);
+    const document = clip.doc();
     const WebPage = this.ns.schema('WebPage');
-
     const about: Statement[] = this.store.createRelations(pageUrl, document);
 
     const insertions = [
-      st(it, a, BookmarkAction, document),
-      st(it, this.ns.schema('startTime'), schemaDateTime(now()), document),
-      st(it, this.ns.schema('object'), pageUrl, document),
+      st(clip, a, BookmarkAction, document),
+      st(clip, this.ns.schema('startTime'), schemaDateTime(now()), document),
+      st(clip, this.ns.schema('object'), pageUrl, document),
       st(pageUrl, a, WebPage, document),
       st(pageUrl, this.ns.schema('url'), pageUrl, document),
       st(pageUrl, this.ns.schema('name'), lit(page.name), document),
@@ -120,7 +141,34 @@ export class SolidApi {
     ];
 
     await this.updater.update([], insertions);
-    return { uri: it.uri };
+  }
+
+  private async updateIndex(
+    index: NamedNode,
+    it: NamedNode,
+    page: PageMetaData
+  ) {
+    const a = this.ns.rdf('type');
+    const BookmarkAction = this.ns.schema('BookmarkAction');
+    const pageUrl = sym(page.url);
+
+    const indexUpdate = [
+      st(it, a, BookmarkAction, index),
+      st(it, this.ns.schema('object'), pageUrl, index),
+    ];
+
+    await this.updater.update([], indexUpdate);
+  }
+
+  async loadBookmark(page: PageMetaData): Promise<Bookmark> {
+    const index = getIndex(this.getStorageUrl());
+    try {
+      await this.fetcher.load(index);
+    } catch (err) {
+      // no index found, that's ok
+    }
+    const bookmarkNode = this.store.getIndexedBookmark(sym(page.url), index);
+    return bookmarkNode ? { uri: bookmarkNode.value } : null;
   }
 }
 
