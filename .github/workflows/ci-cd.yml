@@ -59,7 +59,7 @@ jobs:
           commit: ${{ github.sha }}
           prerelease: true
           allowUpdates: true
-          artifacts: "build/*.zip"
+          artifacts: "*.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
 
   release:
@@ -79,5 +79,5 @@ jobs:
           tag: ${{ needs.build.outputs.version }}
           commit: ${{ github.sha }}
           allowUpdates: false
-          artifacts: "build/*.zip"
+          artifacts: "*.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
