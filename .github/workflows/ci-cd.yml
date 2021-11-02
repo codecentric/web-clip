@@ -12,32 +12,19 @@ jobs:
     strategy:
       matrix:
         node-version: [ 16.x ]
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
       - run: npm ci
       - run: npm run lint
       - run: npm test
       - run: npm run build
-      - name: Save build
-        uses: actions/upload-artifact@v2
-        with:
-          name: build
-          path: |
-            build
-            package.json
-          retention-days: 1
-
-  pre-release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: build
 
       - name: Extract version
         id: extract_version
@@ -57,10 +44,18 @@ jobs:
           path: build/webclip-${{ steps.extract_version.outputs.version }}.zip
           retention-days: 30
 
+  pre-release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: zip
+
       - name: Create pre-release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.extract_version.outputs.version }}-dev
+          tag: ${{ needs.build.outputs.version }}-dev
           commit: ${{ github.sha }}
           prerelease: true
           allowUpdates: true
@@ -68,7 +63,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   release:
-    needs: pre-release
+    needs:
+      - build
+      - pre-release
     environment: prod
     runs-on: ubuntu-latest
     steps:
@@ -76,14 +73,10 @@ jobs:
         with:
           name: zip
 
-      - name: Extract version
-        id: extract_version
-        uses: Saionaro/extract-package-version@v1.0.6
-
       - name: Create draft release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.extract_version.outputs.version }}
+          tag: ${{ needs.build.outputs.version }}
           commit: ${{ github.sha }}
           allowUpdates: false
           artifacts: "build/*.zip"
