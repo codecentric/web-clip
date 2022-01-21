@@ -1,9 +1,8 @@
 import {
+  ILoginInputOptions,
   InMemoryStorage,
-  IStorage,
-  login,
+  ISessionInfo,
   logout,
-  Session,
 } from '@inrupt/solid-client-authn-browser';
 import ClientAuthentication from '@inrupt/solid-client-authn-browser/dist/ClientAuthentication';
 import ClientRegistrar from '@inrupt/solid-client-authn-browser/dist/login/oidc/ClientRegistrar';
@@ -23,11 +22,14 @@ import {
   IRedirector,
   IRedirectorOptions,
 } from '@inrupt/solid-client-authn-core';
-import React from 'react';
+import React, { useState } from 'react';
 import { useOptions } from './useOptions';
 
-class ChromeRedirector implements IRedirector {
-  constructor(private readonly redirectHandler: AggregateRedirectHandler) {}
+class ChromeExtensionRedirector implements IRedirector {
+  constructor(
+    private readonly redirectHandler: AggregateRedirectHandler,
+    private readonly afterRedirect: (info: ISessionInfo) => void
+  ) {}
 
   redirect(redirectUrl: string, options?: IRedirectorOptions) {
     chrome.identity.launchWebAuthFlow(
@@ -37,20 +39,21 @@ class ChromeRedirector implements IRedirector {
       },
       async (redirectUrl: string) => {
         console.log('auth callback', redirectUrl);
+        // no real redirect happens in extension, so we can directly call the redirector from the callback
         const info = await this.redirectHandler.handle(redirectUrl, null);
+        // pass the retrieved session info from the redirect handler
+        this.afterRedirect(info);
         console.log({ info });
       }
     );
   }
 }
 
-export function getClientAuthenticationWithDependencies(dependencies: {
-  secureStorage?: IStorage;
-  insecureStorage?: IStorage;
-}): ClientAuthentication {
-  const inMemoryStorage = new InMemoryStorage();
-  const secureStorage = dependencies.secureStorage || inMemoryStorage;
-  const insecureStorage = dependencies.insecureStorage || new BrowserStorage();
+export function getClientAuthentication(
+  redirectCallback: (info: ISessionInfo) => void
+): ClientAuthentication {
+  const secureStorage = new InMemoryStorage();
+  const insecureStorage = new BrowserStorage();
 
   const storageUtility = new StorageUtilityBrowser(
     secureStorage,
@@ -87,7 +90,8 @@ export function getClientAuthenticationWithDependencies(dependencies: {
     storageUtility,
     new AuthorizationCodeWithPkceOidcHandler(
       storageUtility,
-      new ChromeRedirector(redirectHandler)
+      // custom redirector to honor chrome extension specific handling of auth flow
+      new ChromeExtensionRedirector(redirectHandler, redirectCallback)
     ),
     issuerConfigFetcher,
     clientRegistrar
@@ -102,17 +106,48 @@ export function getClientAuthenticationWithDependencies(dependencies: {
   );
 }
 
+class ChromeExtensionSession {
+  private clientAuthentication: ClientAuthentication;
+  public info: ISessionInfo = {
+    isLoggedIn: false,
+    sessionId: 'f5316878-09bc-4cbd-9bb5-493acbc0aab1', // just generate a random uuid
+  };
+
+  constructor() {
+    this.clientAuthentication = getClientAuthentication(
+      (info) => (this.info = info)
+    );
+  }
+
+  async login(options: ILoginInputOptions) {
+    await this.clientAuthentication.login(
+      {
+        sessionId: this.info.sessionId,
+        ...options,
+        // Defaults the token type to DPoP
+        tokenType: options.tokenType ?? 'DPoP',
+      },
+      null
+    );
+  }
+
+  async logout() {
+    await this.clientAuthentication.logout(this.info.sessionId);
+    this.info.isLoggedIn = false;
+    this.info.webId = '';
+  }
+}
+
+const session = new ChromeExtensionSession();
+
 export const OptionsPage = () => {
   const { loading, providerUrl, setProviderUrl, save, saved } = useOptions();
+
+  const [webId, setWebId] = useState('');
 
   if (loading) {
     return <p>Loading...</p>;
   }
-  const clientAuth = getClientAuthenticationWithDependencies({});
-
-  const session = new Session({
-    clientAuthentication: clientAuth,
-  });
 
   return (
     <section>
@@ -122,14 +157,15 @@ export const OptionsPage = () => {
           session.login({
             redirectUrl: chrome.identity.getRedirectURL(),
             oidcIssuer: providerUrl,
-            clientName: '...',
+            clientName: 'WebClip Options',
           });
         }}
       >
         LOGIN
       </button>
-      <button onClick={() => alert(session.info.webId)}>Who am I</button>
-      <button onClick={() => logout()}>LOGOUT</button>
+      <button onClick={() => setWebId(session.info.webId)}>Who am I</button>
+      <div>{webId}</div>
+      <button onClick={() => session.logout()}>LOGOUT</button>
       <p>
         Please configure the URL for your Solid pod provider, to enable webclip
         to save clips in your pod.
