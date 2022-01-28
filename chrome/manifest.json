@@ -28,7 +28,8 @@
   ],
   "permissions": [
     "storage",
-    "identity"
+    "identity",
+    "tabs"
   ],
   "web_accessible_resources": [],
   "options_page": "options.html"
