@@ -28,7 +28,9 @@ import { useOptions } from './useOptions';
 class ChromeExtensionRedirector implements IRedirector {
   constructor(
     private readonly redirectHandler: AggregateRedirectHandler,
-    private readonly afterRedirect: (info: ISessionInfo) => void
+    private readonly afterRedirect: (
+      info: ISessionInfo & { fetch: typeof fetch }
+    ) => void
   ) {}
 
   redirect(redirectUrl: string, options?: IRedirectorOptions) {
@@ -49,8 +51,10 @@ class ChromeExtensionRedirector implements IRedirector {
   }
 }
 
+type RedirectInfo = ISessionInfo & { fetch: typeof fetch };
+
 export function getClientAuthentication(
-  redirectCallback: (info: ISessionInfo) => void
+  redirectCallback: (info: RedirectInfo) => void
 ): ClientAuthentication {
   const secureStorage = new InMemoryStorage();
   const insecureStorage = new BrowserStorage();
@@ -108,15 +112,17 @@ export function getClientAuthentication(
 
 class ChromeExtensionSession {
   private clientAuthentication: ClientAuthentication;
+  public fetch: typeof fetch = window.fetch.bind(window);
   public info: ISessionInfo = {
     isLoggedIn: false,
-    sessionId: 'f5316878-09bc-4cbd-9bb5-493acbc0aab1', // just generate a random uuid
+    sessionId: '690a9751-1dc4-46bc-a775-ec12eb5b06ec', // just generate a random uuid
   };
 
   constructor() {
-    this.clientAuthentication = getClientAuthentication(
-      (info) => (this.info = info)
-    );
+    this.clientAuthentication = getClientAuthentication((info) => {
+      this.info = info;
+      this.fetch = info.fetch;
+    });
   }
 
   async login(options: ILoginInputOptions) {
@@ -135,10 +141,19 @@ class ChromeExtensionSession {
     await this.clientAuthentication.logout(this.info.sessionId);
     this.info.isLoggedIn = false;
     this.info.webId = '';
+    this.fetch = window.fetch.bind(window);
   }
 }
 
 const session = new ChromeExtensionSession();
+
+async function testPrivateAccess() {
+  const result = await session.fetch('https://solidweb.me/webclip/test.txt', {
+    method: 'PUT',
+    body: 'test file',
+  });
+  alert(result.status);
+}
 
 export const OptionsPage = () => {
   const { loading, providerUrl, setProviderUrl, save, saved } = useOptions();
@@ -166,6 +181,7 @@ export const OptionsPage = () => {
       <button onClick={() => setWebId(session.info.webId)}>Who am I</button>
       <div>{webId}</div>
       <button onClick={() => session.logout()}>LOGOUT</button>
+      <button onClick={() => testPrivateAccess()}>Test private access</button>
       <p>
         Please configure the URL for your Solid pod provider, to enable webclip
         to save clips in your pod.
