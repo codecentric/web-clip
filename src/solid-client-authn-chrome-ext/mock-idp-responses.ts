@@ -79,7 +79,6 @@ export const registerResponse = {
   application_type: 'web',
   grant_types: ['authorization_code'],
   id_token_signed_response_alg: 'RS256',
-  post_logout_redirect_uris: [],
   require_auth_time: false,
   response_types: ['code'],
   subject_type: 'pairwise',
@@ -87,7 +86,6 @@ export const registerResponse = {
   introspection_endpoint_auth_method: 'client_secret_basic',
   revocation_endpoint_auth_method: 'client_secret_basic',
   require_signed_request_object: false,
-  request_uris: [],
   client_id_issued_at: 1635173530,
   client_id: 'mock-client-id',
   client_name: 'My Example App',
@@ -96,4 +94,24 @@ export const registerResponse = {
   redirect_uris: ['https://example.test/redirect-url'],
   registration_client_uri: 'https://pod.test/idp/reg/mock-client-id',
   registration_access_token: 'mock-registration-access-token',
+};
+
+export const tokenResponse = {
+  access_token: 'mock-access-token',
+  id_token: 'mock-id-token',
+  token_type: 'DPoP',
+};
+
+export const jwksResponse = {
+  keys: [
+    {
+      kid: 'mock-kid',
+      kty: 'RSA',
+      alg: 'RS256',
+      key_ops: ['verify'],
+      ext: true,
+      n: 'n',
+      e: 'AQAB',
+    },
+  ],
 };
