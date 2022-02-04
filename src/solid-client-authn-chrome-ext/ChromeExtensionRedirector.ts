@@ -1,18 +1,17 @@
-import {
-  IRedirector,
-  IRedirectorOptions,
-} from '@inrupt/solid-client-authn-core';
+import { IRedirectHandler, IRedirector } from '@inrupt/solid-client-authn-core';
 import { launchWebAuthFlow } from './launchWebAuthFlow';
 
 export class ChromeExtensionRedirector implements IRedirector {
-  redirect(redirectUrl: string, redirectorOptions: IRedirectorOptions): void {
+  constructor(private readonly redirectHandler: IRedirectHandler) {}
+
+  redirect(redirectUrl: string): void {
     launchWebAuthFlow(
       {
         url: redirectUrl,
         interactive: true,
       },
-      () => {
-        throw new Error('Not implemented');
+      (redirectUrl) => {
+        this.redirectHandler.handle(redirectUrl, undefined);
       }
     );
   }
