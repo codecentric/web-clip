@@ -19,7 +19,10 @@ describe('ChromeExtensionRedirector', () => {
   describe('redirect', () => {
     it('launches a web auth flow', () => {
       const redirectHandler = mockRedirectHandler();
-      const redirector = new ChromeExtensionRedirector(redirectHandler);
+      const redirector = new ChromeExtensionRedirector(
+        redirectHandler,
+        () => null
+      );
       redirector.redirect('/redirect-url');
 
       expect(launchWebAuthFlow).toHaveBeenCalledWith(
@@ -34,7 +37,10 @@ describe('ChromeExtensionRedirector', () => {
     it('calls the redirect handler when web auth flow returns to extension', () => {
       const redirectHandler = mockRedirectHandler();
 
-      const redirector = new ChromeExtensionRedirector(redirectHandler);
+      const redirector = new ChromeExtensionRedirector(
+        redirectHandler,
+        () => null
+      );
       redirector.redirect('/redirect-url');
 
       const returnToExtension = (launchWebAuthFlow as jest.Mock).mock
@@ -45,6 +51,31 @@ describe('ChromeExtensionRedirector', () => {
         '/redirect-url?code=123',
         undefined
       );
+    });
+
+    it('calls the after redirect handler with the session info and authenticated fetch', async () => {
+      const redirectHandler = mockRedirectHandler();
+      const sessionInfo = {
+        isLoggedIn: true,
+        sessionID: 'session-id',
+        fetch: jest.fn(),
+      };
+      (redirectHandler.handle as jest.Mock).mockResolvedValue(sessionInfo);
+
+      const afterRedirect = jest.fn();
+
+      const redirector = new ChromeExtensionRedirector(
+        redirectHandler,
+        afterRedirect
+      );
+      redirector.redirect('/redirect-url');
+
+      const returnToExtension = (launchWebAuthFlow as jest.Mock).mock
+        .calls[0][1];
+
+      await returnToExtension('/redirect-url?code=123');
+
+      expect(afterRedirect).toHaveBeenCalledWith(sessionInfo);
     });
   });
 });
