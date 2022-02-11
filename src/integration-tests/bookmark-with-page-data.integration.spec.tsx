@@ -1,4 +1,7 @@
-import { fetch as authenticatedFetch } from '@inrupt/solid-client-authn-browser';
+import {
+  fetch as authenticatedFetch,
+  Session,
+} from '@inrupt/solid-client-authn-browser';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import nock from 'nock';
@@ -7,7 +10,6 @@ import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateDatePathForToday } from '../api/generateDatePathForToday';
 import { generateUuid } from '../api/generateUuid';
 import { now } from '../api/now';
-import { SessionInfo } from '../api/SolidApi';
 import { PageContent } from '../content/PageContent';
 
 jest.mock('@inrupt/solid-client-authn-browser');
@@ -81,11 +83,13 @@ describe('bookmarking an html page with embedded data', () => {
       await render(
         <PageContent
           close={() => null}
-          sessionInfo={
+          session={
             {
-              isLoggedIn: true,
-              webId: 'https://pod.example/#me',
-            } as SessionInfo
+              info: {
+                isLoggedIn: true,
+                webId: 'https://pod.example/#me',
+              },
+            } as Session
           }
         />
       );
@@ -180,11 +184,13 @@ describe('bookmarking an html page with embedded data', () => {
       await render(
         <PageContent
           close={() => null}
-          sessionInfo={
+          session={
             {
-              isLoggedIn: true,
-              webId: 'https://pod.example/#me',
-            } as SessionInfo
+              info: {
+                isLoggedIn: true,
+                webId: 'https://pod.example/#me',
+              },
+            } as Session
           }
         />
       );

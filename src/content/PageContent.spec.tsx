@@ -1,4 +1,4 @@
-import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
+import { Session } from '@inrupt/solid-client-authn-browser';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { PageContent } from './PageContent';
@@ -17,7 +17,7 @@ describe('PageContent', () => {
     it('is present', () => {
       render(
         <PageContent
-          sessionInfo={{ isLoggedIn: false } as ISessionInfo}
+          session={{ info: { isLoggedIn: false } } as Session}
           close={() => null}
         />
       );
@@ -29,7 +29,7 @@ describe('PageContent', () => {
       const close = jest.fn();
       render(
         <PageContent
-          sessionInfo={{ isLoggedIn: false } as ISessionInfo}
+          session={{ info: { isLoggedIn: false } } as Session}
           close={close}
         />
       );
@@ -38,6 +38,6 @@ describe('PageContent', () => {
       closeButton.click();
 
       expect(close).toHaveBeenCalled();
-    })
+    });
   });
 });

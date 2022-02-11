@@ -52,12 +52,12 @@ export class SolidApi {
   private readonly ns: Record<string, (alias: string) => NamedNode>;
   private providerUrl: string;
 
-  constructor(sessionInfo: SessionInfo, store: Store) {
+  constructor(session: Session, store: Store) {
     subscribeOption('providerUrl', (value) => {
       this.providerUrl = value;
     });
-    this.sessionInfo = sessionInfo;
-    this.me = sessionInfo.isLoggedIn ? sym(sessionInfo.webId) : null;
+    this.sessionInfo = session.info;
+    this.me = session.info.isLoggedIn ? sym(session.info.webId) : null;
     this.store = store;
     this.graph = store.getGraph();
     this.fetcher = new Fetcher(this.graph, { fetch: authenticatedFetch });
