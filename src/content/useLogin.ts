@@ -1,5 +1,12 @@
 import { useCallback, useState } from 'react';
 import { useSolidApi } from '../api/apiContext';
+import { MessageType } from '../messages';
+
+function backgroundLogin() {
+  chrome.runtime.sendMessage({ type: MessageType.LOGIN }, function (response) {
+    console.log('login response', response);
+  });
+}
 
 export const useLogin = () => {
   const solidApi = useSolidApi();
@@ -8,6 +15,7 @@ export const useLogin = () => {
   const login = useCallback(async () => {
     try {
       await solidApi.login();
+      // await backgroundLogin();
     } catch (err) {
       setError(err.message);
     }

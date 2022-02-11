@@ -1,4 +1,8 @@
-import { Session } from '@inrupt/solid-client-authn-browser';
+import {
+  ILoginInputOptions,
+  Session,
+} from '@inrupt/solid-client-authn-browser';
+import { Session as ChromeExtensionSession } from '../solid-client-authn-chrome-ext/Session';
 import * as rdf from 'rdflib';
 import {
   Fetcher,
@@ -33,7 +37,7 @@ function getIndex(storageUrl: string): NamedNode {
 
 export class SolidApi {
   private readonly me: NamedNode;
-  private readonly session: Session;
+  private readonly session: Session | ChromeExtensionSession;
   private readonly store: Store;
 
   /**
@@ -46,7 +50,7 @@ export class SolidApi {
   private readonly ns: Record<string, (alias: string) => NamedNode>;
   private providerUrl: string;
 
-  constructor(session: Session, store: Store) {
+  constructor(session: Session | ChromeExtensionSession, store: Store) {
     subscribeOption('providerUrl', (value) => {
       this.providerUrl = value;
     });
@@ -59,13 +63,14 @@ export class SolidApi {
     this.ns = solidNamespace(rdf);
   }
 
-  async login() {
+  async login(options: ILoginInputOptions = {}) {
     if (!this.providerUrl) {
       throw new Error('No pod provider URL configured');
     }
     return this.session.login({
       oidcIssuer: this.providerUrl,
       redirectUrl: window.location.href,
+      ...options,
     });
   }
 
