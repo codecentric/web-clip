@@ -1,7 +1,4 @@
-import {
-  fetch as authenticatedFetch,
-  Session,
-} from '@inrupt/solid-client-authn-browser';
+import { Session } from '@inrupt/solid-client-authn-browser';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import nock from 'nock';
@@ -73,7 +70,7 @@ describe('bookmarking an html page with embedded data', () => {
         }
       );
 
-    mockFetchWithResponse(`
+    const authenticatedFetch = mockFetchWithResponse(`
                 <https://pod.example/#me>
                 <http://www.w3.org/ns/pim/space#storage>
                 <https://storage.example/> .
@@ -89,7 +86,8 @@ describe('bookmarking an html page with embedded data', () => {
                 isLoggedIn: true,
                 webId: 'https://pod.example/#me',
               },
-            } as Session
+              fetch: authenticatedFetch,
+            } as unknown as Session
           }
         />
       );
@@ -174,7 +172,7 @@ describe('bookmarking an html page with embedded data', () => {
         }
       );
 
-    mockFetchWithResponse(`
+    const authenticatedFetch = mockFetchWithResponse(`
                 <https://pod.example/#me>
                 <http://www.w3.org/ns/pim/space#storage>
                 <https://storage.example/> .
@@ -190,7 +188,8 @@ describe('bookmarking an html page with embedded data', () => {
                 isLoggedIn: true,
                 webId: 'https://pod.example/#me',
               },
-            } as Session
+              fetch: authenticatedFetch,
+            } as unknown as Session
           }
         />
       );
@@ -235,7 +234,8 @@ function findPatchRequest(calls: any[], url: string) {
 }
 
 function mockFetchWithResponse(bodyText: string) {
-  (authenticatedFetch as jest.Mock).mockResolvedValue({
+  const authenticatedFetch = jest.fn();
+  authenticatedFetch.mockResolvedValue({
     ok: true,
     headers: new Headers({
       'Content-Type': 'text/turtle',
@@ -246,4 +246,5 @@ function mockFetchWithResponse(bodyText: string) {
     statusText: 'OK',
     text: async () => bodyText,
   });
+  return authenticatedFetch;
 }

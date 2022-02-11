@@ -1,8 +1,4 @@
-import {
-  fetch as authenticatedFetch,
-  login,
-  Session,
-} from '@inrupt/solid-client-authn-browser';
+import { Session } from '@inrupt/solid-client-authn-browser';
 import { Parser as SparqlParser, Update } from 'sparqljs';
 import { subscribeOption } from '../options/optionsStorageApi';
 import { Store } from '../store/Store';
@@ -25,8 +21,9 @@ describe('SolidApi', () => {
     it('logs in against the configured provider url', async () => {
       givenMyPodProviderIs('https://pod.provider.example');
       // when I log in
+      const login = jest.fn();
       const solidApi = new SolidApi(
-        { info: { isLoggedIn: false } } as Session,
+        { info: { isLoggedIn: false }, login } as unknown as Session,
         new Store()
       );
       await solidApi.login();
@@ -54,15 +51,15 @@ describe('SolidApi', () => {
   describe('loadProfile', () => {
     describe('profile can be read after being loaded', () => {
       it('name is Anonymous, when profile contains no name', async () => {
-        mockFetchWithResponse('');
-
+        const authenticatedFetch = mockFetchWithResponse('');
         const solidApi = new SolidApi(
           {
             info: {
               webId: 'https://pod.example/#me',
               isLoggedIn: true,
             },
-          } as Session,
+            fetch: authenticatedFetch,
+          } as unknown as Session,
           new Store()
         );
 
@@ -79,7 +76,7 @@ describe('SolidApi', () => {
       });
 
       it('name is read from vcard:fn', async () => {
-        mockFetchWithResponse(`
+        const authenticatedFetch = mockFetchWithResponse(`
           <https://pod.example/#me>
             <http://www.w3.org/2006/vcard/ns#fn> "Solid User" .
           `);
@@ -90,7 +87,8 @@ describe('SolidApi', () => {
               webId: 'https://pod.example/#me',
               isLoggedIn: true,
             },
-          } as Session,
+            fetch: authenticatedFetch,
+          } as unknown as Session,
           new Store()
         );
 
@@ -120,7 +118,7 @@ describe('SolidApi', () => {
 
   describe('bookmark', () => {
     it("stores a bookmark in the user's pod when storage is available", async () => {
-      mockFetchWithResponse('');
+      const authenticatedFetch = mockFetchWithResponse('');
       givenGeneratedUuidWillBe('some-uuid');
       givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
 
@@ -138,7 +136,8 @@ describe('SolidApi', () => {
             webId: 'https://pod.example/#me',
             isLoggedIn: true,
           },
-        } as Session,
+          fetch: authenticatedFetch,
+        } as unknown as Session,
         new Store(store)
       );
 
@@ -149,6 +148,7 @@ describe('SolidApi', () => {
       });
 
       thenSparqlUpdateIsSentToUrl(
+        authenticatedFetch,
         'https://storage.example/webclip/2021/03/12/some-uuid',
         `
       INSERT DATA {
@@ -167,7 +167,7 @@ describe('SolidApi', () => {
     });
 
     it('adds the bookmark to the webclip index', async () => {
-      mockFetchWithResponse('');
+      const authenticatedFetch = mockFetchWithResponse('');
       givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
       givenGeneratedUuidWillBe('some-uuid');
 
@@ -185,7 +185,8 @@ describe('SolidApi', () => {
             webId: 'https://pod.example/#me',
             isLoggedIn: true,
           },
-        } as Session,
+          fetch: authenticatedFetch,
+        } as unknown as Session,
         new Store(store)
       );
 
@@ -196,6 +197,7 @@ describe('SolidApi', () => {
       });
 
       thenSparqlUpdateIsSentToUrl(
+        authenticatedFetch,
         'https://storage.example/webclip/index.ttl',
         `
       INSERT DATA {
@@ -208,7 +210,7 @@ describe('SolidApi', () => {
     });
 
     it('throws an exception if no storage is available', async () => {
-      mockFetchWithResponse('');
+      const authenticatedFetch = mockFetchWithResponse('');
       (generateUuid as jest.Mock).mockReturnValue('some-uuid');
 
       const store = new Store();
@@ -219,7 +221,8 @@ describe('SolidApi', () => {
             webId: 'https://pod.example/#me',
             isLoggedIn: true,
           },
-        } as Session,
+          fetch: authenticatedFetch,
+        } as unknown as Session,
         store
       );
 
@@ -233,7 +236,7 @@ describe('SolidApi', () => {
     });
 
     it('relates the bookmarked page to named node found on that page', async () => {
-      mockFetchWithResponse('');
+      const authenticatedFetch = mockFetchWithResponse('');
       givenGeneratedUuidWillBe('some-uuid');
       givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
 
@@ -258,7 +261,8 @@ describe('SolidApi', () => {
             webId: 'https://pod.example/#me',
             isLoggedIn: true,
           },
-        } as Session,
+          fetch: authenticatedFetch,
+        } as unknown as Session,
         new Store(store)
       );
 
@@ -269,6 +273,7 @@ describe('SolidApi', () => {
       });
 
       thenSparqlUpdateIsSentToUrl(
+        authenticatedFetch,
         'https://storage.example/webclip/2021/03/12/some-uuid',
         `
       INSERT DATA {
@@ -292,7 +297,7 @@ describe('SolidApi', () => {
     });
 
     it('returns the uri for the bookmark action', async () => {
-      mockFetchWithResponse('');
+      const authenticatedFetch = mockFetchWithResponse('');
       givenGeneratedUuidWillBe('some-uuid');
       givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
 
@@ -310,7 +315,8 @@ describe('SolidApi', () => {
             webId: 'https://pod.example/#me',
             isLoggedIn: true,
           },
-        } as Session,
+          fetch: authenticatedFetch,
+        } as unknown as Session,
         new Store(store)
       );
 
@@ -326,7 +332,7 @@ describe('SolidApi', () => {
     });
 
     it('updates an existing bookmark, instead of creating a new one', async () => {
-      mockFetchWithResponse('');
+      const authenticatedFetch = mockFetchWithResponse('');
       givenGeneratedUuidWillBe('some-uuid');
       givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
 
@@ -344,7 +350,8 @@ describe('SolidApi', () => {
             webId: 'https://pod.example/#me',
             isLoggedIn: true,
           },
-        } as Session,
+          fetch: authenticatedFetch,
+        } as unknown as Session,
         new Store(store)
       );
 
@@ -360,6 +367,7 @@ describe('SolidApi', () => {
       );
 
       thenSparqlUpdateIsSentToUrl(
+        authenticatedFetch,
         'https://storage.example/existing/bookmark',
         `
       INSERT DATA {
@@ -378,7 +386,7 @@ describe('SolidApi', () => {
     });
 
     it('does not update the index, since it already exists for existing bookmark', async () => {
-      mockFetchWithResponse('');
+      const authenticatedFetch = mockFetchWithResponse('');
       givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
       givenGeneratedUuidWillBe('some-uuid');
 
@@ -396,7 +404,8 @@ describe('SolidApi', () => {
             webId: 'https://pod.example/#me',
             isLoggedIn: true,
           },
-        } as Session,
+          fetch: authenticatedFetch,
+        } as unknown as Session,
         new Store(store)
       );
 
@@ -412,6 +421,7 @@ describe('SolidApi', () => {
       );
 
       thenNoSparqlUpdateIsSentToUrl(
+        authenticatedFetch,
         'https://storage.example/webclip/index.ttl'
       );
     });
@@ -420,8 +430,10 @@ describe('SolidApi', () => {
   describe('load bookmark', () => {
     describe('when no index is found', () => {
       let result: Bookmark;
+      let authenticatedFetch: jest.Mock;
       beforeEach(async () => {
-        (authenticatedFetch as jest.Mock).mockResolvedValue({
+        authenticatedFetch = jest.fn();
+        authenticatedFetch.mockResolvedValue({
           ok: true,
           headers: new Headers({
             'Content-Type': 'text/plain',
@@ -447,7 +459,8 @@ describe('SolidApi', () => {
               webId: 'https://pod.example/#me',
               isLoggedIn: true,
             },
-          } as Session,
+            fetch: authenticatedFetch,
+          } as unknown as Session,
           new Store(store)
         );
 
@@ -472,8 +485,9 @@ describe('SolidApi', () => {
 
     describe('when page is not found at the index', () => {
       let result: Bookmark;
+      let authenticatedFetch: jest.Mock;
       beforeEach(async () => {
-        mockFetchWithResponse(`
+        authenticatedFetch = mockFetchWithResponse(`
           @prefix schema: <http://schema.org/> .
           
           <http://storage.example/webclip/irrelevant#it> a schema:BookmarkAction; schema:object <https://irrelevant.example> .
@@ -493,7 +507,8 @@ describe('SolidApi', () => {
               webId: 'https://pod.example/#me',
               isLoggedIn: true,
             },
-          } as Session,
+            fetch: authenticatedFetch,
+          } as unknown as Session,
           new Store(store)
         );
 
@@ -518,8 +533,9 @@ describe('SolidApi', () => {
 
     describe('when page is found at the index', () => {
       let result: Bookmark;
+      let authenticatedFetch: jest.Mock;
       beforeEach(async () => {
-        mockFetchWithResponse(`
+        authenticatedFetch = mockFetchWithResponse(`
           @prefix schema: <http://schema.org/> .
           
           <http://storage.example/webclip/relevant#it> a schema:BookmarkAction; schema:object <https://myfavouriteurl.example> .
@@ -539,7 +555,8 @@ describe('SolidApi', () => {
               webId: 'https://pod.example/#me',
               isLoggedIn: true,
             },
-          } as Session,
+            fetch: authenticatedFetch,
+          } as unknown as Session,
           new Store(store)
         );
 
@@ -567,7 +584,8 @@ describe('SolidApi', () => {
 });
 
 function mockFetchWithResponse(bodyText: string) {
-  (authenticatedFetch as jest.Mock).mockResolvedValue({
+  const authenticatedFetch = jest.fn();
+  authenticatedFetch.mockResolvedValue({
     ok: true,
     headers: new Headers({
       'Content-Type': 'text/turtle',
@@ -578,6 +596,7 @@ function mockFetchWithResponse(bodyText: string) {
     statusText: 'OK',
     text: async () => bodyText,
   });
+  return authenticatedFetch;
 }
 
 function givenMyPodProviderIs(example: string) {
@@ -595,7 +614,11 @@ function givenNowIs(timestamp: number) {
   (now as jest.Mock).mockReturnValue(new Date(timestamp));
 }
 
-function thenSparqlUpdateIsSentToUrl(url: string, query: string) {
+function thenSparqlUpdateIsSentToUrl(
+  authenticatedFetch: jest.Mock,
+  url: string,
+  query: string
+) {
   expect(authenticatedFetch).toHaveBeenCalled();
 
   const parser = new SparqlParser();
@@ -613,8 +636,11 @@ function thenSparqlUpdateIsSentToUrl(url: string, query: string) {
   expect(actualQuery).toEqual(expectedQuery);
 }
 
-function thenNoSparqlUpdateIsSentToUrl(url: string) {
-  const calls = (authenticatedFetch as jest.Mock).mock.calls;
+function thenNoSparqlUpdateIsSentToUrl(
+  authenticatedFetch: jest.Mock,
+  url: string
+) {
+  const calls = authenticatedFetch.mock.calls;
   const sparqlUpdateCall = calls.find(
     (it) => it[0] === url && it[1].method === 'PATCH'
   );
