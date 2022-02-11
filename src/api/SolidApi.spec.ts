@@ -1,6 +1,7 @@
 import {
   fetch as authenticatedFetch,
   login,
+  Session,
 } from '@inrupt/solid-client-authn-browser';
 import { Parser as SparqlParser, Update } from 'sparqljs';
 import { subscribeOption } from '../options/optionsStorageApi';
@@ -8,7 +9,7 @@ import { Store } from '../store/Store';
 import { givenStoreContaining } from '../test/givenStoreContaining';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
-import { Bookmark, SessionInfo, SolidApi } from './SolidApi';
+import { Bookmark, SolidApi } from './SolidApi';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('./generateUuid');
@@ -25,9 +26,7 @@ describe('SolidApi', () => {
       givenMyPodProviderIs('https://pod.provider.example');
       // when I log in
       const solidApi = new SolidApi(
-        {
-          isLoggedIn: false,
-        } as SessionInfo,
+        { info: { isLoggedIn: false } } as Session,
         new Store()
       );
       await solidApi.login();
@@ -42,9 +41,7 @@ describe('SolidApi', () => {
       givenMyPodProviderIs(undefined);
       // when I try to log in
       const solidApi = new SolidApi(
-        {
-          isLoggedIn: false,
-        } as SessionInfo,
+        { info: { isLoggedIn: false } } as Session,
         new Store()
       );
       // then I see this error
@@ -61,9 +58,11 @@ describe('SolidApi', () => {
 
         const solidApi = new SolidApi(
           {
-            webId: 'https://pod.example/#me',
-            isLoggedIn: true,
-          } as SessionInfo,
+            info: {
+              webId: 'https://pod.example/#me',
+              isLoggedIn: true,
+            },
+          } as Session,
           new Store()
         );
 
@@ -87,9 +86,11 @@ describe('SolidApi', () => {
 
         const solidApi = new SolidApi(
           {
-            webId: 'https://pod.example/#me',
-            isLoggedIn: true,
-          } as SessionInfo,
+            info: {
+              webId: 'https://pod.example/#me',
+              isLoggedIn: true,
+            },
+          } as Session,
           new Store()
         );
 
@@ -107,9 +108,7 @@ describe('SolidApi', () => {
     });
     it('profile cannot be loaded, when noone is logged in', async () => {
       const solidApi = new SolidApi(
-        {
-          isLoggedIn: false,
-        } as SessionInfo,
+        { info: { isLoggedIn: false } } as Session,
         new Store()
       );
 
@@ -135,9 +134,11 @@ describe('SolidApi', () => {
 
       const solidApi = new SolidApi(
         {
-          webId: 'https://pod.example/#me',
-          isLoggedIn: true,
-        } as SessionInfo,
+          info: {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          },
+        } as Session,
         new Store(store)
       );
 
@@ -180,9 +181,11 @@ describe('SolidApi', () => {
 
       const solidApi = new SolidApi(
         {
-          webId: 'https://pod.example/#me',
-          isLoggedIn: true,
-        } as SessionInfo,
+          info: {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          },
+        } as Session,
         new Store(store)
       );
 
@@ -212,9 +215,11 @@ describe('SolidApi', () => {
 
       const solidApi = new SolidApi(
         {
-          webId: 'https://pod.example/#me',
-          isLoggedIn: true,
-        } as SessionInfo,
+          info: {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          },
+        } as Session,
         store
       );
 
@@ -249,9 +254,11 @@ describe('SolidApi', () => {
 
       const solidApi = new SolidApi(
         {
-          webId: 'https://pod.example/#me',
-          isLoggedIn: true,
-        } as SessionInfo,
+          info: {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          },
+        } as Session,
         new Store(store)
       );
 
@@ -299,9 +306,11 @@ describe('SolidApi', () => {
 
       const solidApi = new SolidApi(
         {
-          webId: 'https://pod.example/#me',
-          isLoggedIn: true,
-        } as SessionInfo,
+          info: {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          },
+        } as Session,
         new Store(store)
       );
 
@@ -331,9 +340,11 @@ describe('SolidApi', () => {
 
       const solidApi = new SolidApi(
         {
-          webId: 'https://pod.example/#me',
-          isLoggedIn: true,
-        } as SessionInfo,
+          info: {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          },
+        } as Session,
         new Store(store)
       );
 
@@ -381,9 +392,11 @@ describe('SolidApi', () => {
 
       const solidApi = new SolidApi(
         {
-          webId: 'https://pod.example/#me',
-          isLoggedIn: true,
-        } as SessionInfo,
+          info: {
+            webId: 'https://pod.example/#me',
+            isLoggedIn: true,
+          },
+        } as Session,
         new Store(store)
       );
 
@@ -430,9 +443,11 @@ describe('SolidApi', () => {
 
         const solidApi = new SolidApi(
           {
-            webId: 'https://pod.example/#me',
-            isLoggedIn: true,
-          } as SessionInfo,
+            info: {
+              webId: 'https://pod.example/#me',
+              isLoggedIn: true,
+            },
+          } as Session,
           new Store(store)
         );
 
@@ -474,9 +489,11 @@ describe('SolidApi', () => {
 
         const solidApi = new SolidApi(
           {
-            webId: 'https://pod.example/#me',
-            isLoggedIn: true,
-          } as SessionInfo,
+            info: {
+              webId: 'https://pod.example/#me',
+              isLoggedIn: true,
+            },
+          } as Session,
           new Store(store)
         );
 
@@ -518,9 +535,11 @@ describe('SolidApi', () => {
 
         const solidApi = new SolidApi(
           {
-            webId: 'https://pod.example/#me',
-            isLoggedIn: true,
-          } as SessionInfo,
+            info: {
+              webId: 'https://pod.example/#me',
+              isLoggedIn: true,
+            },
+          } as Session,
           new Store(store)
         );
 
