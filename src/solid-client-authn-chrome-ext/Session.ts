@@ -22,7 +22,10 @@ export class Session extends EventEmitter {
       (redirectInfo: RedirectInfo) => {
         const { fetch, ...info } = redirectInfo;
         this.info = info;
-        this.fetch = fetch.bind(window);
+        if (info.isLoggedIn) {
+          this.fetch = fetch.bind(window);
+          this.emit('login');
+        }
       }
     );
   }
@@ -43,4 +46,8 @@ export class Session extends EventEmitter {
     this.info.isLoggedIn = false;
     this.fetch = this.clientAuthentication.fetch;
   };
+
+  onLogin(callback: () => void) {
+    this.on('login', callback);
+  }
 }
