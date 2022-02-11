@@ -94,30 +94,42 @@ describe('Session', () => {
   });
 
   describe('after redirect', () => {
-    it('updates the session info and fetch function', async () => {
+    let session: Session;
+    let authenticatedFetch: typeof fetch;
+    beforeEach(async () => {
       const clientAuthentication = {
         login: jest.fn(),
       };
       (getClientAuthentication as jest.Mock).mockReturnValue(
         clientAuthentication
       );
-      const session = new Session();
+      session = new Session();
+      authenticatedFetch = jest.fn();
+
       await session.login({});
       const afterRedirect = (getClientAuthentication as jest.Mock).mock
         .calls[0][0];
-      const authenticatedFetch = jest.fn();
       afterRedirect({
         sessionId: 'db180742-9c17-4e91-94fc-3422a0e75dd9',
         isLoggedIn: true,
         webId: 'https://pod.example/alice#me',
         fetch: authenticatedFetch,
       } as RedirectInfo);
+    });
+
+    it('updates the session info', async () => {
       expect(session.info).toEqual({
         sessionId: 'db180742-9c17-4e91-94fc-3422a0e75dd9',
         isLoggedIn: true,
         webId: 'https://pod.example/alice#me',
       });
-      expect(session.fetch).toEqual(authenticatedFetch);
+    });
+
+    it('updates fetch to authenticated fetch', async () => {
+      await session.fetch('https://pod.example/private');
+      expect(authenticatedFetch).toHaveBeenCalledWith(
+        'https://pod.example/private'
+      );
     });
   });
 });

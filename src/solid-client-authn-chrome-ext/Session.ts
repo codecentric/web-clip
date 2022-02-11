@@ -22,7 +22,7 @@ export class Session extends EventEmitter {
       (redirectInfo: RedirectInfo) => {
         const { fetch, ...info } = redirectInfo;
         this.info = info;
-        this.fetch = fetch;
+        this.fetch = fetch.bind(window);
       }
     );
   }
