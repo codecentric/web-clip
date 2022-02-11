@@ -1,12 +1,5 @@
-import { MessageType } from './messages';
-import Tab = chrome.tabs.Tab;
+import { activateWebClipForTab } from './background/activate';
 
 chrome.browserAction.onClicked.addListener(function (tab) {
-  onClick(tab);
+  activateWebClipForTab(tab);
 });
-
-function onClick(tab: Tab) {
-  chrome.tabs.sendMessage(tab.id, { type: MessageType.ACTIVATE }, function () {
-    return null;
-  });
-}
