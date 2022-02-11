@@ -96,6 +96,7 @@ describe('Session', () => {
   describe('after redirect', () => {
     let session: Session;
     let authenticatedFetch: typeof fetch;
+    let onLogin: () => unknown;
     beforeEach(async () => {
       const clientAuthentication = {
         login: jest.fn(),
@@ -103,9 +104,10 @@ describe('Session', () => {
       (getClientAuthentication as jest.Mock).mockReturnValue(
         clientAuthentication
       );
+      onLogin = jest.fn();
       session = new Session();
       authenticatedFetch = jest.fn();
-
+      session.onLogin(onLogin);
       await session.login({});
       const afterRedirect = (getClientAuthentication as jest.Mock).mock
         .calls[0][0];
@@ -130,6 +132,52 @@ describe('Session', () => {
       expect(authenticatedFetch).toHaveBeenCalledWith(
         'https://pod.example/private'
       );
+    });
+
+    it('emits login event', () => {
+      expect(onLogin).toHaveBeenCalled();
+    });
+  });
+
+  describe('after redirect from failed login', () => {
+    let session: Session;
+    let onLogin: () => unknown;
+    let unauthenticatedFetch: typeof fetch;
+    beforeEach(async () => {
+      const clientAuthentication = {
+        login: jest.fn(),
+      };
+      (getClientAuthentication as jest.Mock).mockReturnValue(
+        clientAuthentication
+      );
+      onLogin = jest.fn();
+      session = new Session();
+      unauthenticatedFetch = session.fetch;
+      session.onLogin(onLogin);
+      await session.login({});
+      const afterRedirect = (getClientAuthentication as jest.Mock).mock
+        .calls[0][0];
+      afterRedirect({
+        sessionId: 'db180742-9c17-4e91-94fc-3422a0e75dd9',
+        isLoggedIn: false,
+        webId: 'https://pod.example/alice#me',
+      } as RedirectInfo);
+    });
+
+    it('updates the session info', async () => {
+      expect(session.info).toEqual({
+        sessionId: 'db180742-9c17-4e91-94fc-3422a0e75dd9',
+        isLoggedIn: false,
+        webId: 'https://pod.example/alice#me',
+      });
+    });
+
+    it('keeps the unauthenticated fetch', async () => {
+      expect(session.fetch).toBe(unauthenticatedFetch);
+    });
+
+    it('does not emit login event', () => {
+      expect(onLogin).not.toHaveBeenCalled();
     });
   });
 
