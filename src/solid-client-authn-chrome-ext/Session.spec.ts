@@ -132,4 +132,58 @@ describe('Session', () => {
       );
     });
   });
+
+  describe('logout', () => {
+    it('calls client authentication logout with the session id', async () => {
+      const clientAuthentication = {
+        logout: jest.fn(),
+      };
+      (getClientAuthentication as jest.Mock).mockReturnValue(
+        clientAuthentication
+      );
+      const session = new Session();
+      await session.logout();
+      expect(clientAuthentication.logout).toHaveBeenCalledWith(
+        '8df398ce-b3c9-4410-a446-914a50c96842'
+      );
+    });
+
+    it('resets the session logged in status, but keeps session id and WebID', async () => {
+      const clientAuthentication = {
+        logout: jest.fn(),
+      };
+      (getClientAuthentication as jest.Mock).mockReturnValue(
+        clientAuthentication
+      );
+      const session = new Session();
+      session.info = {
+        sessionId: '8df398ce-b3c9-4410-a446-914a50c96842',
+        isLoggedIn: true,
+        webId: 'https://pod.example/alice#me',
+      };
+      await session.logout();
+      expect(session.info.sessionId).toBe(
+        '8df398ce-b3c9-4410-a446-914a50c96842'
+      );
+      expect(session.info.webId).toBe('https://pod.example/alice#me');
+      expect(session.info.isLoggedIn).toBe(false);
+    });
+
+    it('resets the fetch to client authentication fetch', async () => {
+      const authenticatedFetch = jest.fn();
+      const clientAuthenticationFetch = jest.fn();
+
+      const clientAuthentication = {
+        logout: jest.fn(),
+        fetch: clientAuthenticationFetch,
+      };
+      (getClientAuthentication as jest.Mock).mockReturnValue(
+        clientAuthentication
+      );
+      const session = new Session();
+      session.fetch = authenticatedFetch;
+      await session.logout();
+      expect(session.fetch).toBe(clientAuthenticationFetch);
+    });
+  });
 });
