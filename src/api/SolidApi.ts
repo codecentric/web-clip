@@ -1,8 +1,4 @@
-import {
-  fetch as authenticatedFetch,
-  login,
-  Session,
-} from '@inrupt/solid-client-authn-browser';
+import { Session } from '@inrupt/solid-client-authn-browser';
 import * as rdf from 'rdflib';
 import {
   Fetcher,
@@ -23,8 +19,6 @@ import { generateDatePathForToday } from './generateDatePathForToday';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
 
-export type SessionInfo = Session['info'];
-
 export interface Profile {
   name: string;
 }
@@ -39,7 +33,7 @@ function getIndex(storageUrl: string): NamedNode {
 
 export class SolidApi {
   private readonly me: NamedNode;
-  private readonly sessionInfo: SessionInfo;
+  private readonly session: Session;
   private readonly store: Store;
 
   /**
@@ -56,11 +50,11 @@ export class SolidApi {
     subscribeOption('providerUrl', (value) => {
       this.providerUrl = value;
     });
-    this.sessionInfo = session.info;
+    this.session = session;
     this.me = session.info.isLoggedIn ? sym(session.info.webId) : null;
     this.store = store;
     this.graph = store.getGraph();
-    this.fetcher = new Fetcher(this.graph, { fetch: authenticatedFetch });
+    this.fetcher = new Fetcher(this.graph, { fetch: session.fetch });
     this.updater = new UpdateManager(this.graph);
     this.ns = solidNamespace(rdf);
   }
@@ -69,7 +63,7 @@ export class SolidApi {
     if (!this.providerUrl) {
       throw new Error('No pod provider URL configured');
     }
-    return login({
+    return this.session.login({
       oidcIssuer: this.providerUrl,
       redirectUrl: window.location.href,
     });
