@@ -233,5 +233,19 @@ describe('Session', () => {
       await session.logout();
       expect(session.fetch).toBe(clientAuthenticationFetch);
     });
+
+    it('emits logout event', async () => {
+      const clientAuthentication = {
+        logout: jest.fn(),
+      };
+      (getClientAuthentication as jest.Mock).mockReturnValue(
+        clientAuthentication
+      );
+      const onLogout = jest.fn();
+      const session = new Session();
+      session.onLogout(onLogout);
+      await session.logout();
+      expect(onLogout).toHaveBeenCalled();
+    });
   });
 });
