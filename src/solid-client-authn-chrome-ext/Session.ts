@@ -45,9 +45,14 @@ export class Session extends EventEmitter {
     await this.clientAuthentication.logout(this.info.sessionId);
     this.info.isLoggedIn = false;
     this.fetch = this.clientAuthentication.fetch;
+    this.emit('logout');
   };
 
-  onLogin(callback: () => void) {
+  onLogin(callback: () => unknown) {
     this.on('login', callback);
+  }
+
+  onLogout(callback: () => unknown) {
+    this.on('logout', callback);
   }
 }
