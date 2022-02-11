@@ -37,4 +37,10 @@ export class Session extends EventEmitter {
       this
     );
   };
+
+  logout = async () => {
+    await this.clientAuthentication.logout(this.info.sessionId);
+    this.info.isLoggedIn = false;
+    this.fetch = this.clientAuthentication.fetch;
+  };
 }
