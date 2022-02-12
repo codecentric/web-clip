@@ -48,9 +48,14 @@ export class SolidApi {
   private readonly fetcher: Fetcher;
   private readonly updater: UpdateManager;
   private readonly ns: Record<string, (alias: string) => NamedNode>;
+  private readonly redirectUrl: string;
   private providerUrl: string;
 
-  constructor(session: Session | ChromeExtensionSession, store: Store) {
+  constructor(
+    session: Session | ChromeExtensionSession,
+    store: Store,
+    redirectUrl: string = window.location.href
+  ) {
     subscribeOption('providerUrl', (value) => {
       this.providerUrl = value;
     });
@@ -61,6 +66,7 @@ export class SolidApi {
     this.fetcher = new Fetcher(this.graph, { fetch: session.fetch });
     this.updater = new UpdateManager(this.graph);
     this.ns = solidNamespace(rdf);
+    this.redirectUrl = redirectUrl;
   }
 
   async login(options: ILoginInputOptions = {}) {
@@ -69,7 +75,7 @@ export class SolidApi {
     }
     return this.session.login({
       oidcIssuer: this.providerUrl,
-      redirectUrl: window.location.href,
+      redirectUrl: this.redirectUrl,
       ...options,
     });
   }
