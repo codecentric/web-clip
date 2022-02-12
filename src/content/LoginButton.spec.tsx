@@ -1,14 +1,14 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { LoginButton } from './LoginButton';
-import { useLogin } from './useLogin';
+import { useLegacyLogin } from './useLegacyLogin';
 
-jest.mock('./useLogin');
+jest.mock('./useLegacyLogin');
 
 describe('LoginButton', () => {
   it('triggers login when clicked', () => {
     const login = jest.fn();
-    (useLogin as jest.Mock).mockReturnValue({
+    (useLegacyLogin as jest.Mock).mockReturnValue({
       login,
     });
     render(<LoginButton />);
@@ -18,7 +18,7 @@ describe('LoginButton', () => {
   });
 
   it('shows error, when login failed', () => {
-    (useLogin as jest.Mock).mockReturnValue({
+    (useLegacyLogin as jest.Mock).mockReturnValue({
       error: 'something went wrong',
       login: jest.fn(),
     });
