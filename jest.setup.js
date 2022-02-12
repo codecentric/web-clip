@@ -14,3 +14,9 @@ window.crypto = {
 };
 
 window.fetch = fetch;
+
+global.chrome = {
+  runtime: {
+    sendMessage: jest.fn(),
+  },
+};
