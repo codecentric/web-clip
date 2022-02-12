@@ -6,3 +6,7 @@ export enum MessageType {
 export type Message = {
   type: MessageType;
 };
+
+export type Response = {
+  message?: string;
+};
