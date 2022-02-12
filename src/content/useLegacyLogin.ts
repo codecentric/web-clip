@@ -8,7 +8,7 @@ function backgroundLogin() {
   });
 }
 
-export const useLogin = () => {
+export const useLegacyLogin = () => {
   const solidApi = useSolidApi();
   const [error, setError] = useState(null);
 
