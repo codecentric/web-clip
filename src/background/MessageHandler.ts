@@ -26,6 +26,15 @@ export class MessageHandler {
           payload: bookmark,
         };
       }
+      case MessageType.ADD_BOOKMARK: {
+        const result = await this.solidApi.bookmark(
+          request.payload.page,
+          request.payload.bookmark
+        );
+        return {
+          payload: result,
+        };
+      }
     }
   }
 }
