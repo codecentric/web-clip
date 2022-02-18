@@ -1,3 +1,4 @@
+import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
 import { Bookmark } from './api/SolidApi';
 import { PageMetaData } from './content/usePage';
 
@@ -11,13 +12,24 @@ export enum MessageType {
 }
 
 export type Message =
+  | ActivateMessage
   | LoginMessage
+  | LoggedInMessage
   | LoadProfileMessage
   | LoadBookmarkMessage
   | AddBookmarkMessage;
 
+export type ActivateMessage = {
+  type: MessageType.ACTIVATE;
+};
+
 export type LoginMessage = {
   type: MessageType.LOGIN;
+};
+
+export type LoggedInMessage = {
+  type: MessageType.LOGGED_IN;
+  payload: ISessionInfo;
 };
 
 export type LoadProfileMessage = {
