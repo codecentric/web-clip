@@ -7,7 +7,7 @@ interface AsyncState<T> {
   value?: T;
 }
 
-export const useProfile = () => {
+export const useLegacyProfile = () => {
   const solidApi = useSolidApi();
   const [{ loading, value }, setState] = useState<AsyncState<Profile>>({
     loading: true,
