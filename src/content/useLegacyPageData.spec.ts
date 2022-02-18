@@ -1,12 +1,14 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { useStore } from '../store/context';
-import { usePageData } from './usePageData';
+import { useLegacyPageData } from './useLegacyPageData';
 
 jest.mock('../store/context');
 
-describe('usePageData', () => {
+describe('useLegacyPageData', () => {
   it('is loading initially', () => {
-    const { result } = renderHook(() => usePageData('https://page.example'));
+    const { result } = renderHook(() =>
+      useLegacyPageData('https://page.example')
+    );
     expect(result.all[0]).toMatchObject({
       loading: true,
     });
@@ -17,7 +19,7 @@ describe('usePageData', () => {
       importFromUrl: jest.fn(),
     };
     (useStore as jest.Mock).mockReturnValue(store);
-    renderHook(() => usePageData('https://page.example'));
+    renderHook(() => useLegacyPageData('https://page.example'));
     expect(store.importFromUrl).toHaveBeenCalledWith('https://page.example');
   });
 
@@ -27,7 +29,7 @@ describe('usePageData', () => {
     };
     (useStore as jest.Mock).mockReturnValue(store);
     const { result, waitForNextUpdate } = renderHook(() =>
-      usePageData('https://page.example')
+      useLegacyPageData('https://page.example')
     );
     await waitForNextUpdate();
     expect(result.current).toMatchObject({
