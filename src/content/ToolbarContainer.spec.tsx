@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { ToolbarContainer } from './ToolbarContainer';
-import { useBookmark } from './useBookmark';
+import { useLegacyBookmark } from './useLegacyBookmark';
 import { usePage } from './usePage';
 import { usePageData } from './usePageData';
 import { useLegacyProfile } from './useLegacyProfile';
 
 jest.mock('./useLegacyProfile');
-jest.mock('./useBookmark');
+jest.mock('./useLegacyBookmark');
 jest.mock('./usePageData');
 jest.mock('./usePage');
 
@@ -33,7 +33,7 @@ describe('ToolbarContainer', () => {
     });
 
     addBookmark = jest.fn();
-    (useBookmark as jest.Mock).mockReturnValue({
+    (useLegacyBookmark as jest.Mock).mockReturnValue({
       loading: false,
       addBookmark,
     });

@@ -10,7 +10,7 @@ interface AsyncState<T> {
   result?: T;
 }
 
-export const useBookmark = (page: PageMetaData) => {
+export const useLegacyBookmark = (page: PageMetaData) => {
   const solidApi = useSolidApi();
   const [{ loading, saving, error, result: bookmark }, setState] = useState<
     AsyncState<Bookmark>

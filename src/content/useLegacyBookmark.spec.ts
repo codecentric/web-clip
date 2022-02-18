@@ -1,9 +1,9 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import { mockSolidApi, SolidApiMock } from '../test/solidApiMock';
-import { useBookmark } from './useBookmark';
+import { useLegacyBookmark } from './useLegacyBookmark';
 import { PageMetaData } from './usePage';
 
-describe('useBookmark', () => {
+describe('useLegacyBookmark', () => {
   let solidApi: SolidApiMock;
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('useBookmark', () => {
 
     it('returns saving false', () => {
       const { result } = renderHook(() =>
-        useBookmark({
+        useLegacyBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
@@ -39,7 +39,7 @@ describe('useBookmark', () => {
 
     it('returns loading true', () => {
       const { result } = renderHook(() =>
-        useBookmark({
+        useLegacyBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
@@ -53,7 +53,7 @@ describe('useBookmark', () => {
 
     it('calls solid api to check for existing bookmark', async () => {
       const page: PageMetaData = { name: 'any', url: 'any', type: 'WebPage' };
-      renderHook(() => useBookmark(page));
+      renderHook(() => useLegacyBookmark(page));
       expect(solidApi.loadBookmark).toHaveBeenCalledWith(page);
     });
   });
@@ -61,7 +61,7 @@ describe('useBookmark', () => {
   describe('after checking for existing bookmark', () => {
     it('returns loading false', async () => {
       const { result, waitForNextUpdate } = renderHook(() =>
-        useBookmark({
+        useLegacyBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
@@ -78,7 +78,7 @@ describe('useBookmark', () => {
       solidApi.loadBookmark.mockResolvedValue({ uri: 'any#it' });
 
       const { result, waitForNextUpdate } = renderHook(() =>
-        useBookmark({
+        useLegacyBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
@@ -95,7 +95,7 @@ describe('useBookmark', () => {
       solidApi.loadBookmark.mockResolvedValue(null);
 
       const { result, waitForNextUpdate } = renderHook(() =>
-        useBookmark({
+        useLegacyBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
@@ -113,7 +113,7 @@ describe('useBookmark', () => {
       solidApi.loadBookmark.mockRejectedValue(error);
 
       const { result, waitForNextUpdate } = renderHook(() =>
-        useBookmark({
+        useLegacyBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
@@ -130,7 +130,7 @@ describe('useBookmark', () => {
   describe('while bookmarking', () => {
     it('returns saving true', async () => {
       const { result } = renderHook(() =>
-        useBookmark({
+        useLegacyBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
@@ -147,7 +147,9 @@ describe('useBookmark', () => {
 
     it('calls solid api to create a bookmark', async () => {
       const page: PageMetaData = { name: 'any', url: 'any', type: 'WebPage' };
-      const { result, waitForNextUpdate } = renderHook(() => useBookmark(page));
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useLegacyBookmark(page)
+      );
       await waitForNextUpdate();
       await act(async () => {
         await result.current.addBookmark();
@@ -161,7 +163,9 @@ describe('useBookmark', () => {
       };
       solidApi.loadBookmark.mockResolvedValue(existing);
       const page: PageMetaData = { name: 'any', url: 'any', type: 'WebPage' };
-      const { result, waitForNextUpdate } = renderHook(() => useBookmark(page));
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useLegacyBookmark(page)
+      );
       await waitForNextUpdate();
       await act(async () => {
         await result.current.addBookmark();
@@ -174,7 +178,7 @@ describe('useBookmark', () => {
     it('returns no error and stops saving indicator', async () => {
       mockSolidApi();
       const { result } = renderHook(() =>
-        useBookmark({
+        useLegacyBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
@@ -196,7 +200,7 @@ describe('useBookmark', () => {
         uri: 'https://storage.example/bookmark#it',
       });
       const { result } = renderHook(() =>
-        useBookmark({
+        useLegacyBookmark({
           name: 'any',
           url: 'any',
           type: 'WebPage',
@@ -217,7 +221,7 @@ describe('useBookmark', () => {
     solidApi.bookmark.mockRejectedValue(new Error('Pod not available'));
 
     const { result } = renderHook(() =>
-      useBookmark({
+      useLegacyBookmark({
         name: 'any',
         url: 'any',
         type: 'WebPage',

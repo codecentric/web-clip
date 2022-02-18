@@ -1,16 +1,16 @@
 import { usePage } from './usePage';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Toolbar } from './Toolbar';
-import { useBookmark } from './useBookmark';
+import { useLegacyBookmark } from './useLegacyBookmark';
 import React from 'react';
 
-jest.mock('./useBookmark');
+jest.mock('./useLegacyBookmark');
 jest.mock('./usePage');
 
 describe('Toolbar', () => {
   describe('while loading', () => {
     beforeEach(() => {
-      (useBookmark as jest.Mock).mockReturnValue({
+      (useLegacyBookmark as jest.Mock).mockReturnValue({
         saving: false,
         loading: true,
       });
@@ -35,7 +35,7 @@ describe('Toolbar', () => {
 
     beforeEach(() => {
       addBookmark = jest.fn();
-      (useBookmark as jest.Mock).mockReturnValue({
+      (useLegacyBookmark as jest.Mock).mockReturnValue({
         saving: false,
         loading: false,
         addBookmark,
@@ -55,7 +55,7 @@ describe('Toolbar', () => {
           name: 'An interesting article',
         });
         render(<Toolbar profile={{ name: 'Jane Doe' }} />);
-        expect(useBookmark).toHaveBeenCalledWith({
+        expect(useLegacyBookmark).toHaveBeenCalledWith({
           type: 'WebPage',
           url: 'https://page.example/article',
           name: 'An interesting article',
@@ -75,7 +75,7 @@ describe('Toolbar', () => {
       });
 
       it('disables the clip it button and shows a saving message while the bookmark is being saved', () => {
-        (useBookmark as jest.Mock).mockReturnValue({
+        (useLegacyBookmark as jest.Mock).mockReturnValue({
           saving: true,
           error: null,
           addBookmark,
@@ -89,7 +89,7 @@ describe('Toolbar', () => {
       });
 
       it('shows an error if the bookmark cannot be saved', () => {
-        (useBookmark as jest.Mock).mockReturnValue({
+        (useLegacyBookmark as jest.Mock).mockReturnValue({
           saving: false,
           loading: false,
           error: new Error('Pod not available'),
@@ -104,7 +104,7 @@ describe('Toolbar', () => {
       });
 
       it('shows a link to the bookmark after it has been saved', () => {
-        (useBookmark as jest.Mock).mockReturnValue({
+        (useLegacyBookmark as jest.Mock).mockReturnValue({
           saving: false,
           bookmark: { uri: 'https://storage.example/bookmark#it' },
           addBookmark,
