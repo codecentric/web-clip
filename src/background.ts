@@ -8,13 +8,13 @@ import { Store } from './store/Store';
 
 const session = new Session();
 
-const solidApi = new SolidApi(
-  session,
-  new Store(),
-  chrome.identity.getRedirectURL()
-);
+function createMessageHandler() {
+  return new MessageHandler(
+    new SolidApi(session, new Store(), chrome.identity.getRedirectURL())
+  );
+}
 
-const messageHandler = new MessageHandler(solidApi);
+let messageHandler = createMessageHandler();
 
 chrome.browserAction.onClicked.addListener(function (tab) {
   activateWebClipForTab(tab);
@@ -26,8 +26,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 session.onLogin(() => {
+  messageHandler = createMessageHandler();
+
   sendMessageToActiveTab({
     type: MessageType.LOGGED_IN,
     payload: session.info,
   });
+});
+
+session.onLogout(() => {
+  messageHandler = createMessageHandler();
 });
