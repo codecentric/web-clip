@@ -17,7 +17,7 @@ describe('PageContent', () => {
     it('is present', () => {
       render(
         <PageContent
-          session={{ info: { isLoggedIn: false } } as Session}
+          legacySession={{ info: { isLoggedIn: false } } as Session}
           close={() => null}
         />
       );
@@ -29,7 +29,7 @@ describe('PageContent', () => {
       const close = jest.fn();
       render(
         <PageContent
-          session={{ info: { isLoggedIn: false } } as Session}
+          legacySession={{ info: { isLoggedIn: false } } as Session}
           close={close}
         />
       );

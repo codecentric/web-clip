@@ -4,15 +4,17 @@ import { SolidApiContext } from '../api/apiContext';
 import { StoreContext } from '../store/context';
 import { LoginButton } from './LoginButton';
 import { ToolbarContainer } from './ToolbarContainer';
+import { useSessionInfo } from './useSessionInfo';
 import { useSolid } from './useSolid';
 
 interface PageContentProps {
-  session: Session;
+  legacySession: Session;
   close: () => void;
 }
 
-export const PageContent = ({ session, close }: PageContentProps) => {
-  const { store, solidApi } = useSolid(session);
+export const PageContent = ({ legacySession, close }: PageContentProps) => {
+  const { store, solidApi } = useSolid(legacySession);
+  const { sessionInfo } = useSessionInfo(legacySession);
   return (
     <div className="font-sans text-base text-gray-700 z-max fixed top-0 right-0 m-8 shadow rounded w-auto h-auto p-4 bg-white flex flex-col items-center">
       <div className="flex w-full justify-end items-center">
@@ -28,7 +30,7 @@ export const PageContent = ({ session, close }: PageContentProps) => {
       <h1 className="text-3xl mx-4 my-2">WebClip</h1>
       <StoreContext.Provider value={store}>
         <SolidApiContext.Provider value={solidApi}>
-          {session.info.isLoggedIn ? <ToolbarContainer /> : <LoginButton />}
+          {sessionInfo.isLoggedIn ? <ToolbarContainer /> : <LoginButton />}
         </SolidApiContext.Provider>
       </StoreContext.Provider>
     </div>
