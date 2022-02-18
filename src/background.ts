@@ -9,8 +9,10 @@ import { Store } from './store/Store';
 const session = new Session();
 
 function createMessageHandler() {
+  const store = new Store();
   return new MessageHandler(
-    new SolidApi(session, new Store(), chrome.identity.getRedirectURL())
+    new SolidApi(session, store, chrome.identity.getRedirectURL()),
+    store
   );
 }
 

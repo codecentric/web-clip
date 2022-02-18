@@ -2,15 +2,20 @@ import { when } from 'jest-when';
 import { Bookmark, SolidApi } from '../api/SolidApi';
 import { PageMetaData } from '../content/usePage';
 import { MessageType } from '../messages';
+import { Store } from '../store/Store';
 import { mockSolidApi, SolidApiMock } from '../test/solidApiMock';
 import { MessageHandler } from './MessageHandler';
 
 describe('MessageHandler', () => {
   let messageHandler: MessageHandler;
   let solidApi: SolidApiMock;
+  let store: Store;
   beforeEach(() => {
     solidApi = mockSolidApi();
-    messageHandler = new MessageHandler(solidApi as unknown as SolidApi);
+    store = {
+      importFromUrl: jest.fn(),
+    } as undefined as Store;
+    messageHandler = new MessageHandler(solidApi as unknown as SolidApi, store);
   });
 
   describe('handle type LOGIN', () => {
@@ -101,6 +106,22 @@ describe('MessageHandler', () => {
       expect(result).toEqual({
         payload: bookmark,
       });
+    });
+  });
+
+  describe('handle type IMPORT_PAGE_DATA', () => {
+    it('calls import page data and returns result', async () => {
+      const result = await messageHandler.handleMessage(
+        {
+          type: MessageType.IMPORT_PAGE_DATA,
+          payload: {
+            url: 'https://page.example',
+          },
+        },
+        {}
+      );
+      expect(store.importFromUrl).toHaveBeenCalledWith('https://page.example');
+      expect(result).toEqual({});
     });
   });
 });

@@ -1,9 +1,13 @@
 import { SolidApi } from '../api/SolidApi';
 import { Message, MessageType, Response } from '../messages';
+import { Store } from '../store/Store';
 import MessageSender = chrome.runtime.MessageSender;
 
 export class MessageHandler {
-  constructor(private readonly solidApi: SolidApi) {}
+  constructor(
+    private readonly solidApi: SolidApi,
+    private readonly store: Store
+  ) {}
 
   async handleMessage(
     request: Message,
@@ -34,6 +38,10 @@ export class MessageHandler {
         return {
           payload: result,
         };
+      }
+      case MessageType.IMPORT_PAGE_DATA: {
+        await this.store.importFromUrl(request.payload.url);
+        return {};
       }
     }
   }
