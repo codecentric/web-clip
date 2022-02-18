@@ -73,4 +73,34 @@ describe('MessageHandler', () => {
       });
     });
   });
+
+  describe('handle type ADD_BOOKMARK', () => {
+    it('calls bookmark and returns result', async () => {
+      const page: PageMetaData = {
+        type: 'WebPage',
+        name: 'test page',
+        url: 'https://page.example',
+      };
+      const bookmark: Bookmark = {
+        uri: 'https://pod.example/bookmark#it',
+      };
+      when(solidApi.bookmark)
+        .calledWith(page, bookmark)
+        .mockResolvedValue(bookmark);
+
+      const result = await messageHandler.handleMessage(
+        {
+          type: MessageType.ADD_BOOKMARK,
+          payload: {
+            page,
+            bookmark,
+          },
+        },
+        {}
+      );
+      expect(result).toEqual({
+        payload: bookmark,
+      });
+    });
+  });
 });
