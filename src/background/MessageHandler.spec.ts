@@ -1,4 +1,6 @@
-import { SolidApi } from '../api/SolidApi';
+import { when } from 'jest-when';
+import { Bookmark, SolidApi } from '../api/SolidApi';
+import { PageMetaData } from '../content/usePage';
 import { MessageType } from '../messages';
 import { mockSolidApi, SolidApiMock } from '../test/solidApiMock';
 import { MessageHandler } from './MessageHandler';
@@ -41,6 +43,33 @@ describe('MessageHandler', () => {
         payload: {
           name: 'Jane Doe',
         },
+      });
+    });
+  });
+
+  describe('handle type LOAD_BOOKMARK', () => {
+    it('calls loadBookmark and returns result', async () => {
+      const page: PageMetaData = {
+        type: 'WebPage',
+        name: 'test page',
+        url: 'https://page.example',
+      };
+      const bookmark: Bookmark = {
+        uri: 'https://pod.example/bookmark#it',
+      };
+      when(solidApi.loadBookmark).calledWith(page).mockResolvedValue(bookmark);
+
+      const result = await messageHandler.handleMessage(
+        {
+          type: MessageType.LOAD_BOOKMARK,
+          payload: {
+            page,
+          },
+        },
+        {}
+      );
+      expect(result).toEqual({
+        payload: bookmark,
       });
     });
   });

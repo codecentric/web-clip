@@ -7,6 +7,7 @@ export class MessageHandler {
 
   async handleMessage(
     request: Message,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sender: MessageSender
   ): Promise<Response> {
     switch (request.type) {
@@ -17,6 +18,12 @@ export class MessageHandler {
         const profile = await this.solidApi.loadProfile();
         return {
           payload: profile,
+        };
+      }
+      case MessageType.LOAD_BOOKMARK: {
+        const bookmark = await this.solidApi.loadBookmark(request.payload.page);
+        return {
+          payload: bookmark,
         };
       }
     }

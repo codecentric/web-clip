@@ -1,3 +1,6 @@
+import { Bookmark } from './api/SolidApi';
+import { PageMetaData } from './content/usePage';
+
 export enum MessageType {
   ACTIVATE = 'ACTIVATE',
   LOGIN = 'LOGIN',
@@ -7,9 +10,33 @@ export enum MessageType {
   ADD_BOOKMARK = 'ADD_BOOKMARK',
 }
 
-export type Message = {
-  type: MessageType;
-  payload?: unknown;
+export type Message =
+  | LoginMessage
+  | LoadProfileMessage
+  | LoadBookmarkMessage
+  | AddBookmarkMessage;
+
+export type LoginMessage = {
+  type: MessageType.LOGIN;
+};
+
+export type LoadProfileMessage = {
+  type: MessageType.LOAD_PROFILE;
+};
+
+export type LoadBookmarkMessage = {
+  type: MessageType.LOAD_BOOKMARK;
+  payload: {
+    page: PageMetaData;
+  };
+};
+
+export type AddBookmarkMessage = {
+  type: MessageType.ADD_BOOKMARK;
+  payload: {
+    page: PageMetaData;
+    bookmark?: Bookmark;
+  };
 };
 
 export type Response = {
