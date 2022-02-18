@@ -9,6 +9,7 @@ export enum MessageType {
   LOAD_PROFILE = 'LOAD_PROFILE',
   LOAD_BOOKMARK = 'LOAD_BOOKMARK',
   ADD_BOOKMARK = 'ADD_BOOKMARK',
+  IMPORT_PAGE_DATA = 'IMPORT_PAGE_DATA',
 }
 
 export type Message =
@@ -17,7 +18,8 @@ export type Message =
   | LoggedInMessage
   | LoadProfileMessage
   | LoadBookmarkMessage
-  | AddBookmarkMessage;
+  | AddBookmarkMessage
+  | ImportPageDataMessage;
 
 export type ActivateMessage = {
   type: MessageType.ACTIVATE;
@@ -48,6 +50,13 @@ export type AddBookmarkMessage = {
   payload: {
     page: PageMetaData;
     bookmark?: Bookmark;
+  };
+};
+
+export type ImportPageDataMessage = {
+  type: MessageType.IMPORT_PAGE_DATA;
+  payload: {
+    url: string;
   };
 };
 
