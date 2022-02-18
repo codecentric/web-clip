@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { useSessionInfo } from './useSessionInfo';
 import { Session } from '@inrupt/solid-client-authn-browser';
-import { useChromeMessageListener } from './useChromeMessageListener';
+import { useChromeMessageListener } from './chromeMessageListenerContext';
 import { EventEmitter } from 'events';
 import { MessageType } from '../messages';
 
-jest.mock('./useChromeMessageListener');
+jest.mock('./chromeMessageListenerContext');
 
 describe('useSessionInfo', () => {
   let chromeMessageListener: EventEmitter;
@@ -23,7 +23,7 @@ describe('useSessionInfo', () => {
       useSessionInfo(new Session({}, 'LEGACY_SESSION_ID'))
     );
 
-    expect(result.current.sessionInfo).toEqual({
+    expect(result.current).toEqual({
       sessionId: 'LEGACY_SESSION_ID',
       isLoggedIn: false,
     });
@@ -41,6 +41,6 @@ describe('useSessionInfo', () => {
     };
     chromeMessageListener.emit(MessageType.LOGGED_IN, newSessionInfo);
 
-    expect(result.current.sessionInfo).toEqual(newSessionInfo);
+    expect(result.current).toEqual(newSessionInfo);
   });
 });

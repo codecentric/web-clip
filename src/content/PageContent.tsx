@@ -14,7 +14,7 @@ interface PageContentProps {
 
 export const PageContent = ({ legacySession, close }: PageContentProps) => {
   const { store, solidApi } = useSolid(legacySession);
-  const { sessionInfo } = useSessionInfo(legacySession);
+  const sessionInfo = useSessionInfo(legacySession);
   return (
     <div className="font-sans text-base text-gray-700 z-max fixed top-0 right-0 m-8 shadow rounded w-auto h-auto p-4 bg-white flex flex-col items-center">
       <div className="flex w-full justify-end items-center">

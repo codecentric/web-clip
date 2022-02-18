@@ -3,11 +3,16 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { PageContent } from './PageContent';
 import { useSolid } from './useSolid';
+import { useSessionInfo } from './useSessionInfo';
 
 jest.mock('./useSolid');
+jest.mock('./useSessionInfo');
 
 describe('PageContent', () => {
   beforeEach(() => {
+    (useSessionInfo as jest.Mock).mockReturnValue({
+      isLoggedIn: false,
+    });
     (useSolid as jest.Mock).mockReturnValue({
       store: null,
       solidApi: null,

@@ -34,6 +34,12 @@ chrome.storage = {
   sync: { get: (): null => null },
 } as unknown as typeof chrome.storage;
 
+chrome.runtime = {
+  onMessage: () => {
+    return '';
+  },
+} as unknown as typeof chrome.runtime;
+
 async function handleRedirectAfterLogin() {
   await handleIncomingRedirect();
   return getDefaultSession();
