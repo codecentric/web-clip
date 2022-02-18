@@ -11,5 +11,5 @@ export type Message = {
 };
 
 export type Response = {
-  message?: string;
+  payload?: unknown;
 };
