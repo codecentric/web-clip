@@ -13,6 +13,12 @@ export class MessageHandler {
       case MessageType.LOGIN:
         await this.solidApi.login();
         return {};
+      case MessageType.LOAD_PROFILE: {
+        const profile = await this.solidApi.loadProfile();
+        return {
+          payload: profile,
+        };
+      }
     }
   }
 }

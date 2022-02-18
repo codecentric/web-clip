@@ -1,5 +1,5 @@
 import { when } from 'jest-when';
-import { MessageType } from '../messages';
+import { MessageType, Response } from '../messages';
 import { sendMessage } from './sendMessage';
 
 describe('messages', () => {
@@ -13,8 +13,10 @@ describe('messages', () => {
     });
     it('promise resolves to callback response', async () => {
       when(chrome.runtime.sendMessage).mockImplementation(
-        (message: unknown, callback?: (response: string) => void) => {
-          callback('response data');
+        (message: unknown, callback?: (response: Response) => void) => {
+          callback({
+            payload: 'response data',
+          });
         }
       );
       const result = await sendMessage({ type: MessageType.LOGIN });
@@ -22,7 +24,7 @@ describe('messages', () => {
     });
     it('promise rejects in case of an error', async () => {
       when(chrome.runtime.sendMessage).mockImplementation(
-        (message: unknown, callback?: (response: string) => void) => {
+        (message: unknown, callback?: (response: Response) => void) => {
           chrome.runtime.lastError = new Error('something went wrong');
           callback(undefined);
         }
