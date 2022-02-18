@@ -2,10 +2,10 @@ import React from 'react';
 import { Toolbar } from './Toolbar';
 import { usePage } from './usePage';
 import { usePageData } from './usePageData';
-import { useProfile } from './useProfile';
+import { useLegacyProfile } from './useLegacyProfile';
 
 export const ToolbarContainer = () => {
-  const { loading: profileLoading, profile } = useProfile();
+  const { loading: profileLoading, profile } = useLegacyProfile();
   const { url } = usePage();
   const { loading: dataLoading } = usePageData(url);
   return profileLoading || dataLoading ? (

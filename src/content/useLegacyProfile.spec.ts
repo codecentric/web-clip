@@ -1,16 +1,16 @@
 import { act, renderHook } from '@testing-library/react-hooks';
-import { useProfile } from './useProfile';
+import { useLegacyProfile } from './useLegacyProfile';
 import { mockSolidApi } from '../test/solidApiMock';
 
 jest.mock('../api/apiContext');
 
-describe('useProfile', () => {
+describe('useLegcayProfile', () => {
   it('it returns a loading status while the profile is loading', () => {
     const solidApi = mockSolidApi();
 
     solidApi.loadProfile.mockReturnValue(new Promise(() => null));
 
-    const { result } = renderHook(() => useProfile());
+    const { result } = renderHook(() => useLegacyProfile());
 
     act(() => {
       expect(solidApi.loadProfile).toHaveBeenCalled();
@@ -28,7 +28,7 @@ describe('useProfile', () => {
       name: 'Jane Doe',
     });
 
-    const { result, waitForNextUpdate } = renderHook(() => useProfile());
+    const { result, waitForNextUpdate } = renderHook(() => useLegacyProfile());
 
     await waitForNextUpdate();
 

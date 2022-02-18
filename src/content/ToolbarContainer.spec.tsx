@@ -4,9 +4,9 @@ import { ToolbarContainer } from './ToolbarContainer';
 import { useBookmark } from './useBookmark';
 import { usePage } from './usePage';
 import { usePageData } from './usePageData';
-import { useProfile } from './useProfile';
+import { useLegacyProfile } from './useLegacyProfile';
 
-jest.mock('./useProfile');
+jest.mock('./useLegacyProfile');
 jest.mock('./useBookmark');
 jest.mock('./usePageData');
 jest.mock('./usePage');
@@ -21,7 +21,7 @@ describe('ToolbarContainer', () => {
     window.location.href = '';
     window.document.title = '';
 
-    (useProfile as jest.Mock).mockReturnValue({
+    (useLegacyProfile as jest.Mock).mockReturnValue({
       loading: false,
       profile: { name: 'Jane Doe' },
     });
@@ -44,7 +44,7 @@ describe('ToolbarContainer', () => {
   });
 
   it('renders loading indicator while profile is loading', () => {
-    (useProfile as jest.Mock).mockReturnValue({
+    (useLegacyProfile as jest.Mock).mockReturnValue({
       loading: true,
       profile: null,
     });
