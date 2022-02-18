@@ -23,7 +23,7 @@ export const useBookmark = (page: PageMetaData) => {
   useEffect(() => {
     sendMessage({
       type: MessageType.LOAD_BOOKMARK,
-      payload: page,
+      payload: { page },
     })
       .then((bookmark: Bookmark) => {
         setState((state) => ({

@@ -57,7 +57,9 @@ describe('useBookmark', () => {
       renderHook(() => useBookmark(page));
       expect(sendMessage).toHaveBeenCalledWith({
         type: MessageType.LOAD_BOOKMARK,
-        payload: page,
+        payload: {
+          page,
+        },
       });
     });
   });
@@ -72,7 +74,9 @@ describe('useBookmark', () => {
       when(sendMessage)
         .calledWith({
           type: MessageType.LOAD_BOOKMARK,
-          payload: page,
+          payload: {
+            page,
+          },
         })
         .mockResolvedValue({});
       const { result, waitForNextUpdate } = renderHook(() => useBookmark(page));
@@ -92,7 +96,9 @@ describe('useBookmark', () => {
       when(sendMessage)
         .calledWith({
           type: MessageType.LOAD_BOOKMARK,
-          payload: page,
+          payload: {
+            page,
+          },
         })
         .mockResolvedValue({ uri: 'any#it' });
 
@@ -113,7 +119,9 @@ describe('useBookmark', () => {
       when(sendMessage)
         .calledWith({
           type: MessageType.LOAD_BOOKMARK,
-          payload: page,
+          payload: {
+            page,
+          },
         })
         .mockResolvedValue(null);
 
@@ -135,7 +143,9 @@ describe('useBookmark', () => {
       when(sendMessage)
         .calledWith({
           type: MessageType.LOAD_BOOKMARK,
-          payload: page,
+          payload: {
+            page,
+          },
         })
         .mockRejectedValue(error);
 
@@ -158,7 +168,9 @@ describe('useBookmark', () => {
       when(sendMessage)
         .calledWith({
           type: MessageType.LOAD_BOOKMARK,
-          payload: page,
+          payload: {
+            page,
+          },
         })
         .mockResolvedValue(null);
       when(sendMessage)
@@ -185,7 +197,9 @@ describe('useBookmark', () => {
       when(sendMessage)
         .calledWith({
           type: MessageType.LOAD_BOOKMARK,
-          payload: page,
+          payload: {
+            page,
+          },
         })
         .mockResolvedValue(undefined);
       when(sendMessage).mockResolvedValue(undefined);
@@ -211,7 +225,9 @@ describe('useBookmark', () => {
       when(sendMessage)
         .calledWith({
           type: MessageType.LOAD_BOOKMARK,
-          payload: page,
+          payload: {
+            page,
+          },
         })
         .mockResolvedValue(existing);
       when(sendMessage).mockResolvedValue(undefined);
@@ -240,7 +256,9 @@ describe('useBookmark', () => {
       when(sendMessage)
         .calledWith({
           type: MessageType.LOAD_BOOKMARK,
-          payload: page,
+          payload: {
+            page,
+          },
         })
         .mockResolvedValue(null);
       when(sendMessage)
@@ -271,7 +289,9 @@ describe('useBookmark', () => {
       when(sendMessage)
         .calledWith({
           type: MessageType.LOAD_BOOKMARK,
-          payload: page,
+          payload: {
+            page,
+          },
         })
         .mockResolvedValue(null);
       when(sendMessage)
@@ -305,7 +325,9 @@ describe('useBookmark', () => {
     when(sendMessage)
       .calledWith({
         type: MessageType.LOAD_BOOKMARK,
-        payload: page,
+        payload: {
+          page,
+        },
       })
       .mockResolvedValue(null);
     when(sendMessage)
