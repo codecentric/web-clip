@@ -5,7 +5,9 @@ import {
 } from '@inrupt/solid-client-authn-browser';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ChromeMessageListener } from './content/ChromeMessageListener';
 import { PageContent } from './content/PageContent';
+import { WebClip } from './content/WebClip';
 import { MessageType } from './messages';
 
 import contentCss from './assets/content.css';
@@ -19,6 +21,8 @@ const styleTag = document.createElement('style');
 styleTag.innerHTML = contentCss;
 shadowRoot.appendChild(styleTag);
 shadowRoot.appendChild(container);
+
+const chromeMessageListener = new ChromeMessageListener();
 
 async function handleRedirectAfterLogin() {
   await handleIncomingRedirect();
@@ -36,15 +40,17 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     case MessageType.ACTIVATE:
       renderApp(getDefaultSession());
       break;
-    default:
-      throw new Error('unknown message received');
   }
   sendResponse();
 });
 
 function renderApp(session: Session) {
   ReactDOM.render(
-    <PageContent close={unmountApp} legacySession={session} />,
+    <WebClip
+      chromeMessageListener={chromeMessageListener}
+      close={unmountApp}
+      legacySession={session}
+    />,
     container
   );
 }
