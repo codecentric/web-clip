@@ -6,6 +6,7 @@ export enum MessageType {
 
 export type Message = {
   type: MessageType;
+  payload?: unknown;
 };
 
 export type Response = {
