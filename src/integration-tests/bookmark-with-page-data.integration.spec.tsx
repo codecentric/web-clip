@@ -80,7 +80,7 @@ describe('bookmarking an html page with embedded data', () => {
       await render(
         <PageContent
           close={() => null}
-          session={
+          legacySession={
             {
               info: {
                 isLoggedIn: true,
@@ -182,7 +182,7 @@ describe('bookmarking an html page with embedded data', () => {
       await render(
         <PageContent
           close={() => null}
-          session={
+          legacySession={
             {
               info: {
                 isLoggedIn: true,
