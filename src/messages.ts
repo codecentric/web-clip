@@ -23,6 +23,7 @@ export type Message =
 
 export type ActivateMessage = {
   type: MessageType.ACTIVATE;
+  payload: ISessionInfo;
 };
 
 export type LoginMessage = {

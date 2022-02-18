@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLegacyBookmark } from './useLegacyBookmark';
+import { useBookmark } from './useBookmark';
 import { usePage } from './usePage';
 
 interface Props {
@@ -10,8 +10,7 @@ interface Props {
 
 export const Toolbar = ({ profile }: Props) => {
   const page = usePage();
-  const { addBookmark, loading, saving, error, bookmark } =
-    useLegacyBookmark(page);
+  const { addBookmark, loading, saving, error, bookmark } = useBookmark(page);
   const waiting = loading || saving;
   return (
     <>

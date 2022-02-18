@@ -19,7 +19,7 @@ function createMessageHandler() {
 let messageHandler = createMessageHandler();
 
 chrome.browserAction.onClicked.addListener(function (tab) {
-  activateWebClipForTab(tab);
+  activateWebClipForTab(tab, session.info);
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {

@@ -1,4 +1,4 @@
-import { Session } from '@inrupt/solid-client-authn-browser';
+import { ISessionInfo, Session } from '@inrupt/solid-client-authn-browser';
 import React from 'react';
 import { ChromeMessageListener } from './ChromeMessageListener';
 
@@ -7,18 +7,18 @@ import { PageContent } from './PageContent';
 
 interface Props {
   chromeMessageListener: ChromeMessageListener;
-  legacySession: Session;
+  sessionInfo: ISessionInfo;
   close: () => void;
 }
 
 export const WebClip = ({
   chromeMessageListener,
-  legacySession,
+  sessionInfo,
   close,
 }: Props) => {
   return (
     <ChromeMessageListenerContext.Provider value={chromeMessageListener}>
-      <PageContent close={close} legacySession={legacySession} />
+      <PageContent close={close} sessionInfo={sessionInfo} />
     </ChromeMessageListenerContext.Provider>
   );
 };

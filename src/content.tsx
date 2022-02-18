@@ -1,16 +1,11 @@
-import {
-  getDefaultSession,
-  handleIncomingRedirect,
-  Session,
-} from '@inrupt/solid-client-authn-browser';
+import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ChromeMessageListener } from './content/ChromeMessageListener';
-import { PageContent } from './content/PageContent';
-import { WebClip } from './content/WebClip';
-import { MessageType } from './messages';
 
 import contentCss from './assets/content.css';
+import { ChromeMessageListener } from './content/ChromeMessageListener';
+import { WebClip } from './content/WebClip';
+import { MessageType } from './messages';
 
 const root = document.createElement('div');
 root.id = 'webclip';
@@ -24,32 +19,21 @@ shadowRoot.appendChild(container);
 
 const chromeMessageListener = new ChromeMessageListener();
 
-async function handleRedirectAfterLogin() {
-  await handleIncomingRedirect();
-  return getDefaultSession();
-}
-
-handleRedirectAfterLogin().then((session: Session) => {
-  if (session.info.isLoggedIn) {
-    renderApp(session);
-  }
-});
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   switch (request.type) {
     case MessageType.ACTIVATE:
-      renderApp(getDefaultSession());
+      renderApp(request.payload);
       break;
   }
   sendResponse();
 });
 
-function renderApp(session: Session) {
+function renderApp(sessionInfo: ISessionInfo) {
   ReactDOM.render(
     <WebClip
       chromeMessageListener={chromeMessageListener}
       close={unmountApp}
-      legacySession={session}
+      sessionInfo={sessionInfo}
     />,
     container
   );
