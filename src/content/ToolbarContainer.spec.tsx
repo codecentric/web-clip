@@ -3,12 +3,12 @@ import React from 'react';
 import { ToolbarContainer } from './ToolbarContainer';
 import { useLegacyBookmark } from './useLegacyBookmark';
 import { usePage } from './usePage';
-import { usePageData } from './usePageData';
+import { useLegacyPageData } from './useLegacyPageData';
 import { useLegacyProfile } from './useLegacyProfile';
 
 jest.mock('./useLegacyProfile');
 jest.mock('./useLegacyBookmark');
-jest.mock('./usePageData');
+jest.mock('./useLegacyPageData');
 jest.mock('./usePage');
 
 describe('ToolbarContainer', () => {
@@ -28,7 +28,7 @@ describe('ToolbarContainer', () => {
 
     (usePage as jest.Mock).mockReturnValue({});
 
-    (usePageData as jest.Mock).mockReturnValue({
+    (useLegacyPageData as jest.Mock).mockReturnValue({
       loading: false,
     });
 
@@ -56,12 +56,12 @@ describe('ToolbarContainer', () => {
     (usePage as jest.Mock).mockReturnValue({
       url: 'https://page.example/',
     });
-    (usePageData as jest.Mock).mockReturnValue({
+    (useLegacyPageData as jest.Mock).mockReturnValue({
       loading: true,
     });
     render(<ToolbarContainer />);
     expect(screen.getByText('Loading...')).toBeInTheDocument();
-    expect(usePageData).toHaveBeenCalledWith('https://page.example/');
+    expect(useLegacyPageData).toHaveBeenCalledWith('https://page.example/');
   });
 
   it("renders the user's name", () => {

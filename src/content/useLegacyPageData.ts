@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useStore } from '../store/context';
 
-export const usePageData = (url: string) => {
+export const useLegacyPageData = (url: string) => {
   const [loading, setLoading] = useState(true);
   const store = useStore();
   useEffect(() => {
