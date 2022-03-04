@@ -1,4 +1,4 @@
-import { Session } from '@inrupt/solid-client-authn-browser';
+import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { PageContent } from './PageContent';
@@ -22,7 +22,7 @@ describe('PageContent', () => {
     it('is present', () => {
       render(
         <PageContent
-          legacySession={{ info: { isLoggedIn: false } } as Session}
+          sessionInfo={{ isLoggedIn: false } as ISessionInfo}
           close={() => null}
         />
       );
@@ -34,7 +34,7 @@ describe('PageContent', () => {
       const close = jest.fn();
       render(
         <PageContent
-          legacySession={{ info: { isLoggedIn: false } } as Session}
+          sessionInfo={{ isLoggedIn: false } as ISessionInfo}
           close={close}
         />
       );

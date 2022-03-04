@@ -19,4 +19,7 @@ global.chrome = {
   runtime: {
     sendMessage: jest.fn(),
   },
+  identity: {
+    getRedirectURL: () => 'https://redirect-url.test',
+  },
 };

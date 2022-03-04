@@ -1,12 +1,10 @@
-import { ISessionInfo, Session } from '@inrupt/solid-client-authn-browser';
+import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
 import { useEffect, useState } from 'react';
 import { MessageType } from '../messages';
 import { useChromeMessageListener } from './chromeMessageListenerContext';
 
-export function useSessionInfo(legacySession: Session): ISessionInfo {
-  const [sessionInfo, setSessionInfo] = useState<ISessionInfo>(
-    legacySession.info
-  );
+export function useSessionInfo(initial: ISessionInfo): ISessionInfo {
+  const [sessionInfo, setSessionInfo] = useState<ISessionInfo>(initial);
 
   const chromeMessageListener = useChromeMessageListener();
 

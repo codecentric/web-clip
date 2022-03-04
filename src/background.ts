@@ -1,25 +1,15 @@
-import { SolidApi } from './api/SolidApi';
 import { activateWebClipForTab } from './background/activate';
-import { MessageHandler } from './background/MessageHandler';
+import { createMessageHandler } from './background/createMessageHandler';
 import { sendMessageToActiveTab } from './background/sendMessageToActiveTab';
 import { MessageType } from './messages';
 import { Session } from './solid-client-authn-chrome-ext/Session';
-import { Store } from './store/Store';
 
 const session = new Session();
 
-function createMessageHandler() {
-  const store = new Store();
-  return new MessageHandler(
-    new SolidApi(session, store, chrome.identity.getRedirectURL()),
-    store
-  );
-}
-
-let messageHandler = createMessageHandler();
+let messageHandler = createMessageHandler(session);
 
 chrome.browserAction.onClicked.addListener(function (tab) {
-  activateWebClipForTab(tab);
+  activateWebClipForTab(tab, session.info);
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -28,7 +18,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 session.onLogin(() => {
-  messageHandler = createMessageHandler();
+  messageHandler = createMessageHandler(session);
 
   sendMessageToActiveTab({
     type: MessageType.LOGGED_IN,
@@ -37,5 +27,5 @@ session.onLogin(() => {
 });
 
 session.onLogout(() => {
-  messageHandler = createMessageHandler();
+  messageHandler = createMessageHandler(session);
 });

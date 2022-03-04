@@ -1,9 +1,8 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { useSessionInfo } from './useSessionInfo';
-import { Session } from '@inrupt/solid-client-authn-browser';
-import { useChromeMessageListener } from './chromeMessageListenerContext';
 import { EventEmitter } from 'events';
 import { MessageType } from '../messages';
+import { useChromeMessageListener } from './chromeMessageListenerContext';
+import { useSessionInfo } from './useSessionInfo';
 
 jest.mock('./chromeMessageListenerContext');
 
@@ -18,20 +17,26 @@ describe('useSessionInfo', () => {
     );
   });
 
-  it('returns the legacy session info by default', () => {
+  it('returns the initial session info by default', () => {
     const { result } = renderHook(() =>
-      useSessionInfo(new Session({}, 'LEGACY_SESSION_ID'))
+      useSessionInfo({
+        sessionId: 'SESSION_ID',
+        isLoggedIn: false,
+      })
     );
 
     expect(result.current).toEqual({
-      sessionId: 'LEGACY_SESSION_ID',
+      sessionId: 'SESSION_ID',
       isLoggedIn: false,
     });
   });
 
   it('updates the session info upon receipt of a chrome LOGGED_IN message', () => {
     const { result } = renderHook(() =>
-      useSessionInfo(new Session({}, 'LEGACY_SESSION_ID'))
+      useSessionInfo({
+        sessionId: 'SESSION_ID',
+        isLoggedIn: false,
+      })
     );
 
     const newSessionInfo = {

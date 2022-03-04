@@ -1,4 +1,3 @@
-import { Session } from '@inrupt/solid-client-authn-browser';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import nock from 'nock';
@@ -8,6 +7,8 @@ import { generateDatePathForToday } from '../api/generateDatePathForToday';
 import { generateUuid } from '../api/generateUuid';
 import { now } from '../api/now';
 import { PageContent } from '../content/PageContent';
+import { createMessageHandler } from '../background/createMessageHandler';
+import { Session } from '../solid-client-authn-chrome-ext/Session';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('../api/generateUuid');
@@ -18,12 +19,29 @@ jest.mock('../options/optionsStorageApi');
 describe('bookmarking an html page with embedded data', () => {
   const { location } = window;
 
+  let authenticatedFetch: typeof fetch;
+
   beforeEach(() => {
     jest.resetAllMocks();
     delete window.location;
     window.location = { ...location };
     window.location.href = '';
     window.document.title = '';
+    authenticatedFetch = jest.fn();
+    const handler = createMessageHandler({
+      info: {
+        isLoggedIn: true,
+        webId: 'https://pod.example/#me',
+        sessionId: 'id',
+      },
+      fetch: authenticatedFetch,
+    } as unknown as Session);
+    (chrome.runtime.sendMessage as jest.Mock).mockImplementation(
+      async (message, sendResponse) => {
+        const result = await handler.handleMessage(message, null);
+        sendResponse(result);
+      }
+    );
   });
 
   afterEach(() => {
@@ -70,25 +88,24 @@ describe('bookmarking an html page with embedded data', () => {
         }
       );
 
-    const authenticatedFetch = mockFetchWithResponse(`
+    mockFetchWithResponse(
+      authenticatedFetch,
+      `
                 <https://pod.example/#me>
                 <http://www.w3.org/ns/pim/space#storage>
                 <https://storage.example/> .
-            `);
+            `
+    );
 
     await act(async () => {
       await render(
         <PageContent
           close={() => null}
-          legacySession={
-            {
-              info: {
-                isLoggedIn: true,
-                webId: 'https://pod.example/#me',
-              },
-              fetch: authenticatedFetch,
-            } as unknown as Session
-          }
+          sessionInfo={{
+            isLoggedIn: true,
+            webId: 'https://pod.example/#me',
+            sessionId: 'id',
+          }}
         />
       );
     });
@@ -172,25 +189,24 @@ describe('bookmarking an html page with embedded data', () => {
         }
       );
 
-    const authenticatedFetch = mockFetchWithResponse(`
+    mockFetchWithResponse(
+      authenticatedFetch,
+      `
                 <https://pod.example/#me>
                 <http://www.w3.org/ns/pim/space#storage>
                 <https://storage.example/> .
-            `);
+            `
+    );
 
     await act(async () => {
       await render(
         <PageContent
           close={() => null}
-          legacySession={
-            {
-              info: {
-                isLoggedIn: true,
-                webId: 'https://pod.example/#me',
-              },
-              fetch: authenticatedFetch,
-            } as unknown as Session
-          }
+          sessionInfo={{
+            sessionId: 'id',
+            isLoggedIn: true,
+            webId: 'https://pod.example/#me',
+          }}
         />
       );
     });
@@ -233,9 +249,11 @@ function findPatchRequest(calls: any[], url: string) {
   return call;
 }
 
-function mockFetchWithResponse(bodyText: string) {
-  const authenticatedFetch = jest.fn();
-  authenticatedFetch.mockResolvedValue({
+function mockFetchWithResponse(
+  authenticatedFetch: typeof fetch,
+  bodyText: string
+) {
+  (authenticatedFetch as jest.Mock).mockResolvedValue({
     ok: true,
     headers: new Headers({
       'Content-Type': 'text/turtle',
@@ -246,5 +264,4 @@ function mockFetchWithResponse(bodyText: string) {
     statusText: 'OK',
     text: async () => bodyText,
   });
-  return authenticatedFetch;
 }

@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { ToolbarContainer } from './ToolbarContainer';
-import { useLegacyBookmark } from './useLegacyBookmark';
+import { useBookmark } from './useBookmark';
 import { usePage } from './usePage';
-import { useLegacyPageData } from './useLegacyPageData';
-import { useLegacyProfile } from './useLegacyProfile';
+import { usePageData } from './usePageData';
+import { useProfile } from './useProfile';
 
-jest.mock('./useLegacyProfile');
-jest.mock('./useLegacyBookmark');
-jest.mock('./useLegacyPageData');
+jest.mock('./useProfile');
+jest.mock('./useBookmark');
+jest.mock('./usePageData');
 jest.mock('./usePage');
 
 describe('ToolbarContainer', () => {
@@ -21,19 +21,19 @@ describe('ToolbarContainer', () => {
     window.location.href = '';
     window.document.title = '';
 
-    (useLegacyProfile as jest.Mock).mockReturnValue({
+    (useProfile as jest.Mock).mockReturnValue({
       loading: false,
       profile: { name: 'Jane Doe' },
     });
 
     (usePage as jest.Mock).mockReturnValue({});
 
-    (useLegacyPageData as jest.Mock).mockReturnValue({
+    (usePageData as jest.Mock).mockReturnValue({
       loading: false,
     });
 
     addBookmark = jest.fn();
-    (useLegacyBookmark as jest.Mock).mockReturnValue({
+    (useBookmark as jest.Mock).mockReturnValue({
       loading: false,
       addBookmark,
     });
@@ -44,7 +44,7 @@ describe('ToolbarContainer', () => {
   });
 
   it('renders loading indicator while profile is loading', () => {
-    (useLegacyProfile as jest.Mock).mockReturnValue({
+    (useProfile as jest.Mock).mockReturnValue({
       loading: true,
       profile: null,
     });
@@ -56,12 +56,12 @@ describe('ToolbarContainer', () => {
     (usePage as jest.Mock).mockReturnValue({
       url: 'https://page.example/',
     });
-    (useLegacyPageData as jest.Mock).mockReturnValue({
+    (usePageData as jest.Mock).mockReturnValue({
       loading: true,
     });
     render(<ToolbarContainer />);
     expect(screen.getByText('Loading...')).toBeInTheDocument();
-    expect(useLegacyPageData).toHaveBeenCalledWith('https://page.example/');
+    expect(usePageData).toHaveBeenCalledWith('https://page.example/');
   });
 
   it("renders the user's name", () => {

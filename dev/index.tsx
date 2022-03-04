@@ -61,7 +61,7 @@ function renderApp(session: Session) {
   ReactDOM.render(
     <PageContent
       close={() => alert('cannot close in dev mode')}
-      legacySession={session}
+      sessionInfo={session.info}
     />,
     container
   );

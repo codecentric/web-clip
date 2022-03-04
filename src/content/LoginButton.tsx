@@ -1,8 +1,8 @@
 import React from 'react';
-import { useLegacyLogin } from './useLegacyLogin';
+import { useLogin } from './useLogin';
 
 export const LoginButton = () => {
-  const { login, error } = useLegacyLogin();
+  const { login, error } = useLogin();
   return (
     <>
       <button
