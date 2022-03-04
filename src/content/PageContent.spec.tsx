@@ -1,4 +1,4 @@
-import { ISessionInfo, Session } from '@inrupt/solid-client-authn-browser';
+import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { PageContent } from './PageContent';

@@ -1,4 +1,4 @@
-import { ISessionInfo, Session } from '@inrupt/solid-client-authn-browser';
+import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
 import React from 'react';
 import { ChromeMessageListener } from './ChromeMessageListener';
 
