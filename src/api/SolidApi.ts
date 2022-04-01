@@ -2,7 +2,6 @@ import {
   ILoginInputOptions,
   Session,
 } from '@inrupt/solid-client-authn-browser';
-import { Session as ChromeExtensionSession } from '../solid-client-authn-chrome-ext/Session';
 import * as rdf from 'rdflib';
 import {
   Fetcher,
@@ -17,7 +16,7 @@ import {
 import solidNamespace from 'solid-namespace';
 import urlJoin from 'url-join';
 import { PageMetaData } from '../content/usePage';
-import { subscribeOption } from '../options/optionsStorageApi';
+import { Session as ChromeExtensionSession } from '../solid-client-authn-chrome-ext/Session';
 import { Store } from '../store/Store';
 import { generateDatePathForToday } from './generateDatePathForToday';
 import { generateUuid } from './generateUuid';
@@ -54,11 +53,9 @@ export class SolidApi {
   constructor(
     session: Session | ChromeExtensionSession,
     store: Store,
+    providerUrl: string,
     redirectUrl: string = window.location.href
   ) {
-    subscribeOption('providerUrl', (value) => {
-      this.providerUrl = value;
-    });
     this.session = session;
     this.me = session.info.isLoggedIn ? sym(session.info.webId) : null;
     this.store = store;
@@ -67,6 +64,7 @@ export class SolidApi {
     this.updater = new UpdateManager(this.graph);
     this.ns = solidNamespace(rdf);
     this.redirectUrl = redirectUrl;
+    this.providerUrl = providerUrl;
   }
 
   async login(options: ILoginInputOptions = {}) {

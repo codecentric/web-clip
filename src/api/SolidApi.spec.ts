@@ -1,6 +1,5 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
 import { Parser as SparqlParser, Update } from 'sparqljs';
-import { subscribeOption } from '../options/optionsStorageApi';
 import { Store } from '../store/Store';
 import { givenStoreContaining } from '../test/givenStoreContaining';
 import { generateUuid } from './generateUuid';
@@ -19,12 +18,12 @@ describe('SolidApi', () => {
 
   describe('login', () => {
     it('logs in against the configured provider url', async () => {
-      givenMyPodProviderIs('https://pod.provider.example');
       // when I log in
       const login = jest.fn();
       const solidApi = new SolidApi(
         { info: { isLoggedIn: false }, login } as unknown as Session,
-        new Store()
+        new Store(),
+        'https://pod.provider.example'
       );
       await solidApi.login();
       // then I can log in at that pod provider and am redirected to the current page after that
@@ -35,11 +34,11 @@ describe('SolidApi', () => {
     });
 
     it('login fails if provider url is not present yet', async () => {
-      givenMyPodProviderIs(undefined);
       // when I try to log in
       const solidApi = new SolidApi(
         { info: { isLoggedIn: false } } as Session,
-        new Store()
+        new Store(),
+        undefined
       );
       // then I see this error
       await expect(() => solidApi.login()).rejects.toEqual(
@@ -60,7 +59,8 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new Store()
+          new Store(),
+          'https://pod.provider.example'
         );
 
         const result = await solidApi.loadProfile();
@@ -89,7 +89,8 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new Store()
+          new Store(),
+          'https://pod.provider.example'
         );
 
         const result = await solidApi.loadProfile();
@@ -107,7 +108,8 @@ describe('SolidApi', () => {
     it('profile cannot be loaded, when noone is logged in', async () => {
       const solidApi = new SolidApi(
         { info: { isLoggedIn: false } } as Session,
-        new Store()
+        new Store(),
+        'https://pod.provider.example'
       );
 
       await expect(solidApi.loadProfile()).rejects.toThrow(
@@ -138,7 +140,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store)
+        new Store(store),
+        'https://pod.provider.example'
       );
 
       await solidApi.bookmark({
@@ -187,7 +190,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store)
+        new Store(store),
+        'https://pod.provider.example'
       );
 
       await solidApi.bookmark({
@@ -223,7 +227,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        store
+        store,
+        'https://pod.provider.example'
       );
 
       await expect(
@@ -263,7 +268,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store)
+        new Store(store),
+        'https://pod.provider.example'
       );
 
       await solidApi.bookmark({
@@ -317,7 +323,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store)
+        new Store(store),
+        'https://pod.provider.example'
       );
 
       const result = await solidApi.bookmark({
@@ -352,7 +359,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store)
+        new Store(store),
+        'https://pod.provider.example'
       );
 
       await solidApi.bookmark(
@@ -406,7 +414,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store)
+        new Store(store),
+        'https://pod.provider.example'
       );
 
       await solidApi.bookmark(
@@ -461,7 +470,8 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new Store(store)
+          new Store(store),
+          'https://pod.provider.example'
         );
 
         result = await solidApi.loadBookmark({
@@ -509,7 +519,8 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new Store(store)
+          new Store(store),
+          'https://pod.provider.example'
         );
 
         result = await solidApi.loadBookmark({
@@ -557,7 +568,8 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new Store(store)
+          new Store(store),
+          'https://pod.provider.example'
         );
 
         result = await solidApi.loadBookmark({
@@ -597,13 +609,6 @@ function mockFetchWithResponse(bodyText: string) {
     text: async () => bodyText,
   });
   return authenticatedFetch;
-}
-
-function givenMyPodProviderIs(example: string) {
-  (subscribeOption as jest.Mock).mockImplementation((key, callback) => {
-    expect(key).toBe('providerUrl');
-    callback(example);
-  });
 }
 
 function givenGeneratedUuidWillBe(value: string) {

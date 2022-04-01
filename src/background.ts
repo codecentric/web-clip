@@ -1,12 +1,21 @@
 import { activateWebClipForTab } from './background/activate';
 import { createMessageHandler } from './background/createMessageHandler';
+import { MessageHandler } from './background/MessageHandler';
 import { sendMessageToActiveTab } from './background/sendMessageToActiveTab';
 import { MessageType } from './messages';
+import { subscribeOption } from './options/optionsStorageApi';
 import { Session } from './solid-client-authn-chrome-ext/Session';
 
 const session = new Session();
 
-let messageHandler = createMessageHandler(session);
+let messageHandler: MessageHandler = null;
+let providerUrl: string = null;
+
+subscribeOption('providerUrl', (value) => {
+  console.log('providerUrl changed from', providerUrl, 'to', value);
+  providerUrl = value;
+  return session.logout();
+});
 
 chrome.browserAction.onClicked.addListener(function (tab) {
   activateWebClipForTab(tab, session.info);
@@ -18,7 +27,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 session.onLogin(() => {
-  messageHandler = createMessageHandler(session);
+  messageHandler = createMessageHandler(session, providerUrl);
 
   sendMessageToActiveTab({
     type: MessageType.LOGGED_IN,
@@ -27,5 +36,5 @@ session.onLogin(() => {
 });
 
 session.onLogout(() => {
-  messageHandler = createMessageHandler(session);
+  messageHandler = createMessageHandler(session, providerUrl);
 });
