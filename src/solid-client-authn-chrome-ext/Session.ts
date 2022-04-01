@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 import { v4 as uuid } from 'uuid';
 import { RedirectInfo } from './ChromeExtensionRedirector';
 import { getClientAuthentication } from './getClientAuthentication';
+import { now } from './time';
 
 export class Session extends EventEmitter {
   private clientAuthentication: ClientAuthentication;
@@ -54,5 +55,12 @@ export class Session extends EventEmitter {
 
   onLogout(callback: () => unknown) {
     this.on('logout', callback);
+  }
+
+  isExpired() {
+    if (this.info.isLoggedIn && this.info.expirationDate) {
+      return this.info.expirationDate <= now();
+    }
+    return false;
   }
 }

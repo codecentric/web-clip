@@ -1,4 +1,6 @@
+import { when } from 'jest-when';
 import nock from 'nock';
+import { now } from './time';
 import { RedirectInfo } from './ChromeExtensionRedirector';
 import { Session } from './Session';
 import { getClientAuthentication } from './getClientAuthentication';
@@ -6,6 +8,8 @@ import { v4 as uuid } from 'uuid';
 
 jest.mock('./getClientAuthentication');
 jest.mock('uuid');
+
+jest.mock('./time');
 
 describe('Session', () => {
   beforeEach(() => {
@@ -247,5 +251,47 @@ describe('Session', () => {
       await session.logout();
       expect(onLogout).toHaveBeenCalled();
     });
+  });
+
+  describe('is expired', () => {
+    let session: Session;
+    beforeEach(() => {
+      session = new Session();
+      when(now).mockReturnValue(1234);
+    });
+    it('returns false if not logged in', async () => {
+      expect(session.isExpired()).toBe(false);
+    });
+    it('returns true if logged in and expiration date is reached', () => {
+      session.info = {
+        sessionId: '8df398ce-b3c9-4410-a446-914a50c96842',
+        isLoggedIn: true,
+        webId: 'https://pod.example/alice#me',
+        expirationDate: 1234,
+      };
+      expect(session.isExpired()).toBe(true);
+    });
+    it('returns false if logged in but expiration date is in future', () => {
+      session.info = {
+        sessionId: '8df398ce-b3c9-4410-a446-914a50c96842',
+        isLoggedIn: true,
+        webId: 'https://pod.example/alice#me',
+        expirationDate: 1235,
+      };
+      expect(session.isExpired()).toBe(false);
+    });
+
+    it.each([null, undefined, 0])(
+      'returns false if logged in but expiration date is not given',
+      (expirationDate) => {
+        session.info = {
+          sessionId: '8df398ce-b3c9-4410-a446-914a50c96842',
+          isLoggedIn: true,
+          webId: 'https://pod.example/alice#me',
+          expirationDate,
+        };
+        expect(session.isExpired()).toBe(false);
+      }
+    );
   });
 });
