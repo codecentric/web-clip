@@ -17,7 +17,11 @@ subscribeOption('providerUrl', (value) => {
   return session.logout();
 });
 
-chrome.browserAction.onClicked.addListener(function (tab) {
+chrome.browserAction.onClicked.addListener(async function (tab) {
+  if (session.isExpired()) {
+    console.log('session expired, logging out');
+    await session.logout();
+  }
   activateWebClipForTab(tab, session.info);
 });
 
