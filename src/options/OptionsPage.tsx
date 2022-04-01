@@ -15,7 +15,7 @@ export const OptionsPage = ({ extensionUrl }: Props) => {
   }
 
   return (
-    <main className="container text-lg my-8 mx-auto p-8">
+    <main className="container text-lg mx-auto p-8">
       <h1 className="text-xl font-medium my-8">Setup WebClip</h1>
       <section>
         <p className="my-4">
