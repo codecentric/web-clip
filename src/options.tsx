@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { OptionsPage } from './options/OptionsPage';
 
-import './assets/options.css';
+import 'style-loader!./assets/options.css';
 
 console.log('You are in the options!');
 

@@ -64,7 +64,7 @@ const config = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
+        use: ['css-loader', 'postcss-loader'],
       },
     ],
   },
