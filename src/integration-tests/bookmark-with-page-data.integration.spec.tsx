@@ -28,14 +28,17 @@ describe('bookmarking an html page with embedded data', () => {
     window.location.href = '';
     window.document.title = '';
     authenticatedFetch = jest.fn();
-    const handler = createMessageHandler({
-      info: {
-        isLoggedIn: true,
-        webId: 'https://pod.example/#me',
-        sessionId: 'id',
-      },
-      fetch: authenticatedFetch,
-    } as unknown as Session);
+    const handler = createMessageHandler(
+      {
+        info: {
+          isLoggedIn: true,
+          webId: 'https://pod.example/#me',
+          sessionId: 'id',
+        },
+        fetch: authenticatedFetch,
+      } as unknown as Session,
+      'https://pod.provider.test'
+    );
     (chrome.runtime.sendMessage as jest.Mock).mockImplementation(
       async (message, sendResponse) => {
         const result = await handler.handleMessage(message, null);
