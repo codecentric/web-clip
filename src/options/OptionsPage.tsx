@@ -18,8 +18,8 @@ export const OptionsPage = ({ extensionUrl }: Props) => {
     <main className="container text-lg mx-auto p-8">
       <h1 className="text-xl font-medium my-8">Setup WebClip</h1>
       <section>
+        <h2 className="text-lg font-medium my-8">1) Get a Solid Pod</h2>
         <p className="my-4">
-          <h2 className="text-lg font-medium my-8">1) Get a Solid Pod</h2>
           For information on how to create your own pod, please visit{' '}
           <a
             className="text-blue-600 hover:underline"
