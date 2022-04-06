@@ -11,9 +11,9 @@ import {
 } from 'rdflib';
 
 export async function importToStore(url: string, store: IndexedFormula) {
-  const { quads } = await rdfDereferencer.dereference(url);
+  const { data } = await rdfDereferencer.dereference(url);
   await new Promise((resolve, reject) => {
-    quads
+    data
       .on('data', (quad) => {
         // workarounds for incompatibility between rdflib.js and RDF/JS regarding toCanonical and toNT
         if (quad.object.datatype) {
