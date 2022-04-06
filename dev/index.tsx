@@ -5,40 +5,27 @@ import {
 } from '@inrupt/solid-client-authn-browser';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { PageContent } from '../src/content/PageContent';
 
 import contentCss from '../src/assets/content.css';
+import { createMessageHandler } from '../src/background/createMessageHandler';
+import { MessageHandler } from '../src/background/MessageHandler';
+import { PageContent } from '../src/content/PageContent';
 
-import StorageChange = chrome.storage.StorageChange;
-import AreaName = chrome.storage.AreaName;
-
-chrome.storage = {
-  onChanged: {
-    addListener: (
-      listener: (
-        changes: { [p: string]: StorageChange },
-        namespace: AreaName
-      ) => void
-    ): void => {
-      listener(
-        {
-          providerUrl: {
-            oldValue: '',
-            newValue: 'http://localhost:3000',
-          },
-        },
-        'sync'
-      );
-    },
-  },
-  sync: { get: (): null => null },
-} as unknown as typeof chrome.storage;
+let handler: MessageHandler;
 
 chrome.runtime = {
   onMessage: () => {
     return '';
   },
+  sendMessage: async (message: any, sendResponse: any) => {
+    const result = await handler.handleMessage(message, null);
+    sendResponse(result);
+  },
 } as unknown as typeof chrome.runtime;
+
+chrome.identity = {
+  getRedirectURL: () => window.location.href,
+} as unknown as typeof chrome.identity;
 
 async function handleRedirectAfterLogin() {
   await handleIncomingRedirect();
@@ -46,6 +33,9 @@ async function handleRedirectAfterLogin() {
 }
 
 handleRedirectAfterLogin().then((session: Session) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore: this dev environment is no chrome extension, so we use regular browser session here
+  handler = createMessageHandler(session, 'http://localhost:3000');
   renderApp(session);
 });
 
