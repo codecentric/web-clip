@@ -46,12 +46,20 @@ export const OptionsPage = ({ extensionUrl }: Props) => {
         <label className="block text-gray-700 text-sm font-bold mb-2">
           <p>Pod Provider URL</p>
           <input
+            list="providers"
+            placeholder="Enter or select your Provider"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             onChange={(e) => setProviderUrl(e.target.value)}
             value={providerUrl}
             type="url"
             required
           />
+          <datalist id="providers">
+            <option value="https://solidcommunity.net" />
+            <option value="https://inrupt.net" />
+            <option value="https://solidweb.me" />
+            <option value="https://solidweb.org" />
+          </datalist>
         </label>
         <button
           className="my-1 px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold"
