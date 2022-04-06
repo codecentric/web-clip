@@ -17,7 +17,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@inrupt/solid-client-authn-browser": "^1.11.3",
+    "@inrupt/solid-client-authn-browser": "^1.11.7",
     "@inrupt/vocab-common-rdf": "^1.0.3",
     "events": "^3.3.0",
     "node-polyfill-webpack-plugin": "^1.1.4",
