@@ -6,6 +6,9 @@ export async function sendMessage(message: Message) {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
       }
+      if (response.errorMessage) {
+        reject(new Error(response.errorMessage));
+      }
       resolve(response?.payload);
     });
   });

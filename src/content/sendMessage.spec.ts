@@ -22,11 +22,20 @@ describe('messages', () => {
       const result = await sendMessage({ type: MessageType.LOGIN });
       expect(result).toEqual('response data');
     });
-    it('promise rejects in case of an error', async () => {
+    it('promise rejects in case of a runtime error', async () => {
       when(chrome.runtime.sendMessage).mockImplementation(
         (message: unknown, callback?: (response: Response) => void) => {
           chrome.runtime.lastError = new Error('something went wrong');
           callback(undefined);
+        }
+      );
+      const promise = sendMessage({ type: MessageType.LOGIN });
+      await expect(promise).rejects.toEqual(new Error('something went wrong'));
+    });
+    it('promise rejects in case of an error response', async () => {
+      when(chrome.runtime.sendMessage).mockImplementation(
+        (message: unknown, callback?: (response: Response) => void) => {
+          callback({ errorMessage: 'something went wrong' });
         }
       );
       const promise = sendMessage({ type: MessageType.LOGIN });

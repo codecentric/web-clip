@@ -63,4 +63,5 @@ export type ImportPageDataMessage = {
 
 export type Response = {
   payload?: unknown;
+  errorMessage?: string;
 };
