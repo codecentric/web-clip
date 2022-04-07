@@ -9,7 +9,7 @@ export const useLogin = () => {
     try {
       await sendMessage({ type: MessageType.LOGIN });
     } catch (error) {
-      setError(error.message);
+      setError(error);
     }
   }, []);
   return {

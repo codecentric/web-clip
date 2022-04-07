@@ -19,7 +19,7 @@ describe('LoginButton', () => {
 
   it('shows error, when login failed', () => {
     (useLogin as jest.Mock).mockReturnValue({
-      error: 'something went wrong',
+      error: new Error('something went wrong'),
       login: jest.fn(),
     });
     render(<LoginButton />);

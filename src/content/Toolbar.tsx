@@ -1,4 +1,5 @@
 import React from 'react';
+import { ErrorMessage } from '../components/ErrorMessage';
 import { useBookmark } from './useBookmark';
 import { usePage } from './usePage';
 
@@ -24,7 +25,7 @@ export const Toolbar = ({ profile }: Props) => {
           {saving ? 'Saving...' : 'Clip it!'}
         </button>
       )}
-      {error && <p>{error.message}</p>}
+      {error && <ErrorMessage error={error} />}
       {bookmark && (
         <p className="my-1 text-blue-400 opacity-90 hover:opacity-100">
           <a href={bookmark.uri} target="_blank" rel="noreferrer">

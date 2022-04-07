@@ -1,4 +1,5 @@
 import React from 'react';
+import { ErrorMessage } from '../components/ErrorMessage';
 import { useLogin } from './useLogin';
 
 export const LoginButton = () => {
@@ -11,7 +12,7 @@ export const LoginButton = () => {
       >
         Login
       </button>
-      {error && <p>{error}</p>}
+      {error && <ErrorMessage error={error} />}
     </>
   );
 };

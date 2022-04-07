@@ -21,7 +21,7 @@ describe('useLogin', () => {
       await result.current.login();
     });
     expect(result.all[1]).toMatchObject({
-      error: 'something went wrong',
+      error: new Error('something went wrong'),
     });
   });
 });
