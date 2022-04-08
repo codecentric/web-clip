@@ -53,7 +53,7 @@ describe('Session', () => {
   describe('login', () => {
     it('delegates login to client authentication passing sessionId and tokenType DPoP as default', async () => {
       const clientAuthentication = {
-        login: jest.fn(),
+        login: jest.fn().mockResolvedValue(null),
       };
       (getClientAuthentication as jest.Mock).mockReturnValue(
         clientAuthentication
@@ -74,7 +74,7 @@ describe('Session', () => {
         '8df398ce-b3c9-4410-a446-914a50c96842'
       );
       const clientAuthentication = {
-        login: jest.fn(),
+        login: jest.fn().mockResolvedValue(null),
       };
       (getClientAuthentication as jest.Mock).mockReturnValue(
         clientAuthentication
@@ -106,7 +106,7 @@ describe('Session', () => {
     let loginPromise: Promise<void>;
     beforeEach(async () => {
       const clientAuthentication = {
-        login: jest.fn(),
+        login: jest.fn().mockResolvedValue(null),
       };
       (getClientAuthentication as jest.Mock).mockReturnValue(
         clientAuthentication
@@ -158,7 +158,7 @@ describe('Session', () => {
     let loginPromise: Promise<void>;
     beforeEach(async () => {
       const clientAuthentication = {
-        login: jest.fn(),
+        login: jest.fn().mockResolvedValue(null),
       };
       (getClientAuthentication as jest.Mock).mockReturnValue(
         clientAuthentication
@@ -194,6 +194,54 @@ describe('Session', () => {
         sessionId: 'db180742-9c17-4e91-94fc-3422a0e75dd9',
         isLoggedIn: false,
         webId: 'https://pod.example/alice#me',
+      });
+    });
+
+    it('keeps the unauthenticated fetch', async () => {
+      expect(session.fetch).toBe(unauthenticatedFetch);
+    });
+
+    it('does not emit login event', async () => {
+      expect(onLogin).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('when connection to pod provider fails', () => {
+    let session: Session;
+    let onLogin: () => unknown;
+    let unauthenticatedFetch: typeof fetch;
+    let loginPromise: Promise<void>;
+    beforeEach(async () => {
+      const clientAuthentication = {
+        login: jest
+          .fn()
+          .mockRejectedValue(new Error('pod provider not reachable')),
+      };
+      (getClientAuthentication as jest.Mock).mockReturnValue(
+        clientAuthentication
+      );
+      onLogin = jest.fn();
+      session = new Session();
+      unauthenticatedFetch = session.fetch;
+      session.onLogin(onLogin);
+      loginPromise = session.login({});
+      try {
+        await loginPromise;
+      } catch (err) {
+        // expected rejection
+      }
+    });
+
+    it('rejects the login promise', async () => {
+      await expect(loginPromise).rejects.toEqual(
+        new Error('pod provider not reachable')
+      );
+    });
+
+    it('stays logged out', async () => {
+      expect(session.info).toEqual({
+        sessionId: '8df398ce-b3c9-4410-a446-914a50c96842',
+        isLoggedIn: false,
       });
     });
 
