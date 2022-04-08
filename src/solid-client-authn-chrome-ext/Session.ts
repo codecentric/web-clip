@@ -18,7 +18,7 @@ export class Session extends EventEmitter {
   public fetch: typeof fetch = window.fetch.bind(window);
 
   private resolveLogin: (value: PromiseLike<void> | void) => void;
-  private rejectLogin: (reason?: any) => void;
+  private rejectLogin: (reason?: Error) => void;
 
   constructor() {
     super();
