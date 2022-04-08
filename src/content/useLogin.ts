@@ -1,12 +1,6 @@
 import { useCallback, useState } from 'react';
-import { Bookmark } from '../api/SolidApi';
 import { MessageType } from '../messages';
 import { sendMessage } from './sendMessage';
-
-interface AsyncState<T> {
-  loading: boolean;
-  error: Error;
-}
 
 export const useLogin = () => {
   const [state, setState] = useState({
