@@ -43,14 +43,16 @@ export class Session extends EventEmitter {
     return new Promise<void>((resolve, reject) => {
       this.resolveLogin = resolve;
       this.rejectLogin = reject;
-      this.clientAuthentication.login(
-        {
-          sessionId: this.info.sessionId,
-          ...options,
-          tokenType: options.tokenType ?? 'DPoP',
-        },
-        this
-      );
+      this.clientAuthentication
+        .login(
+          {
+            sessionId: this.info.sessionId,
+            ...options,
+            tokenType: options.tokenType ?? 'DPoP',
+          },
+          this
+        )
+        .catch((err) => reject(err));
     });
   };
 
