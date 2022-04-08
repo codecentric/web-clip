@@ -53,7 +53,7 @@ import {
  * @param redirectCallback
  */
 export function getClientAuthentication(
-  redirectCallback: (info: RedirectInfo) => void
+  redirectCallback: (info: RedirectInfo, error?: Error) => void
 ): ClientAuthentication {
   const secureStorage = new InMemoryStorage();
   const insecureStorage = new BrowserStorage();

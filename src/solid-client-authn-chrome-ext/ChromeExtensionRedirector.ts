@@ -7,7 +7,7 @@ export type RedirectInfo = ISessionInfo & { fetch: typeof fetch };
 export class ChromeExtensionRedirector implements IRedirector {
   constructor(
     private readonly redirectHandler: IRedirectHandler,
-    private readonly afterRedirect: (info: RedirectInfo) => void
+    private readonly afterRedirect: (info: RedirectInfo, error?: Error) => void
   ) {}
 
   redirect(redirectUrl: string): void {
@@ -17,11 +17,22 @@ export class ChromeExtensionRedirector implements IRedirector {
         interactive: true,
       },
       async (redirectUrl) => {
-        const sessionInfo = await this.redirectHandler.handle(
-          redirectUrl,
-          undefined
-        );
-        this.afterRedirect(sessionInfo);
+        try {
+          const sessionInfo = await this.redirectHandler.handle(
+            redirectUrl,
+            undefined
+          );
+          this.afterRedirect(sessionInfo);
+        } catch (error) {
+          this.afterRedirect(
+            {
+              isLoggedIn: false,
+              fetch: undefined,
+              sessionId: '',
+            },
+            error
+          );
+        }
       }
     );
   }
