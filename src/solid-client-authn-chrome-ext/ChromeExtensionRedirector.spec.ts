@@ -78,11 +78,40 @@ describe('ChromeExtensionRedirector', () => {
       expect(afterRedirect).toHaveBeenCalledWith(sessionInfo);
     });
 
-    it('calls the after redirect handler with an error', async () => {
+    it('calls the after redirect handler with error from authentication process', async () => {
+      const redirectHandler = mockRedirectHandler();
+
+      const afterRedirect = jest.fn();
+
+      const redirector = new ChromeExtensionRedirector(
+        redirectHandler,
+        afterRedirect
+      );
+      redirector.redirect('/redirect-url');
+
+      const returnToExtension = (launchWebAuthFlow as jest.Mock).mock
+        .calls[0][1];
+
+      await returnToExtension(
+        '/redirect-url?code=123',
+        new Error('error during authentication')
+      );
+
+      expect(afterRedirect).toHaveBeenCalledWith(
+        {
+          isLoggedIn: false,
+          sessionId: '',
+          fetch: undefined,
+        },
+        new Error('error during authentication')
+      );
+    });
+
+    it('calls the after redirect handler with an error from redirect handler', async () => {
       const redirectHandler = mockRedirectHandler();
 
       (redirectHandler.handle as jest.Mock).mockRejectedValue(
-        new Error('this failed')
+        new Error('error during handler')
       );
 
       const afterRedirect = jest.fn();
@@ -104,7 +133,7 @@ describe('ChromeExtensionRedirector', () => {
           sessionId: '',
           fetch: undefined,
         },
-        new Error('this failed')
+        new Error('error during handler')
       );
     });
   });
