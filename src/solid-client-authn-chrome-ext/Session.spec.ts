@@ -170,12 +170,23 @@ describe('Session', () => {
       loginPromise = session.login({});
       const afterRedirect = (getClientAuthentication as jest.Mock).mock
         .calls[0][0];
-      afterRedirect({
-        sessionId: 'db180742-9c17-4e91-94fc-3422a0e75dd9',
-        isLoggedIn: false,
-        webId: 'https://pod.example/alice#me',
-      } as RedirectInfo);
-      await loginPromise;
+      afterRedirect(
+        {
+          sessionId: 'db180742-9c17-4e91-94fc-3422a0e75dd9',
+          isLoggedIn: false,
+          webId: 'https://pod.example/alice#me',
+        } as RedirectInfo,
+        new Error('login failed')
+      );
+      try {
+        await loginPromise;
+      } catch (err) {
+        // expected rejection
+      }
+    });
+
+    it('rejects the login promise', async () => {
+      await expect(loginPromise).rejects.toEqual(new Error('login failed'));
     });
 
     it('updates the session info', async () => {
