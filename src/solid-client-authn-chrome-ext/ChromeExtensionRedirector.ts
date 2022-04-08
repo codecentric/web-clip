@@ -16,8 +16,11 @@ export class ChromeExtensionRedirector implements IRedirector {
         url: redirectUrl,
         interactive: true,
       },
-      async (redirectUrl) => {
+      async (redirectUrl, error) => {
         try {
+          if (error) {
+            throw error;
+          }
           const sessionInfo = await this.redirectHandler.handle(
             redirectUrl,
             undefined
