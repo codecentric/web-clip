@@ -18,6 +18,7 @@ export class Session extends EventEmitter {
   public fetch: typeof fetch = window.fetch.bind(window);
 
   private resolveLogin: (value: PromiseLike<void> | void) => void;
+  private rejectLogin: (reason?: any) => void;
 
   constructor() {
     super();
@@ -25,7 +26,11 @@ export class Session extends EventEmitter {
       (redirectInfo: RedirectInfo, error?: Error) => {
         const { fetch, ...info } = redirectInfo;
         this.info = info;
-        this.resolveLogin();
+        if (error) {
+          this.rejectLogin(error);
+        } else {
+          this.resolveLogin();
+        }
         if (info.isLoggedIn) {
           this.fetch = fetch.bind(window);
           this.emit('login');
@@ -37,6 +42,7 @@ export class Session extends EventEmitter {
   login = async (options: ILoginInputOptions) => {
     return new Promise<void>((resolve, reject) => {
       this.resolveLogin = resolve;
+      this.rejectLogin = reject;
       this.clientAuthentication.login(
         {
           sessionId: this.info.sessionId,
