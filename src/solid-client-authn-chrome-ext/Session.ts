@@ -17,12 +17,15 @@ export class Session extends EventEmitter {
   };
   public fetch: typeof fetch = window.fetch.bind(window);
 
+  private resolveLogin: (value: PromiseLike<void> | void) => void;
+
   constructor() {
     super();
     this.clientAuthentication = getClientAuthentication(
       (redirectInfo: RedirectInfo) => {
         const { fetch, ...info } = redirectInfo;
         this.info = info;
+        this.resolveLogin();
         if (info.isLoggedIn) {
           this.fetch = fetch.bind(window);
           this.emit('login');
@@ -32,14 +35,17 @@ export class Session extends EventEmitter {
   }
 
   login = async (options: ILoginInputOptions) => {
-    await this.clientAuthentication.login(
-      {
-        sessionId: this.info.sessionId,
-        ...options,
-        tokenType: options.tokenType ?? 'DPoP',
-      },
-      this
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.resolveLogin = resolve;
+      this.clientAuthentication.login(
+        {
+          sessionId: this.info.sessionId,
+          ...options,
+          tokenType: options.tokenType ?? 'DPoP',
+        },
+        this
+      );
+    });
   };
 
   logout = async () => {

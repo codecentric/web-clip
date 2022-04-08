@@ -59,7 +59,7 @@ describe('Session', () => {
         clientAuthentication
       );
       const session = new Session();
-      await session.login({});
+      session.login({}).then();
       expect(clientAuthentication.login).toHaveBeenCalledWith(
         {
           sessionId: '8df398ce-b3c9-4410-a446-914a50c96842',
@@ -80,11 +80,13 @@ describe('Session', () => {
         clientAuthentication
       );
       const session = new Session();
-      await session.login({
-        oidcIssuer: 'https://issuer.example',
-        clientName: 'Test Client',
-        tokenType: 'Bearer',
-      });
+      session
+        .login({
+          oidcIssuer: 'https://issuer.example',
+          clientName: 'Test Client',
+          tokenType: 'Bearer',
+        })
+        .then();
       expect(clientAuthentication.login).toHaveBeenCalledWith(
         {
           sessionId: '8df398ce-b3c9-4410-a446-914a50c96842',
@@ -101,6 +103,7 @@ describe('Session', () => {
     let session: Session;
     let authenticatedFetch: typeof fetch;
     let onLogin: () => unknown;
+    let loginPromise: Promise<void>;
     beforeEach(async () => {
       const clientAuthentication = {
         login: jest.fn(),
@@ -112,7 +115,7 @@ describe('Session', () => {
       session = new Session();
       authenticatedFetch = jest.fn();
       session.onLogin(onLogin);
-      await session.login({});
+      loginPromise = session.login({});
       const afterRedirect = (getClientAuthentication as jest.Mock).mock
         .calls[0][0];
       afterRedirect({
@@ -121,6 +124,11 @@ describe('Session', () => {
         webId: 'https://pod.example/alice#me',
         fetch: authenticatedFetch,
       } as RedirectInfo);
+      await loginPromise;
+    });
+
+    it('the login promise resolves', async () => {
+      await expect(loginPromise).resolves.not.toThrow();
     });
 
     it('updates the session info', async () => {
@@ -147,6 +155,7 @@ describe('Session', () => {
     let session: Session;
     let onLogin: () => unknown;
     let unauthenticatedFetch: typeof fetch;
+    let loginPromise: Promise<void>;
     beforeEach(async () => {
       const clientAuthentication = {
         login: jest.fn(),
@@ -158,7 +167,7 @@ describe('Session', () => {
       session = new Session();
       unauthenticatedFetch = session.fetch;
       session.onLogin(onLogin);
-      await session.login({});
+      loginPromise = session.login({});
       const afterRedirect = (getClientAuthentication as jest.Mock).mock
         .calls[0][0];
       afterRedirect({
@@ -166,6 +175,7 @@ describe('Session', () => {
         isLoggedIn: false,
         webId: 'https://pod.example/alice#me',
       } as RedirectInfo);
+      await loginPromise;
     });
 
     it('updates the session info', async () => {
@@ -180,7 +190,7 @@ describe('Session', () => {
       expect(session.fetch).toBe(unauthenticatedFetch);
     });
 
-    it('does not emit login event', () => {
+    it('does not emit login event', async () => {
       expect(onLogin).not.toHaveBeenCalled();
     });
   });
