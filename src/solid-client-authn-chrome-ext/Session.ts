@@ -22,7 +22,7 @@ export class Session extends EventEmitter {
   constructor() {
     super();
     this.clientAuthentication = getClientAuthentication(
-      (redirectInfo: RedirectInfo) => {
+      (redirectInfo: RedirectInfo, error?: Error) => {
         const { fetch, ...info } = redirectInfo;
         this.info = info;
         this.resolveLogin();
