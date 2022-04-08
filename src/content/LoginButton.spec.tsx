@@ -25,4 +25,13 @@ describe('LoginButton', () => {
     render(<LoginButton />);
     expect(screen.getByText('something went wrong')).toBeInTheDocument();
   });
+
+  it('indicates loading', () => {
+    (useLogin as jest.Mock).mockReturnValue({
+      error: null,
+      loading: true,
+    });
+    render(<LoginButton />);
+    expect(screen.getByText('Signing in')).toBeInTheDocument();
+  });
 });

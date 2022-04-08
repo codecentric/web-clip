@@ -1,17 +1,15 @@
 import React from 'react';
+import { Button } from '../components/Button';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { useLogin } from './useLogin';
 
 export const LoginButton = () => {
-  const { login, error } = useLogin();
+  const { login, loading, error } = useLogin();
   return (
     <>
-      <button
-        className="my-1 px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold"
-        onClick={login}
-      >
+      <Button loading={loading} loadingLabel="Signing in" onClick={login}>
         Login
-      </button>
+      </Button>
       {error && <ErrorMessage error={error} />}
     </>
   );
