@@ -22,18 +22,20 @@ const chromeMessageListener = new ChromeMessageListener();
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   switch (request.type) {
     case MessageType.ACTIVATE:
-      renderApp(request.payload);
+      const { providerUrl, ...sessionInfo } = request.payload;
+      renderApp(sessionInfo, providerUrl);
       break;
   }
   sendResponse();
 });
 
-function renderApp(sessionInfo: ISessionInfo) {
+function renderApp(sessionInfo: ISessionInfo, providerUrl: string) {
   ReactDOM.render(
     <WebClip
       chromeMessageListener={chromeMessageListener}
       close={unmountApp}
       sessionInfo={sessionInfo}
+      providerUrl={providerUrl}
     />,
     container
   );

@@ -22,7 +22,7 @@ chrome.browserAction.onClicked.addListener(async function (tab) {
     console.log('session expired, logging out');
     await session.logout();
   }
-  activateWebClipForTab(tab, session.info);
+  activateWebClipForTab(tab, session.info, providerUrl);
 });
 
 chrome.runtime.onMessage.addListener(function (

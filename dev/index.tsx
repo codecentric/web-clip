@@ -32,10 +32,12 @@ async function handleRedirectAfterLogin() {
   return getDefaultSession();
 }
 
+const providerUrl = 'http://localhost:3000';
+
 handleRedirectAfterLogin().then((session: Session) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore: this dev environment is no chrome extension, so we use regular browser session here
-  handler = createMessageHandler(session, 'http://localhost:3000');
+  handler = createMessageHandler(session, providerUrl);
   renderApp(session);
 });
 
@@ -52,6 +54,7 @@ function renderApp(session: Session) {
     <PageContent
       close={() => alert('cannot close in dev mode')}
       sessionInfo={session.info}
+      providerUrl={providerUrl}
     />,
     container
   );

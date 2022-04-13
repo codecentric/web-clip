@@ -109,6 +109,7 @@ describe('bookmarking an html page with embedded data', () => {
             webId: 'https://pod.example/#me',
             sessionId: 'id',
           }}
+          providerUrl="https://provider.test"
         />
       );
     });
@@ -210,6 +211,7 @@ describe('bookmarking an html page with embedded data', () => {
             isLoggedIn: true,
             webId: 'https://pod.example/#me',
           }}
+          providerUrl="https://provider.test"
         />
       );
     });

@@ -3,14 +3,19 @@ import { Button } from '../components/Button';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { useLogin } from './useLogin';
 
-export const LoginButton = () => {
+interface Props {
+  providerUrl: string;
+}
+
+export const LoginButton = ({ providerUrl }: Props) => {
   const { login, loading, error } = useLogin();
   return (
-    <>
+    <div className="grid">
       <Button loading={loading} loadingLabel="Signing in" onClick={login}>
-        Login
+        <p>Login</p>
       </Button>
+      <p className="font-light text-gray-500 text-xs">{providerUrl}</p>
       {error && <ErrorMessage error={error} />}
-    </>
+    </div>
   );
 };

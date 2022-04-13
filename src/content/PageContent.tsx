@@ -6,10 +6,15 @@ import { useSessionInfo } from './useSessionInfo';
 
 interface PageContentProps {
   sessionInfo: ISessionInfo;
+  providerUrl: string;
   close: () => void;
 }
 
-export const PageContent = ({ sessionInfo, close }: PageContentProps) => {
+export const PageContent = ({
+  sessionInfo,
+  providerUrl,
+  close,
+}: PageContentProps) => {
   const currentSessionInfo = useSessionInfo(sessionInfo);
   return (
     <div className="font-sans text-base text-gray-700 z-max fixed top-0 right-0 m-8 shadow rounded w-auto h-auto p-4 bg-white flex flex-col items-center">
@@ -24,7 +29,11 @@ export const PageContent = ({ sessionInfo, close }: PageContentProps) => {
       </div>
       <div className="paperclip" />
       <h1 className="text-3xl mx-4 my-2">WebClip</h1>
-      {currentSessionInfo.isLoggedIn ? <ToolbarContainer /> : <LoginButton />}
+      {currentSessionInfo.isLoggedIn ? (
+        <ToolbarContainer />
+      ) : (
+        <LoginButton providerUrl={providerUrl} />
+      )}
     </div>
   );
 };

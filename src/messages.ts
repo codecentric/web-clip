@@ -23,7 +23,7 @@ export type Message =
 
 export type ActivateMessage = {
   type: MessageType.ACTIVATE;
-  payload: ISessionInfo;
+  payload: ISessionInfo & { providerUrl: string };
 };
 
 export type LoginMessage = {

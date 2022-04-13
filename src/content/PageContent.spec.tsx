@@ -17,6 +17,7 @@ describe('PageContent', () => {
       render(
         <PageContent
           sessionInfo={{ isLoggedIn: false } as ISessionInfo}
+          providerUrl="https://provider.test"
           close={() => null}
         />
       );
@@ -29,6 +30,7 @@ describe('PageContent', () => {
       render(
         <PageContent
           sessionInfo={{ isLoggedIn: false } as ISessionInfo}
+          providerUrl="https://provider.test"
           close={close}
         />
       );

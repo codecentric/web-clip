@@ -8,17 +8,23 @@ import { PageContent } from './PageContent';
 interface Props {
   chromeMessageListener: ChromeMessageListener;
   sessionInfo: ISessionInfo;
+  providerUrl: string;
   close: () => void;
 }
 
 export const WebClip = ({
   chromeMessageListener,
   sessionInfo,
+  providerUrl,
   close,
 }: Props) => {
   return (
     <ChromeMessageListenerContext.Provider value={chromeMessageListener}>
-      <PageContent close={close} sessionInfo={sessionInfo} />
+      <PageContent
+        close={close}
+        sessionInfo={sessionInfo}
+        providerUrl={providerUrl}
+      />
     </ChromeMessageListenerContext.Provider>
   );
 };
