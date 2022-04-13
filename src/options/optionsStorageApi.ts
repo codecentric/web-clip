@@ -5,7 +5,7 @@ export interface Options {
 }
 
 const defaultsOptions: Options = {
-  providerUrl: 'https://solidcommunity.net',
+  providerUrl: '',
 };
 
 export const save = (options: Options): Promise<Options> => {
