@@ -12,7 +12,7 @@ describe('LoginButton', () => {
       login,
     });
     render(<LoginButton providerUrl="https://provider.test" />);
-    const provider = screen.queryByText('https://provider.test');
+    const provider = screen.queryByText('provider.test');
     expect(provider).not.toBeNull();
   });
 

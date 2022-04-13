@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '../components/Button';
 import { ErrorMessage } from '../components/ErrorMessage';
+import { prettifyUrl } from './prettifyUrl';
 import { useLogin } from './useLogin';
 
 interface Props {
@@ -14,7 +15,9 @@ export const LoginButton = ({ providerUrl }: Props) => {
       <Button loading={loading} loadingLabel="Signing in" onClick={login}>
         <p>Login</p>
       </Button>
-      <p className="font-light text-gray-500 text-xs">{providerUrl}</p>
+      <p className="font-light text-gray-500 text-xs">
+        {prettifyUrl(providerUrl)}
+      </p>
       {error && <ErrorMessage error={error} />}
     </div>
   );
