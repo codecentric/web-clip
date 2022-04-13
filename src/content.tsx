@@ -21,10 +21,11 @@ const chromeMessageListener = new ChromeMessageListener();
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   switch (request.type) {
-    case MessageType.ACTIVATE:
+    case MessageType.ACTIVATE: {
       const { providerUrl, ...sessionInfo } = request.payload;
       renderApp(sessionInfo, providerUrl);
       break;
+    }
   }
   sendResponse();
 });
