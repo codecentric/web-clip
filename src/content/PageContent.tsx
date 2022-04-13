@@ -1,6 +1,7 @@
 import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
 import React from 'react';
 import { LoginButton } from './LoginButton';
+import { SetupButton } from './SetupButton';
 import { ToolbarContainer } from './ToolbarContainer';
 import { useSessionInfo } from './useSessionInfo';
 
@@ -31,8 +32,10 @@ export const PageContent = ({
       <h1 className="text-3xl mx-4 my-2">WebClip</h1>
       {currentSessionInfo.isLoggedIn ? (
         <ToolbarContainer />
-      ) : (
+      ) : providerUrl ? (
         <LoginButton providerUrl={providerUrl} />
+      ) : (
+        <SetupButton close={close} />
       )}
     </div>
   );
