@@ -10,10 +10,12 @@ export enum MessageType {
   LOAD_BOOKMARK = 'LOAD_BOOKMARK',
   ADD_BOOKMARK = 'ADD_BOOKMARK',
   IMPORT_PAGE_DATA = 'IMPORT_PAGE_DATA',
+  OPEN_OPTIONS = 'OPEN_OPTIONS',
 }
 
 export type Message =
   | ActivateMessage
+  | OpenOptionsMessage
   | LoginMessage
   | LoggedInMessage
   | LoadProfileMessage
@@ -24,6 +26,10 @@ export type Message =
 export type ActivateMessage = {
   type: MessageType.ACTIVATE;
   payload: ISessionInfo & { providerUrl: string };
+};
+
+export type OpenOptionsMessage = {
+  type: MessageType.OPEN_OPTIONS;
 };
 
 export type LoginMessage = {

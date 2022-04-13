@@ -5,6 +5,9 @@ import { MessageType } from '../messages';
 import { Store } from '../store/Store';
 import { mockSolidApi, SolidApiMock } from '../test/solidApiMock';
 import { MessageHandler } from './MessageHandler';
+import { openOptionsPage } from './openOptionsPage';
+
+jest.mock('./openOptionsPage');
 
 describe('MessageHandler', () => {
   let messageHandler: MessageHandler;
@@ -18,8 +21,21 @@ describe('MessageHandler', () => {
     messageHandler = new MessageHandler(solidApi as unknown as SolidApi, store);
   });
 
+  describe('handle type OPEN_OPTIONS', () => {
+    it('calls openOptionsPage and returns nothing', async () => {
+      const result = await messageHandler.handleMessage(
+        {
+          type: MessageType.OPEN_OPTIONS,
+        },
+        {}
+      );
+      expect(openOptionsPage).toHaveBeenCalledWith();
+      expect(result).toEqual({});
+    });
+  });
+
   describe('handle type LOGIN', () => {
-    it('calls login and returns undefined', async () => {
+    it('calls login and returns nothing', async () => {
       const result = await messageHandler.handleMessage(
         {
           type: MessageType.LOGIN,

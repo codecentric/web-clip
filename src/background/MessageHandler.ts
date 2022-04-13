@@ -1,6 +1,7 @@
 import { SolidApi } from '../api/SolidApi';
 import { Message, MessageType, Response } from '../messages';
 import { Store } from '../store/Store';
+import { openOptionsPage } from './openOptionsPage';
 import MessageSender = chrome.runtime.MessageSender;
 
 export class MessageHandler {
@@ -15,6 +16,9 @@ export class MessageHandler {
     sender: MessageSender
   ): Promise<Response> {
     switch (request.type) {
+      case MessageType.OPEN_OPTIONS:
+        openOptionsPage();
+        return {};
       case MessageType.LOGIN:
         await this.solidApi.login();
         return {};
