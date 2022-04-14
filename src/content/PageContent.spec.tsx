@@ -3,8 +3,10 @@ import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
 import { render, screen } from '@testing-library/react';
 import { PageContent } from './PageContent';
 import { useSessionInfo } from './useSessionInfo';
+import { openOptions } from './openOptions';
 
 jest.mock('./useSessionInfo');
+jest.mock('./openOptions');
 
 describe('PageContent', () => {
   beforeEach(() => {
@@ -64,6 +66,37 @@ describe('PageContent', () => {
 
       closeButton.click();
 
+      expect(close).toHaveBeenCalled();
+    });
+  });
+
+  describe('options icon', () => {
+    it('is present', () => {
+      render(
+        <PageContent
+          sessionInfo={{ isLoggedIn: false } as ISessionInfo}
+          providerUrl="https://provider.test"
+          close={() => null}
+        />
+      );
+      const optionsButton = screen.queryByLabelText('Options');
+      expect(optionsButton).toBeInTheDocument();
+    });
+
+    it('opens options and closes when clicked', () => {
+      const close = jest.fn();
+      render(
+        <PageContent
+          sessionInfo={{ isLoggedIn: false } as ISessionInfo}
+          providerUrl="https://provider.test"
+          close={close}
+        />
+      );
+      const optionsButton = screen.queryByLabelText('Options');
+
+      optionsButton.click();
+
+      expect(openOptions).toHaveBeenCalled();
       expect(close).toHaveBeenCalled();
     });
   });

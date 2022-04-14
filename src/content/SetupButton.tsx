@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from '../components/Button';
-import { MessageType } from '../messages';
-import { sendMessage } from './sendMessage';
+import { openOptions } from './openOptions';
 
 interface Props {
   close: () => void;
@@ -14,7 +13,7 @@ export const SetupButton = ({ close }: Props) => {
       loadingLabel="Please wait"
       onClick={async () => {
         close();
-        await sendMessage({ type: MessageType.OPEN_OPTIONS });
+        await openOptions();
       }}
     >
       Get started
