@@ -85,3 +85,6 @@ creates or
 the version from package.json. The ZIP file can then be downloaded locally and
 uploaded manually via the
 [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole/ee35c951-053f-4723-80b8-e4420a571f64/mfgjcggbpdkbnnpgllaicoeplfgkfnkj/edit/package?hl=de).
+To create an official release on GitHub, the `release` step in the
+[CI/CD Github Action](https://github.com/codecentric/web-clip/actions/workflows/ci-cd.yml)
+needs to be triggered manually.
