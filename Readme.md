@@ -28,18 +28,34 @@ The Options page and the browser integration can not be tested this way, see sec
 
 ### Local pod for testing
 
-To start a Community Solid Server instance localy for testing run:
+You need [Docker](https://www.docker.com) to do this.
+
+To start a Community Solid Server instance locally for testing run:
 
 ```shell
-npm run pod
+npm run pod:up
 ```
 
-The server is running on http://localhost:3000. The data of it is stored at `./dev/pod`.
+The server will be running as a docker container in the background and can be accessed on http://localhost:3000.
+
+The data of it is stored at `./dev/pod`.
 
 | Log in   |                   |
 | -------- | ----------------- |
 | email    | webclip@mail.test |
 | password | webclip-dev-pod   |
+
+To view the server logs run:
+
+```shell
+npm run pod:logs
+```
+
+To stop the server execute:
+
+```shell
+npm run pod:down
+```
 
 ### Full extension via chrome
 

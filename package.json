@@ -10,8 +10,10 @@
     "lint": "eslint ./src",
     "start": "NODE_ENV=development webpack --mode development --watch",
     "build": "webpack",
-    "dev": "webpack serve --open --config webpack.dev.config.js ",
-    "pod": "community-solid-server --config @css:config/file.json --rootFilePath ./dev/pod"
+    "dev": "webpack serve --open --config webpack.dev.config.js",
+    "pod:up": "docker run --rm --detach --name webclip-dev-pod --publish 3000:3000 --volume ${PWD}/dev/pod:/pod solidproject/community-server --config @css:config/file.json --rootFilePath /pod",
+    "pod:logs": "docker logs webclip-dev-pod --follow",
+    "pod:down": "docker stop webclip-dev-pod"
   },
   "keywords": [],
   "author": "",
@@ -35,7 +37,6 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
-    "@solid/community-server": "^2.0.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
     "@testing-library/react-hooks": "^7.0.2",
