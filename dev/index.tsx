@@ -21,6 +21,7 @@ chrome.runtime = {
     const result = await handler.handleMessage(message, null);
     sendResponse(result);
   },
+  openOptionsPage: () => (window.location.href = '/options.html'),
 } as unknown as typeof chrome.runtime;
 
 chrome.identity = {
@@ -52,7 +53,10 @@ shadowRoot.appendChild(container);
 function renderApp(session: Session) {
   ReactDOM.render(
     <PageContent
-      close={() => alert('cannot close in dev mode')}
+      close={() => {
+        ReactDOM.unmountComponentAtNode(container);
+        console.log('reload the page to re-open WebClip in dev mode');
+      }}
       sessionInfo={session.info}
       providerUrl={providerUrl}
     />,
