@@ -1,13 +1,25 @@
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
+import { when } from 'jest-when';
+import { useAuthentication } from './auth/AuthenticationContext';
 import { useOptions } from './useOptions';
 import { save as saveOptions, load as loadOptions } from './optionsStorageApi';
 
 jest.mock('./optionsStorageApi');
+jest.mock('./auth/AuthenticationContext');
 
 describe('useOptions', () => {
   let renderResult: RenderResult<ReturnType<typeof useOptions>>;
 
   beforeEach(async () => {
+    when(useAuthentication).mockReturnValue({
+      session: {
+        info: {
+          isLoggedIn: false,
+          sessionId: '1234',
+        },
+      },
+      redirectUrl: '',
+    });
     (saveOptions as jest.Mock).mockResolvedValue(undefined);
     (loadOptions as jest.Mock).mockResolvedValue({
       providerUrl: 'https://pod.provider.example',
@@ -50,8 +62,8 @@ describe('useOptions', () => {
     });
   });
 
-  describe('saving the provider url', () => {
-    it('saves the url and returns a confirmation', async () => {
+  describe('on login', () => {
+    it('saves the provider url', async () => {
       (saveOptions as jest.Mock).mockResolvedValue(null);
       const { result, waitForNextUpdate } = renderHook(() => useOptions());
 
@@ -60,7 +72,7 @@ describe('useOptions', () => {
       });
 
       act(() => {
-        result.current.save();
+        result.current.onLogin();
       });
 
       await waitForNextUpdate();

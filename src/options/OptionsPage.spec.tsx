@@ -1,10 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { when } from 'jest-when';
 import React from 'react';
+import { useAuthentication } from './auth/AuthenticationContext';
 import { OptionsPage } from './OptionsPage';
-import { save as saveOptions, load as loadOptions } from './optionsStorageApi';
+import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
 
 jest.mock('./optionsStorageApi');
+jest.mock('./auth/AuthenticationContext');
 
 describe('OptionsPage', () => {
   describe('while loading', () => {
@@ -21,6 +24,12 @@ describe('OptionsPage', () => {
 
   describe('after loading', () => {
     beforeEach(async () => {
+      when(useAuthentication).mockReturnValue({
+        session: {
+          login: (): null => null,
+        },
+        redirectUrl: '',
+      });
       (saveOptions as jest.Mock).mockResolvedValue(undefined);
       (loadOptions as jest.Mock).mockResolvedValue({
         providerUrl: 'https://solidcommunity.net',
@@ -48,9 +57,9 @@ describe('OptionsPage', () => {
       expect(input).toHaveValue('https://another.provider.example');
     });
 
-    it('should have a save button', async () => {
+    it('should have a Connect Pod button', async () => {
       render(<OptionsPage redirectUrl="" session={null} extensionUrl="" />);
-      const button = await screen.findByText('Save');
+      const button = await screen.findByText('Connect Pod');
       expect(button).toBeInTheDocument();
     });
 
@@ -62,8 +71,10 @@ describe('OptionsPage', () => {
           value: 'https://pod.provider.example',
         },
       });
-      const button = await screen.findByText('Save');
+      const button = await screen.findByText('Connect Pod');
       fireEvent.click(button);
+      await screen.findByText('Signing in');
+      await screen.findByText('Connect Pod');
 
       expect(saveOptions).toHaveBeenCalledWith({
         providerUrl: 'https://pod.provider.example',

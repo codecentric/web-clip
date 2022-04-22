@@ -1,8 +1,9 @@
 import React from 'react';
 import { useOptions } from '../useOptions';
+import { LoginButton } from './LoginButton';
 
 export const ConnectPodSection = () => {
-  const { loading, providerUrl, setProviderUrl, save, saved } = useOptions();
+  const { loading, providerUrl, setProviderUrl, saved, onLogin } = useOptions();
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -33,12 +34,7 @@ export const ConnectPodSection = () => {
           <option value="https://solidweb.org" />
         </datalist>
       </label>
-      <button
-        className="my-1 px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold"
-        onClick={save}
-      >
-        Save
-      </button>
+      <LoginButton oidcIssuer={providerUrl} onLogin={onLogin} />
       {saved && (
         <div
           className="flex lg:inline-flex bg-green-100 border border-green-400 text-green-700 px-2 py-1 rounded relative"

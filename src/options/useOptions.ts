@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
 import {
+  load as loadOptions,
   Options,
   save as saveOptions,
-  load as loadOptions,
 } from './optionsStorageApi';
 
 interface AsyncLoadingState<T> {
@@ -38,11 +38,15 @@ export const useOptions = () => {
 
   const save = () => saveOptions(value).then(() => setSaved(true));
 
+  const onLogin = async () => {
+    await save();
+  };
+
   return {
     loading,
     ...value,
     setProviderUrl,
-    save,
     saved,
+    onLogin,
   };
 };

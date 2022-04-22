@@ -10,6 +10,10 @@ describe('useLogin', () => {
   let session: Session;
   beforeEach(() => {
     session = {
+      info: {
+        isLoggedIn: true,
+        webId: 'http://pod.test/alice#me',
+      },
       login: jest.fn().mockResolvedValue(undefined),
     } as unknown as Session;
     when(useAuthentication).mockReturnValue({
@@ -19,14 +23,18 @@ describe('useLogin', () => {
   });
 
   it('returns loading false', () => {
-    const { result } = renderHook(() => useLogin('https://pod.test'));
+    const { result } = renderHook(() =>
+      useLogin('https://pod.test', () => null)
+    );
     expect(result.current).toMatchObject({
       loading: false,
     });
   });
 
   it('calls session login on login', async () => {
-    const { result } = renderHook(() => useLogin('https://pod.test'));
+    const { result } = renderHook(() =>
+      useLogin('https://pod.test', () => null)
+    );
     await result.current.login();
     expect(session.login).toHaveBeenCalledWith({
       oidcIssuer: 'https://pod.test',
@@ -34,8 +42,20 @@ describe('useLogin', () => {
     });
   });
 
+  it('calls on login after login', async () => {
+    const onLogin = jest.fn();
+    const { result } = renderHook(() => useLogin('https://pod.test', onLogin));
+    await result.current.login();
+    expect(onLogin).toHaveBeenCalledWith({
+      isLoggedIn: true,
+      webId: 'http://pod.test/alice#me',
+    });
+  });
+
   it('indicates loading while logging in', async () => {
-    const { result } = renderHook(() => useLogin('https://pod.test'));
+    const { result } = renderHook(() =>
+      useLogin('https://pod.test', () => null)
+    );
     await act(async () => {
       await result.current.login();
     });
