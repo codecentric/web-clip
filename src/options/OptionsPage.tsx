@@ -1,18 +1,24 @@
 import React from 'react';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
-import { SessionContext } from './auth/SessionContext';
+import { AuthenticationContext } from './auth/AuthenticationContext';
 import { AuthorizationSection } from './AuthorizationSection';
 import { ConnectPodSection } from './connect-pod/ConnectPodSection';
 import { HelpSection } from './HelpSection';
 
 interface Props {
   session: Session;
+  redirectUrl: string;
   extensionUrl: string;
 }
 
-export const OptionsPage = ({ session, extensionUrl }: Props) => {
+export const OptionsPage = ({ session, redirectUrl, extensionUrl }: Props) => {
   return (
-    <SessionContext.Provider value={session}>
+    <AuthenticationContext.Provider
+      value={{
+        session,
+        redirectUrl,
+      }}
+    >
       <main className="container text-lg mx-auto p-8">
         <h1 className="text-xl font-medium my-8">Setup WebClip</h1>
         <section>
@@ -40,6 +46,6 @@ export const OptionsPage = ({ session, extensionUrl }: Props) => {
         ></AuthorizationSection>
         <HelpSection></HelpSection>
       </main>
-    </SessionContext.Provider>
+    </AuthenticationContext.Provider>
   );
 };

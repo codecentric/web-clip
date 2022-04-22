@@ -48,6 +48,7 @@ function renderApp(session: ChromeExtensionSession) {
   ReactDOM.render(
     <OptionsPage
       session={session}
+      redirectUrl={window.location.href}
       extensionUrl="chrome-extension://extension-id"
     />,
     root

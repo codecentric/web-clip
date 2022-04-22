@@ -12,7 +12,7 @@ describe('OptionsPage', () => {
       (saveOptions as jest.Mock).mockResolvedValue(undefined);
       (loadOptions as jest.Mock).mockReturnValue(new Promise(() => null));
 
-      render(<OptionsPage session={null} extensionUrl="" />);
+      render(<OptionsPage redirectUrl="" session={null} extensionUrl="" />);
     });
     it('shows a loading indicator', () => {
       expect(screen.getByText('Loading...')).toBeInTheDocument();
@@ -28,19 +28,19 @@ describe('OptionsPage', () => {
     });
 
     it('should allow to input a Solid IDP URI', async () => {
-      render(<OptionsPage session={null} extensionUrl="" />);
+      render(<OptionsPage redirectUrl="" session={null} extensionUrl="" />);
       const input = await screen.findByLabelText('Pod Provider URL');
       expect(input).toBeInTheDocument();
     });
 
     it('shows solidcommunity.net as default provider URL in the input', async () => {
-      render(<OptionsPage session={null} extensionUrl="" />);
+      render(<OptionsPage redirectUrl="" session={null} extensionUrl="" />);
       const input = await screen.findByLabelText('Pod Provider URL');
       expect(input).toHaveValue('https://solidcommunity.net');
     });
 
     it('allows to change the provider url', async () => {
-      render(<OptionsPage session={null} extensionUrl="" />);
+      render(<OptionsPage redirectUrl="" session={null} extensionUrl="" />);
       const input = await screen.findByLabelText('Pod Provider URL');
       userEvent.clear(input);
       userEvent.type(input, 'https://another.provider.example');
@@ -49,13 +49,13 @@ describe('OptionsPage', () => {
     });
 
     it('should have a save button', async () => {
-      render(<OptionsPage session={null} extensionUrl="" />);
+      render(<OptionsPage redirectUrl="" session={null} extensionUrl="" />);
       const button = await screen.findByText('Save');
       expect(button).toBeInTheDocument();
     });
 
     it('should save the pod provider url and provide a confirmation message', async () => {
-      render(<OptionsPage session={null} extensionUrl="" />);
+      render(<OptionsPage redirectUrl="" session={null} extensionUrl="" />);
       const input = await screen.findByLabelText('Pod Provider URL');
       fireEvent.change(input, {
         target: {
