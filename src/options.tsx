@@ -12,6 +12,10 @@ const extensionUrl = chrome.extension.getURL('').slice(0, -1);
 const session = new Session();
 
 ReactDOM.render(
-  <OptionsPage session={session} extensionUrl={extensionUrl} />,
+  <OptionsPage
+    session={session}
+    redirectUrl={chrome.identity.getRedirectURL()}
+    extensionUrl={extensionUrl}
+  />,
   document.getElementById('root')
 );
