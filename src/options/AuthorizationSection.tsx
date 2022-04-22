@@ -20,10 +20,10 @@ export const AuthorizationSection = ({ extensionUrl }: Props) => {
           as described in the user guide
         </a>
         .
-        <pre className="my-4 bg-gray-50 border-2 border-gray-700 p-3">
-          {extensionUrl}
-        </pre>
       </p>
+      <pre className="my-4 bg-gray-50 border-2 border-gray-700 p-3">
+        {extensionUrl}
+      </pre>
     </section>
   );
 };
