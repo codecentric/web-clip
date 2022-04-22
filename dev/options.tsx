@@ -1,9 +1,15 @@
+import {
+  getDefaultSession,
+  handleIncomingRedirect,
+  Session,
+} from '@inrupt/solid-client-authn-browser';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { OptionsPage } from '../src/options/OptionsPage';
 
 import 'style-loader!../src/assets/content.css';
+import { OptionsPage } from '../src/options/OptionsPage';
 import { Options } from '../src/options/optionsStorageApi';
+import { Session as ChromeExtensionSession } from '../src/solid-client-authn-chrome-ext/Session';
 
 let inMemoryStorage = {
   providerUrl: '',
@@ -26,7 +32,24 @@ chrome.storage = {
 
 const root = document.getElementById('root');
 
-ReactDOM.render(
-  <OptionsPage extensionUrl="chrome-extension://extension-id" />,
-  root
-);
+async function handleRedirectAfterLogin() {
+  await handleIncomingRedirect();
+  return getDefaultSession();
+}
+
+handleRedirectAfterLogin().then((session: Session) => {
+  console.log({ session });
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore: this dev environment is no chrome extension, so we use regular browser session here
+  renderApp(session);
+});
+
+function renderApp(session: ChromeExtensionSession) {
+  ReactDOM.render(
+    <OptionsPage
+      session={session}
+      extensionUrl="chrome-extension://extension-id"
+    />,
+    root
+  );
+}
