@@ -10,12 +10,11 @@ import reducer, { ActionType, AsyncLoadingState } from './reducer';
 
 const initialState: AsyncLoadingState<Options> = {
   loading: true,
+  saved: false,
   value: { providerUrl: '' },
 };
 
 export const useOptions = () => {
-  const [saved, setSaved] = useState<boolean>(false);
-
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -34,7 +33,10 @@ export const useOptions = () => {
     });
   };
 
-  const save = () => saveOptions(state.value).then(() => setSaved(true));
+  const save = () =>
+    saveOptions(state.value).then(() =>
+      dispatch({ type: ActionType.OPTIONS_SAVED })
+    );
 
   const onLogin = async () => {
     await save();
@@ -44,7 +46,7 @@ export const useOptions = () => {
     loading: state.loading,
     ...state.value,
     setProviderUrl,
-    saved,
+    saved: state.saved,
     onLogin,
   };
 };

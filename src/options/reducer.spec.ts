@@ -9,6 +9,7 @@ describe('options reducer', () => {
       newState = reducer(
         {
           loading: true,
+          saved: false,
         },
         {
           type: ActionType.OPTIONS_LOADED,
@@ -35,6 +36,7 @@ describe('options reducer', () => {
       newState = reducer(
         {
           loading: false,
+          saved: false,
           value: {
             providerUrl: 'https://old.provider.test',
           },
@@ -48,6 +50,24 @@ describe('options reducer', () => {
 
     it('sets the new provider url', () => {
       expect(newState.value.providerUrl).toBe('https://new.provider.test');
+    });
+  });
+
+  describe('OPTIONS_SAVED', () => {
+    beforeEach(() => {
+      newState = reducer(
+        {
+          loading: false,
+          saved: false,
+        },
+        {
+          type: ActionType.OPTIONS_SAVED,
+        }
+      );
+    });
+
+    it('sets saved to true', () => {
+      expect(newState.saved).toBe(true);
     });
   });
 });
