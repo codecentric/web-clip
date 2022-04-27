@@ -26,13 +26,6 @@ export const useOptions = () => {
     });
   }, []);
 
-  const setProviderUrl = (url: string) => {
-    dispatch({
-      type: ActionType.SET_PROVIDER_URL,
-      payload: url,
-    });
-  };
-
   const save = () =>
     saveOptions(state.value).then(() =>
       dispatch({ type: ActionType.OPTIONS_SAVED })
@@ -45,8 +38,8 @@ export const useOptions = () => {
   return {
     loading: state.loading,
     ...state.value,
-    setProviderUrl,
     saved: state.saved,
     onLogin,
+    dispatch,
   };
 };

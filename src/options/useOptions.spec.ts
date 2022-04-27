@@ -1,6 +1,7 @@
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
 import { useAuthentication } from './auth/AuthenticationContext';
+import { ActionType } from './reducer';
 import { useOptions } from './useOptions';
 import { save as saveOptions, load as loadOptions } from './optionsStorageApi';
 
@@ -55,7 +56,10 @@ describe('useOptions', () => {
       await waitForNextUpdate();
 
       act(() => {
-        result.current.setProviderUrl('https://new.provider.example');
+        result.current.dispatch({
+          type: ActionType.SET_PROVIDER_URL,
+          payload: 'https://new.provider.example',
+        });
       });
 
       expect(result.current.providerUrl).toBe('https://new.provider.example');
@@ -68,7 +72,10 @@ describe('useOptions', () => {
       const { result, waitForNextUpdate } = renderHook(() => useOptions());
 
       act(() => {
-        result.current.setProviderUrl('https://new.provider.example');
+        result.current.dispatch({
+          type: ActionType.SET_PROVIDER_URL,
+          payload: 'https://new.provider.example',
+        });
       });
 
       act(() => {
