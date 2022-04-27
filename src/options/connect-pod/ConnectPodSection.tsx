@@ -1,6 +1,6 @@
 import React from 'react';
 import { useOptions } from '../useOptions';
-import { LoginButton } from './LoginButton';
+import { ConnectPodButton } from './ConnectPodButton';
 
 export const ConnectPodSection = () => {
   const { loading, providerUrl, setProviderUrl, saved, onLogin } = useOptions();
@@ -34,7 +34,7 @@ export const ConnectPodSection = () => {
           <option value="https://solidweb.org" />
         </datalist>
       </label>
-      <LoginButton oidcIssuer={providerUrl} onLogin={onLogin} />
+      <ConnectPodButton oidcIssuer={providerUrl} onLogin={onLogin} />
       {saved && (
         <div
           className="flex lg:inline-flex bg-green-100 border border-green-400 text-green-700 px-2 py-1 rounded relative"

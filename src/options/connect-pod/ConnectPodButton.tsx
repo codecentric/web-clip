@@ -7,7 +7,7 @@ interface Props {
   oidcIssuer: string;
   onLogin: (sessionInfo: ISessionInfo) => Promise<void>;
 }
-export const LoginButton = ({ oidcIssuer, onLogin }: Props) => {
+export const ConnectPodButton = ({ oidcIssuer, onLogin }: Props) => {
   const { login, loading } = useLogin(oidcIssuer, onLogin);
 
   return (
