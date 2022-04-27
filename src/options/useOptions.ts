@@ -6,54 +6,12 @@ import {
   save as saveOptions,
 } from './optionsStorageApi';
 
-interface AsyncLoadingState<T> {
-  loading: boolean;
-  value?: T;
-}
+import reducer, { ActionType, AsyncLoadingState } from './reducer';
 
 const initialState: AsyncLoadingState<Options> = {
   loading: true,
   value: { providerUrl: '' },
 };
-
-enum ActionType {
-  SET_PROVIDER_URL = 'SET_PROVIDER_URL',
-  OPTIONS_LOADED = 'OPTIONS_LOADED',
-}
-
-type Action = OptionsLoaded | SetProviderUrl;
-
-interface OptionsLoaded {
-  type: ActionType.OPTIONS_LOADED;
-  payload: Options;
-}
-
-interface SetProviderUrl {
-  type: ActionType.SET_PROVIDER_URL;
-  payload: string;
-}
-
-function reducer(
-  state: AsyncLoadingState<Options>,
-  action: Action
-): AsyncLoadingState<Options> {
-  switch (action.type) {
-    case ActionType.SET_PROVIDER_URL:
-      return {
-        ...state,
-        value: {
-          providerUrl: action.payload,
-        },
-      };
-    case ActionType.OPTIONS_LOADED:
-      return {
-        loading: false,
-        value: action.payload,
-      };
-    default:
-      throw new Error();
-  }
-}
 
 export const useOptions = () => {
   const [saved, setSaved] = useState<boolean>(false);
@@ -68,6 +26,7 @@ export const useOptions = () => {
       });
     });
   }, []);
+
   const setProviderUrl = (url: string) => {
     dispatch({
       type: ActionType.SET_PROVIDER_URL,
