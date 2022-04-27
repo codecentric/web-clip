@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { when } from 'jest-when';
 import React from 'react';
-import { LoginButton } from './LoginButton';
+import { ConnectPodButton } from './ConnectPodButton';
 import { useLogin } from './useLogin';
 
 jest.mock('./useLogin');
@@ -15,7 +15,9 @@ describe('LoginButton', () => {
         loading: false,
         login,
       });
-    render(<LoginButton oidcIssuer="http://pod.test" onLogin={() => null} />);
+    render(
+      <ConnectPodButton oidcIssuer="http://pod.test" onLogin={() => null} />
+    );
     const button = screen.getByText('Connect Pod');
     fireEvent.click(button);
     expect(login).toHaveBeenCalled();
@@ -28,7 +30,9 @@ describe('LoginButton', () => {
         loading: true,
         login: jest.fn(),
       });
-    render(<LoginButton oidcIssuer="http://pod.test" onLogin={() => null} />);
+    render(
+      <ConnectPodButton oidcIssuer="http://pod.test" onLogin={() => null} />
+    );
     expect(screen.getByText('Signing in')).toBeInTheDocument();
   });
 });
