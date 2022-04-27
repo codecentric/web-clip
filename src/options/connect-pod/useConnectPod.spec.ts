@@ -25,21 +25,6 @@ describe('useConnectPod', () => {
     });
   });
 
-  it('returns saved true', () => {
-    when(useOptions).mockReturnValue({
-      state: {
-        ...initialState,
-        saved: true,
-      },
-      save: () => null,
-      dispatch: () => null,
-    });
-    const render = renderHook(() => useConnectPod());
-    expect(render.result.current).toMatchObject({
-      saved: true,
-    });
-  });
-
   it('dispatches SET_PROVIDER_URL', () => {
     const dispatch = jest.fn();
     when(useOptions).mockReturnValue({

@@ -8,6 +8,5 @@ export const useConnectPod = () => {
       dispatch({ type: ActionType.SET_PROVIDER_URL, payload: url }),
     providerUrl: state.value.providerUrl,
     onLogin: save,
-    saved: state.saved,
   };
 };

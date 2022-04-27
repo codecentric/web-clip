@@ -31,6 +31,19 @@ export const OptionsPage = ({ session, redirectUrl, extensionUrl }: Props) => {
       <OptionsContext.Provider value={page}>
         <main className="container text-lg mx-auto p-8">
           <h1 className="text-xl font-medium my-8">Setup WebClip</h1>
+          {page.state.saved && (
+            <div
+              className="flex lg:inline-flex bg-green-100 border border-green-400 text-green-700 px-2 py-1 rounded relative"
+              role="alert"
+            >
+              <span className="flex rounded-full text-white bg-green-500 uppercase px-2 py-1 text-xs font-bold mr-3">
+                Success
+              </span>
+              <span className="block sm:inline">
+                Your settings have been saved
+              </span>
+            </div>
+          )}
           <GetAPodSection />
           <ConnectPodSection />
           <AuthorizationSection
