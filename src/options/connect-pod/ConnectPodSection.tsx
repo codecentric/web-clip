@@ -1,9 +1,10 @@
 import React from 'react';
+import { ActionType } from '../reducer';
 import { useOptions } from '../useOptions';
 import { ConnectPodButton } from './ConnectPodButton';
 
 export const ConnectPodSection = () => {
-  const { loading, providerUrl, setProviderUrl, saved, onLogin } = useOptions();
+  const { loading, providerUrl, dispatch, saved, onLogin } = useOptions();
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -22,7 +23,12 @@ export const ConnectPodSection = () => {
           list="providers"
           placeholder="Enter or select your Provider"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          onChange={(e) => setProviderUrl(e.target.value)}
+          onChange={(e) =>
+            dispatch({
+              type: ActionType.SET_PROVIDER_URL,
+              payload: e.target.value,
+            })
+          }
           value={providerUrl}
           type="url"
           required
