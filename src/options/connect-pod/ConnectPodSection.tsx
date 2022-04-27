@@ -1,13 +1,9 @@
 import React from 'react';
-import { ActionType } from '../reducer';
-import { useOptions } from '../useOptions';
 import { ConnectPodButton } from './ConnectPodButton';
+import { useConnectPod } from './useConnectPod';
 
 export const ConnectPodSection = () => {
-  const { loading, providerUrl, dispatch, saved, save } = useOptions();
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  const { setProviderUrl, providerUrl, onLogin, saved } = useConnectPod();
 
   return (
     <section>
@@ -23,12 +19,7 @@ export const ConnectPodSection = () => {
           list="providers"
           placeholder="Enter or select your Provider"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          onChange={(e) =>
-            dispatch({
-              type: ActionType.SET_PROVIDER_URL,
-              payload: e.target.value,
-            })
-          }
+          onChange={(e) => setProviderUrl(e.target.value)}
           value={providerUrl}
           type="url"
           required
@@ -40,7 +31,7 @@ export const ConnectPodSection = () => {
           <option value="https://solidweb.org" />
         </datalist>
       </label>
-      <ConnectPodButton oidcIssuer={providerUrl} onLogin={save} />
+      <ConnectPodButton oidcIssuer={providerUrl} onLogin={onLogin} />
       {saved && (
         <div
           className="flex lg:inline-flex bg-green-100 border border-green-400 text-green-700 px-2 py-1 rounded relative"

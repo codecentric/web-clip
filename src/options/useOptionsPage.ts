@@ -1,20 +1,16 @@
 import { useEffect, useReducer } from 'react';
 
-import {
-  load as loadOptions,
-  Options,
-  save as saveOptions,
-} from './optionsStorageApi';
+import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
 
-import reducer, { ActionType, AsyncLoadingState } from './reducer';
+import reducer, { ActionType, State } from './reducer';
 
-const initialState: AsyncLoadingState<Options> = {
+export const initialState: State = {
   loading: true,
   saved: false,
   value: { providerUrl: '' },
 };
 
-export const useOptions = () => {
+export const useOptionsPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -32,9 +28,7 @@ export const useOptions = () => {
     );
 
   return {
-    loading: state.loading,
-    ...state.value,
-    saved: state.saved,
+    state,
     save,
     dispatch,
   };

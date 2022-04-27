@@ -1,6 +1,6 @@
 import { Options } from './optionsStorageApi';
 
-export interface AsyncLoadingState<T> {
+interface PageState<T> {
   loading: boolean;
   saved: boolean;
   value?: T;
@@ -12,7 +12,9 @@ export enum ActionType {
   OPTIONS_SAVED = 'OPTIONS_SAVED',
 }
 
-type Action = OptionsLoaded | SetProviderUrl | OptionsSaved;
+export type State = PageState<Options>;
+export type Action = OptionsLoaded | SetProviderUrl | OptionsSaved;
+export type Dispatch = (action: Action) => void;
 
 interface OptionsLoaded {
   type: ActionType.OPTIONS_LOADED;
@@ -29,9 +31,9 @@ interface OptionsSaved {
 }
 
 export default (
-  state: AsyncLoadingState<Options>,
+  state: PageState<Options>,
   action: Action
-): AsyncLoadingState<Options> => {
+): PageState<Options> => {
   switch (action.type) {
     case ActionType.OPTIONS_LOADED:
       return {
