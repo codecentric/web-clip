@@ -36,6 +36,7 @@ export default (
       return {
         ...state,
         value: {
+          ...state.value,
           providerUrl: action.payload,
         },
       };
