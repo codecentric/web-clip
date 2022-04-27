@@ -4,7 +4,7 @@ import { useOptions } from '../useOptions';
 import { ConnectPodButton } from './ConnectPodButton';
 
 export const ConnectPodSection = () => {
-  const { loading, providerUrl, dispatch, saved, onLogin } = useOptions();
+  const { loading, providerUrl, dispatch, saved, save } = useOptions();
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -40,7 +40,7 @@ export const ConnectPodSection = () => {
           <option value="https://solidweb.org" />
         </datalist>
       </label>
-      <ConnectPodButton oidcIssuer={providerUrl} onLogin={onLogin} />
+      <ConnectPodButton oidcIssuer={providerUrl} onLogin={save} />
       {saved && (
         <div
           className="flex lg:inline-flex bg-green-100 border border-green-400 text-green-700 px-2 py-1 rounded relative"

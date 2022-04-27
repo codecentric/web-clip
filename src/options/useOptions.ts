@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import {
   load as loadOptions,
@@ -31,15 +31,11 @@ export const useOptions = () => {
       dispatch({ type: ActionType.OPTIONS_SAVED })
     );
 
-  const onLogin = async () => {
-    await save();
-  };
-
   return {
     loading: state.loading,
     ...state.value,
     saved: state.saved,
-    onLogin,
+    save,
     dispatch,
   };
 };
