@@ -80,7 +80,7 @@ describe('OptionsPage', () => {
         providerUrl: 'https://pod.provider.example',
       });
       expect(
-        await screen.findByText('Pod Provider URL saved')
+        await screen.findByText('Your settings have been saved')
       ).toBeInTheDocument();
     });
   });

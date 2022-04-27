@@ -3,7 +3,7 @@ import { ConnectPodButton } from './ConnectPodButton';
 import { useConnectPod } from './useConnectPod';
 
 export const ConnectPodSection = () => {
-  const { setProviderUrl, providerUrl, onLogin, saved } = useConnectPod();
+  const { setProviderUrl, providerUrl, onLogin } = useConnectPod();
 
   return (
     <section>
@@ -32,17 +32,6 @@ export const ConnectPodSection = () => {
         </datalist>
       </label>
       <ConnectPodButton oidcIssuer={providerUrl} onLogin={onLogin} />
-      {saved && (
-        <div
-          className="flex lg:inline-flex bg-green-100 border border-green-400 text-green-700 px-2 py-1 rounded relative"
-          role="alert"
-        >
-          <span className="flex rounded-full text-white bg-green-500 uppercase px-2 py-1 text-xs font-bold mr-3">
-            Success
-          </span>
-          <span className="block sm:inline">Pod Provider URL saved</span>
-        </div>
-      )}
     </section>
   );
 };
