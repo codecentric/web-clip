@@ -66,7 +66,7 @@ describe('useOptions', () => {
     });
   });
 
-  describe('on login', () => {
+  describe('save', () => {
     it('saves the provider url', async () => {
       (saveOptions as jest.Mock).mockResolvedValue(null);
       const { result, waitForNextUpdate } = renderHook(() => useOptions());
@@ -79,7 +79,7 @@ describe('useOptions', () => {
       });
 
       act(() => {
-        result.current.onLogin();
+        result.current.save();
       });
 
       await waitForNextUpdate();
