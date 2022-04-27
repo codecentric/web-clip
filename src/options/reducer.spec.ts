@@ -1,8 +1,7 @@
-import { Options } from './optionsStorageApi';
-import reducer, { ActionType, AsyncLoadingState } from './reducer';
+import reducer, { ActionType, State } from './reducer';
 
 describe('options reducer', () => {
-  let newState: AsyncLoadingState<Options>;
+  let newState: State;
 
   describe('OPTIONS_LOADED', () => {
     beforeEach(() => {

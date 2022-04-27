@@ -2,14 +2,14 @@ import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
 import { useAuthentication } from './auth/AuthenticationContext';
 import { ActionType } from './reducer';
-import { useOptions } from './useOptions';
+import { useOptionsPage } from './useOptionsPage';
 import { save as saveOptions, load as loadOptions } from './optionsStorageApi';
 
 jest.mock('./optionsStorageApi');
 jest.mock('./auth/AuthenticationContext');
 
-describe('useOptions', () => {
-  let renderResult: RenderResult<ReturnType<typeof useOptions>>;
+describe('useOptionsPage', () => {
+  let renderResult: RenderResult<ReturnType<typeof useOptionsPage>>;
 
   beforeEach(async () => {
     when(useAuthentication).mockReturnValue({
@@ -25,7 +25,7 @@ describe('useOptions', () => {
     (loadOptions as jest.Mock).mockResolvedValue({
       providerUrl: 'https://pod.provider.example',
     });
-    const render = renderHook(() => useOptions());
+    const render = renderHook(() => useOptionsPage());
     renderResult = render.result;
 
     await render.waitForNextUpdate();
@@ -34,42 +34,26 @@ describe('useOptions', () => {
   describe('on mount', () => {
     it('indicates loading', async () => {
       expect(renderResult.all[0]).toMatchObject({
-        loading: true,
+        state: { loading: true },
       });
     });
 
     it('returns loaded options', async () => {
       expect(renderResult.all[1]).toMatchObject({
-        loading: false,
-        providerUrl: 'https://pod.provider.example',
+        state: {
+          loading: false,
+          value: {
+            providerUrl: 'https://pod.provider.example',
+          },
+        },
       });
-    });
-  });
-
-  describe('change provider url', () => {
-    it('updates the value', async () => {
-      (loadOptions as jest.Mock).mockResolvedValue({
-        providerUrl: 'https://pod.provider.example',
-      });
-      const { result, waitForNextUpdate } = renderHook(() => useOptions());
-
-      await waitForNextUpdate();
-
-      act(() => {
-        result.current.dispatch({
-          type: ActionType.SET_PROVIDER_URL,
-          payload: 'https://new.provider.example',
-        });
-      });
-
-      expect(result.current.providerUrl).toBe('https://new.provider.example');
     });
   });
 
   describe('save', () => {
     it('saves the provider url', async () => {
       (saveOptions as jest.Mock).mockResolvedValue(null);
-      const { result, waitForNextUpdate } = renderHook(() => useOptions());
+      const { result, waitForNextUpdate } = renderHook(() => useOptionsPage());
 
       act(() => {
         result.current.dispatch({
@@ -87,7 +71,7 @@ describe('useOptions', () => {
       expect(saveOptions).toHaveBeenCalledWith({
         providerUrl: 'https://new.provider.example',
       });
-      expect(result.current.saved).toBe(true);
+      expect(result.current.state.saved).toBe(true);
     });
   });
 });
