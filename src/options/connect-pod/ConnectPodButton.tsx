@@ -5,7 +5,7 @@ import { useLogin } from './useLogin';
 
 interface Props {
   oidcIssuer: string;
-  onLogin: (sessionInfo: ISessionInfo) => Promise<void>;
+  onLogin: (sessionInfo: ISessionInfo) => void;
 }
 export const ConnectPodButton = ({ oidcIssuer, onLogin }: Props) => {
   const { login, loading } = useLogin(oidcIssuer, onLogin);

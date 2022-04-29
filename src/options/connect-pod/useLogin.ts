@@ -4,7 +4,7 @@ import { useAuthentication } from '../auth/AuthenticationContext';
 
 export const useLogin = (
   oidcIssuer: string,
-  onLogin: (sessionInfo: ISessionInfo) => Promise<void>
+  onLogin: (sessionInfo: ISessionInfo) => void
 ) => {
   const [loading, setLoading] = useState(false);
   const { session, redirectUrl } = useAuthentication();

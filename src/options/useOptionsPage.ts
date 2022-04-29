@@ -7,6 +7,10 @@ import reducer, { ActionType, State } from './reducer';
 export const initialState: State = {
   loading: true,
   saved: false,
+  sessionInfo: {
+    sessionId: '',
+    isLoggedIn: false,
+  },
   value: { providerUrl: '' },
 };
 
@@ -22,14 +26,16 @@ export const useOptionsPage = () => {
     });
   }, []);
 
-  const save = () =>
-    saveOptions(state.value).then(() =>
-      dispatch({ type: ActionType.OPTIONS_SAVED })
-    );
+  useEffect(() => {
+    if (state.sessionInfo.isLoggedIn) {
+      saveOptions(state.value).then(() =>
+        dispatch({ type: ActionType.OPTIONS_SAVED })
+      );
+    }
+  }, [state.sessionInfo.isLoggedIn]);
 
   return {
     state,
-    save,
     dispatch,
   };
 };
