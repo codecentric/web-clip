@@ -11,7 +11,7 @@ const session = new Session();
 let messageHandler: MessageHandler = null;
 let providerUrl: string = null;
 
-subscribeOption('providerUrl', (value) => {
+subscribeOption('providerUrl', (value: string) => {
   console.log('providerUrl changed from', providerUrl, 'to', value);
   providerUrl = value;
   return session.logout();

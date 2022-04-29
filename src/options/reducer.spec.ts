@@ -11,12 +11,14 @@ describe('options reducer', () => {
           ...initialState,
           loading: true,
           value: {
+            trustedApp: false,
             providerUrl: '',
           },
         },
         {
           type: ActionType.OPTIONS_LOADED,
           payload: {
+            trustedApp: true,
             providerUrl: 'https://pod.provider.test',
           },
         }
@@ -29,6 +31,7 @@ describe('options reducer', () => {
 
     it('updates the option values', () => {
       expect(newState.value).toEqual({
+        trustedApp: true,
         providerUrl: 'https://pod.provider.test',
       });
     });
@@ -69,6 +72,10 @@ describe('options reducer', () => {
     it('sets saved to true', () => {
       expect(newState.saved).toBe(true);
     });
+
+    it('resets unsaved changes indication', () => {
+      expect(newState.unsavedChanges).toBe(false);
+    });
   });
 
   describe('LOGGED_IN', () => {
@@ -89,6 +96,31 @@ describe('options reducer', () => {
         webId: 'https://alice.test#me',
         isLoggedIn: true,
       });
+    });
+
+    it('indicates unsaved changes', () => {
+      expect(newState.unsavedChanges).toBe(true);
+    });
+  });
+  describe('TRUSTED_APP', () => {
+    beforeEach(() => {
+      newState = reducer(
+        {
+          ...initialState,
+          value: { ...initialState.value, trustedApp: false },
+        },
+        {
+          type: ActionType.TRUSTED_APP,
+        }
+      );
+    });
+
+    it('sets session info', () => {
+      expect(newState.value.trustedApp).toBe(true);
+    });
+
+    it('indicates unsaved changes', () => {
+      expect(newState.unsavedChanges).toBe(true);
     });
   });
 });
