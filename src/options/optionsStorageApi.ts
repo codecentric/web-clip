@@ -1,11 +1,19 @@
 import { onOptionChange } from './onOptionChange';
 
 export interface Options {
+  /**
+   * URL of the chosen OIDC provider
+   */
   providerUrl: string;
+  /**
+   * whether WebClip is a trusted app with the required permissions in the connected pod
+   */
+  trustedApp: boolean;
 }
 
 const defaultsOptions: Options = {
   providerUrl: '',
+  trustedApp: false,
 };
 
 export const save = (options: Options): Promise<Options> => {
@@ -28,7 +36,7 @@ export const load = (): Promise<Options> => {
 
 export const subscribeOption = (
   key: keyof Options,
-  callback: (value: string) => void
+  callback: (value: Options[typeof key]) => void
 ) => {
   load().then((options) => callback(options[key]));
   chrome.storage.onChanged.addListener(onOptionChange(key, callback));
