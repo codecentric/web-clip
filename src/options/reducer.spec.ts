@@ -1,4 +1,5 @@
 import reducer, { ActionType, State } from './reducer';
+import { initialState } from './useOptionsPage';
 
 describe('options reducer', () => {
   let newState: State;
@@ -7,8 +8,11 @@ describe('options reducer', () => {
     beforeEach(() => {
       newState = reducer(
         {
+          ...initialState,
           loading: true,
-          saved: false,
+          value: {
+            providerUrl: '',
+          },
         },
         {
           type: ActionType.OPTIONS_LOADED,
@@ -34,9 +38,9 @@ describe('options reducer', () => {
     beforeEach(() => {
       newState = reducer(
         {
-          loading: false,
-          saved: false,
+          ...initialState,
           value: {
+            ...initialState.value,
             providerUrl: 'https://old.provider.test',
           },
         },
@@ -55,10 +59,7 @@ describe('options reducer', () => {
   describe('OPTIONS_SAVED', () => {
     beforeEach(() => {
       newState = reducer(
-        {
-          loading: false,
-          saved: false,
-        },
+        { ...initialState, saved: false },
         {
           type: ActionType.OPTIONS_SAVED,
         }
@@ -67,6 +68,27 @@ describe('options reducer', () => {
 
     it('sets saved to true', () => {
       expect(newState.saved).toBe(true);
+    });
+  });
+
+  describe('LOGGED_IN', () => {
+    beforeEach(() => {
+      newState = reducer(initialState, {
+        type: ActionType.LOGGED_IN,
+        payload: {
+          sessionId: '1',
+          webId: 'https://alice.test#me',
+          isLoggedIn: true,
+        },
+      });
+    });
+
+    it('sets session info', () => {
+      expect(newState.sessionInfo).toEqual({
+        sessionId: '1',
+        webId: 'https://alice.test#me',
+        isLoggedIn: true,
+      });
     });
   });
 });
