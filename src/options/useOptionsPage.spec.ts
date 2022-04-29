@@ -50,8 +50,8 @@ describe('useOptionsPage', () => {
     });
   });
 
-  describe('save', () => {
-    it('saves the provider url', async () => {
+  describe('save options', () => {
+    it('saves the provider url after login', async () => {
       (saveOptions as jest.Mock).mockResolvedValue(null);
       const { result, waitForNextUpdate } = renderHook(() => useOptionsPage());
 
@@ -63,7 +63,14 @@ describe('useOptionsPage', () => {
       });
 
       act(() => {
-        result.current.save();
+        result.current.dispatch({
+          type: ActionType.LOGGED_IN,
+          payload: {
+            sessionId: 'test-session',
+            webId: 'https://alice.test#me',
+            isLoggedIn: true,
+          },
+        });
       });
 
       await waitForNextUpdate();

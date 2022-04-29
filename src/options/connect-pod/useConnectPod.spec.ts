@@ -16,7 +16,6 @@ describe('useConnectPod', () => {
           providerUrl: 'https://provider.test',
         },
       },
-      save: () => null,
       dispatch: () => null,
     });
     const render = renderHook(() => useConnectPod());
@@ -31,7 +30,6 @@ describe('useConnectPod', () => {
       state: {
         ...initialState,
       },
-      save: () => null,
       dispatch,
     });
     const render = renderHook(() => useConnectPod());
@@ -42,17 +40,28 @@ describe('useConnectPod', () => {
     });
   });
 
-  it('saves on login', () => {
-    const save = jest.fn();
+  it('dispatches session info on login', () => {
+    const dispatch = jest.fn();
     when(useOptions).mockReturnValue({
       state: {
         ...initialState,
       },
-      save,
-      dispatch: () => null,
+      dispatch,
     });
     const render = renderHook(() => useConnectPod());
-    render.result.current.onLogin();
-    expect(save).toHaveBeenCalled();
+    render.result.current.onLogin({
+      isLoggedIn: true,
+      webId: 'https://alice.test#me',
+      sessionId: '1',
+    });
+
+    expect(dispatch).toHaveBeenCalledWith({
+      type: ActionType.LOGGED_IN,
+      payload: {
+        isLoggedIn: true,
+        webId: 'https://alice.test#me',
+        sessionId: '1',
+      },
+    });
   });
 });

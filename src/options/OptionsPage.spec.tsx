@@ -27,6 +27,10 @@ describe('OptionsPage', () => {
       when(useAuthentication).mockReturnValue({
         session: {
           login: (): null => null,
+          info: {
+            sessionId: 'test-session',
+            isLoggedIn: false,
+          },
         },
         redirectUrl: '',
       });
@@ -64,6 +68,17 @@ describe('OptionsPage', () => {
     });
 
     it('should save the pod provider url and provide a confirmation message', async () => {
+      when(useAuthentication).mockReturnValue({
+        session: {
+          login: (): null => null,
+          info: {
+            sessionId: 'test-session',
+            isLoggedIn: true,
+            webId: 'http://alice.test#me',
+          },
+        },
+        redirectUrl: '',
+      });
       render(<OptionsPage redirectUrl="" session={null} extensionUrl="" />);
       const input = await screen.findByLabelText('Pod Provider URL');
       fireEvent.change(input, {
