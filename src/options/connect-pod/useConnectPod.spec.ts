@@ -13,6 +13,7 @@ describe('useConnectPod', () => {
       state: {
         ...initialState,
         value: {
+          ...initialState.value,
           providerUrl: 'https://provider.test',
         },
       },
