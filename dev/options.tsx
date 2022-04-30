@@ -13,6 +13,7 @@ import { Session as ChromeExtensionSession } from '../src/solid-client-authn-chr
 
 let inMemoryStorage = {
   providerUrl: '',
+  trustedApp: false,
 };
 
 chrome.storage = {
