@@ -2,6 +2,9 @@ import { IndexedFormula, sym, Namespace } from 'rdflib';
 
 const acl = Namespace('http://www.w3.org/ns/auth/acl#');
 
+/**
+ * User profile related queries to a rdflib store
+ */
 export class ProfileStore {
   private store: IndexedFormula;
 
