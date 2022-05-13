@@ -1,4 +1,4 @@
-import { Fetcher, LiveStore, UpdateManager } from 'rdflib';
+import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -12,9 +12,10 @@ console.log('You are in the options!');
 const extensionUrl = chrome.extension.getURL('').slice(0, -1);
 
 const session = new Session();
-const updater = new UpdateManager();
-const fetcher = new Fetcher(updater.store, { fetch: session.fetch });
-const profileApi = new ProfileApi(session, fetcher.store as LiveStore);
+const store = graph();
+new UpdateManager(store);
+new Fetcher(store, { fetch: session.fetch });
+const profileApi = new ProfileApi(session, store as LiveStore);
 
 ReactDOM.render(
   <OptionsPage
