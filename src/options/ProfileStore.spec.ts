@@ -1,12 +1,12 @@
 import { graph, parse } from 'rdflib';
-import { OptionsStore } from './OptionsStore';
+import { ProfileStore } from './ProfileStore';
 
-describe('OptionsStore', () => {
+describe('ProfileStore', () => {
   describe('checkAccessPermissions', () => {
     it('returns false if store is empty', () => {
       const store = graph();
-      const optionsStore = new OptionsStore(store);
-      const result = optionsStore.checkAccessPermissions(
+      const profileStore = new ProfileStore(store);
+      const result = profileStore.checkAccessPermissions(
         'https://pod.test/alice#me',
         'chrome-extension://extension-id'
       );
@@ -25,8 +25,8 @@ describe('OptionsStore', () => {
         store,
         'https://pod.test/alice'
       );
-      const optionsStore = new OptionsStore(store);
-      const result = optionsStore.checkAccessPermissions(
+      const profileStore = new ProfileStore(store);
+      const result = profileStore.checkAccessPermissions(
         'https://pod.test/alice#me',
         'chrome-extension://extension-id'
       );
@@ -46,8 +46,8 @@ describe('OptionsStore', () => {
         store,
         'https://pod.test/alice'
       );
-      const optionsStore = new OptionsStore(store);
-      const result = optionsStore.checkAccessPermissions(
+      const profileStore = new ProfileStore(store);
+      const result = profileStore.checkAccessPermissions(
         'https://pod.test/alice#me',
         'chrome-extension://extension-id'
       );
@@ -67,8 +67,8 @@ describe('OptionsStore', () => {
         store,
         'https://pod.test/alice'
       );
-      const optionsStore = new OptionsStore(store);
-      const result = optionsStore.checkAccessPermissions(
+      const profileStore = new ProfileStore(store);
+      const result = profileStore.checkAccessPermissions(
         'https://pod.test/alice#me',
         'chrome-extension://extension-id'
       );
@@ -88,8 +88,8 @@ describe('OptionsStore', () => {
         store,
         'https://pod.test/alice'
       );
-      const optionsStore = new OptionsStore(store);
-      const result = optionsStore.checkAccessPermissions(
+      const profileStore = new ProfileStore(store);
+      const result = profileStore.checkAccessPermissions(
         'https://pod.test/alice#me',
         'chrome-extension://extension-id'
       );
@@ -109,8 +109,8 @@ describe('OptionsStore', () => {
         store,
         'https://pod.test/alice'
       );
-      const optionsStore = new OptionsStore(store);
-      const result = optionsStore.checkAccessPermissions(
+      const profileStore = new ProfileStore(store);
+      const result = profileStore.checkAccessPermissions(
         'https://pod.test/alice#me',
         'chrome-extension://extension-id'
       );
@@ -130,8 +130,8 @@ describe('OptionsStore', () => {
         store,
         'https://pod.test/alice'
       );
-      const optionsStore = new OptionsStore(store);
-      const result = optionsStore.checkAccessPermissions(
+      const profileStore = new ProfileStore(store);
+      const result = profileStore.checkAccessPermissions(
         'https://pod.test/alice#me',
         'chrome-extension://extension-id'
       );
@@ -151,8 +151,8 @@ describe('OptionsStore', () => {
         store,
         'https://pod.test/bob'
       );
-      const optionsStore = new OptionsStore(store);
-      const result = optionsStore.checkAccessPermissions(
+      const profileStore = new ProfileStore(store);
+      const result = profileStore.checkAccessPermissions(
         'https://pod.test/alice#me',
         'chrome-extension://extension-id'
       );
