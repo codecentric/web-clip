@@ -1,6 +1,6 @@
 import { IndexedFormula, sym, Namespace } from 'rdflib';
 
-const acl = Namespace('http://www.w3.org/ns/auth/acl#')
+const acl = Namespace('http://www.w3.org/ns/auth/acl#');
 
 export class OptionsStore {
   private store: IndexedFormula;
@@ -9,6 +9,13 @@ export class OptionsStore {
     this.store = store;
   }
 
+  /**
+   * Checks whether the user identified by the given Web ID has granted all the
+   * required permissions to the WebClip extension identified by the given origin
+   *
+   * @param webId The Web ID of the user, whose profile document is checked
+   * @param extensionOrigin The origin of the extension whose permissions are checked
+   */
   checkAccessPermissions(webId: string, extensionOrigin: string) {
     const profileDoc = sym(webId).doc();
     const trustedApp = this.store.anyStatementMatching(

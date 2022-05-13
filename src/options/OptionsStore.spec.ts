@@ -1,4 +1,4 @@
-import { blankNode, graph, parse, sym } from 'rdflib';
+import { graph, parse } from 'rdflib';
 import { OptionsStore } from './OptionsStore';
 
 describe('OptionsStore', () => {

@@ -1,19 +1,23 @@
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
 import { useAuthentication } from './auth/AuthenticationContext';
+import { ProfileApi } from './ProfileApi';
 import { ActionType } from './reducer';
 import { useOptionsPage } from './useOptionsPage';
 import { save as saveOptions, load as loadOptions } from './optionsStorageApi';
-import { checkAccessPermissions } from './checkAccessPermissions';
 
 jest.mock('./optionsStorageApi');
-jest.mock('./checkAccessPermissions');
 jest.mock('./auth/AuthenticationContext');
 
 describe('useOptionsPage', () => {
   let renderResult: RenderResult<ReturnType<typeof useOptionsPage>>;
 
+  let profileApi: ProfileApi;
+
   beforeEach(async () => {
+    profileApi = {
+      hasGrantedAccessTo: jest.fn(),
+    } as unknown as ProfileApi;
     when(useAuthentication).mockReturnValue({
       session: {
         info: {
@@ -32,7 +36,9 @@ describe('useOptionsPage', () => {
 
   describe('on mount', () => {
     beforeEach(async () => {
-      const render = renderHook(() => useOptionsPage());
+      const render = renderHook(() =>
+        useOptionsPage('chrome-extension://extension-id', profileApi)
+      );
       renderResult = render.result;
       await render.waitForNextUpdate();
     });
@@ -60,10 +66,12 @@ describe('useOptionsPage', () => {
       (saveOptions as jest.Mock).mockResolvedValue(null);
 
       // given access permissions are already granted
-      (checkAccessPermissions as jest.Mock).mockResolvedValue(true);
+      when(profileApi.hasGrantedAccessTo)
+        .calledWith('chrome-extension://extension-id')
+        .mockResolvedValue(true);
 
       const { result, waitForNextUpdate, waitFor } = renderHook(() =>
-        useOptionsPage()
+        useOptionsPage('chrome-extension://extension-id', profileApi)
       );
 
       await waitFor(() => !result.current.state.loading);
@@ -115,10 +123,12 @@ describe('useOptionsPage', () => {
       (saveOptions as jest.Mock).mockResolvedValue(null);
 
       // given access permissions are missing
-      (checkAccessPermissions as jest.Mock).mockResolvedValue(false);
+      when(profileApi.hasGrantedAccessTo)
+        .calledWith('chrome-extension://extension-id')
+        .mockResolvedValue(false);
 
       const { result, waitFor, waitForNextUpdate } = renderHook(() =>
-        useOptionsPage()
+        useOptionsPage('chrome-extension://extension-id', profileApi)
       );
 
       await waitFor(() => !result.current.state.loading);
