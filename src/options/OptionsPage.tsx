@@ -6,7 +6,7 @@ import { ConnectPodSection } from './connect-pod/ConnectPodSection';
 import { GetAPodSection } from './get-a-pod/GetAPodSection';
 import { HelpSection } from './HelpSection';
 import { OptionsContext } from './OptionsContext';
-import { ProfileApi } from './ProfileApi';
+import { ProfileApi } from './api/ProfileApi';
 import { useOptionsPage } from './useOptionsPage';
 
 interface Props {

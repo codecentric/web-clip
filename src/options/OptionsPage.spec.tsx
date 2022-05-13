@@ -5,7 +5,7 @@ import React from 'react';
 import { useAuthentication } from './auth/AuthenticationContext';
 import { OptionsPage } from './OptionsPage';
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
-import { ProfileApi } from './ProfileApi';
+import { ProfileApi } from './api/ProfileApi';
 
 jest.mock('./optionsStorageApi');
 jest.mock('./auth/AuthenticationContext');
