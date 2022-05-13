@@ -2,6 +2,7 @@
 @prefix solid: <http://www.w3.org/ns/solid/terms#>.
 @prefix pim:       <http://www.w3.org/ns/pim/space#> .
 
+@prefix acl: <http://www.w3.org/ns/auth/acl#> .
 
 <>
     a foaf:PersonalProfileDocument;
@@ -15,4 +16,8 @@
             <http://localhost:3000/>;
     pim:storage
             </>;
+    acl:trustedApp [
+        acl:origin <chrome-extension://jjmieagjdpgikkkcnpagkbdldcalmola> ;
+        acl:mode acl:Read, acl:Write, acl:Append ;
+    ]
 .
