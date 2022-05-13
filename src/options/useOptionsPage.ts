@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from 'react';
 
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
-import { ProfileApi } from './ProfileApi';
+import { ProfileApi } from './api/ProfileApi';
 
 import reducer, { ActionType, State } from './reducer';
 

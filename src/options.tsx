@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 import 'style-loader!./assets/options.css';
 import { OptionsPage } from './options/OptionsPage';
-import { ProfileApi } from './options/ProfileApi';
+import { ProfileApi } from './options/api/ProfileApi';
 import { Session } from './solid-client-authn-chrome-ext/Session';
 
 console.log('You are in the options!');

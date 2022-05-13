@@ -1,7 +1,7 @@
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
 import { useAuthentication } from './auth/AuthenticationContext';
-import { ProfileApi } from './ProfileApi';
+import { ProfileApi } from './api/ProfileApi';
 import { ActionType } from './reducer';
 import { useOptionsPage } from './useOptionsPage';
 import { save as saveOptions, load as loadOptions } from './optionsStorageApi';

@@ -1,5 +1,5 @@
 import { LiveStore } from 'rdflib';
-import { Session } from '../solid-client-authn-chrome-ext/Session';
+import { Session } from '../../solid-client-authn-chrome-ext/Session';
 import { ProfileStore } from './ProfileStore';
 
 export class ProfileApi {
