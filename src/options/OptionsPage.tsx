@@ -6,16 +6,23 @@ import { ConnectPodSection } from './connect-pod/ConnectPodSection';
 import { GetAPodSection } from './get-a-pod/GetAPodSection';
 import { HelpSection } from './HelpSection';
 import { OptionsContext } from './OptionsContext';
+import { ProfileApi } from './ProfileApi';
 import { useOptionsPage } from './useOptionsPage';
 
 interface Props {
   session: Session;
   redirectUrl: string;
   extensionUrl: string;
+  profileApi: ProfileApi;
 }
 
-export const OptionsPage = ({ session, redirectUrl, extensionUrl }: Props) => {
-  const page = useOptionsPage();
+export const OptionsPage = ({
+  session,
+  redirectUrl,
+  extensionUrl,
+  profileApi,
+}: Props) => {
+  const page = useOptionsPage(extensionUrl, profileApi);
 
   if (page.state.loading) {
     return <p>Loading...</p>;
