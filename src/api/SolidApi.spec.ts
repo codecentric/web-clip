@@ -1,7 +1,7 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
-import { Parser as SparqlParser, Update } from 'sparqljs';
 import { Store } from '../store/Store';
 import { givenStoreContaining } from '../test/givenStoreContaining';
+import { thenSparqlUpdateIsSentToUrl } from '../test/thenSparqlUpdateIsSentToUrl';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
 import { Bookmark, SolidApi } from './SolidApi';
@@ -617,28 +617,6 @@ function givenGeneratedUuidWillBe(value: string) {
 
 function givenNowIs(timestamp: number) {
   (now as jest.Mock).mockReturnValue(new Date(timestamp));
-}
-
-function thenSparqlUpdateIsSentToUrl(
-  authenticatedFetch: jest.Mock,
-  url: string,
-  query: string
-) {
-  expect(authenticatedFetch).toHaveBeenCalled();
-
-  const parser = new SparqlParser();
-
-  const calls = (authenticatedFetch as jest.Mock).mock.calls;
-  const sparqlUpdateCall = calls.find(
-    (it) => it[0] === url && it[1].method === 'PATCH'
-  );
-
-  expect(sparqlUpdateCall).toBeDefined();
-
-  const body = sparqlUpdateCall[1].body;
-  const actualQuery = parser.parse(body) as Update;
-  const expectedQuery = parser.parse(query) as Update;
-  expect(actualQuery).toEqual(expectedQuery);
 }
 
 function thenNoSparqlUpdateIsSentToUrl(
