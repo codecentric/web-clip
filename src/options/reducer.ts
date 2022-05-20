@@ -65,6 +65,7 @@ export default (
         ...state,
         value: {
           ...state.value,
+          trustedApp: false,
           providerUrl: action.payload,
         },
       };

@@ -144,6 +144,7 @@ describe('OptionsPage', () => {
 
       expect(saveOptions).toHaveBeenCalledWith({
         providerUrl: 'https://pod.provider.example',
+        trustedApp: false,
       });
       expect(
         await screen.findByText('Your settings have been saved')
