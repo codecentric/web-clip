@@ -2,10 +2,15 @@ import React from 'react';
 
 interface Props {
   extensionUrl: string;
+  providerUrl: string;
   trusted: boolean;
 }
 
-export const AuthorizationSection = ({ extensionUrl, trusted }: Props) => {
+export const AuthorizationSection = ({
+  extensionUrl,
+  providerUrl,
+  trusted,
+}: Props) => {
   return (
     <section>
       <h2 className="text-lg font-medium my-8">3) Authorize Access</h2>
@@ -27,6 +32,15 @@ export const AuthorizationSection = ({ extensionUrl, trusted }: Props) => {
             <pre className="my-4 bg-gray-50 border-2 border-gray-700 p-3">
               {extensionUrl}
             </pre>
+            or do it automatically:{' '}
+            <a
+              target="_blank"
+              className="text-blue-600 hover:underline"
+              href={`${providerUrl}/.web-clip/${chrome.runtime.id}`}
+              rel="noreferrer"
+            >
+              Trust WebClip
+            </a>
           </>
         )}
       </p>
