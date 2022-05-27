@@ -3,6 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import contentCss from './assets/content.css';
+import { renderAuthorizationPage } from './content/authorization-page';
+import { isOnAuthorizationPage } from './content/authorization-page/isOnAuthorizationPage';
 import { ChromeMessageListener } from './content/ChromeMessageListener';
 import { WebClip } from './content/WebClip';
 import { MessageType } from './messages';
@@ -17,20 +19,34 @@ styleTag.innerHTML = contentCss;
 shadowRoot.appendChild(styleTag);
 shadowRoot.appendChild(container);
 
-const chromeMessageListener = new ChromeMessageListener();
+const extensionId = chrome.runtime.id;
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  switch (request.type) {
-    case MessageType.ACTIVATE: {
-      const { providerUrl, ...sessionInfo } = request.payload;
-      renderApp(sessionInfo, providerUrl);
-      break;
+if (isOnAuthorizationPage(extensionId)) {
+  renderAuthorizationPage(extensionId, root, container);
+} else {
+  const chromeMessageListener = new ChromeMessageListener();
+
+  chrome.runtime.onMessage.addListener(function (
+    request,
+    sender,
+    sendResponse
+  ) {
+    switch (request.type) {
+      case MessageType.ACTIVATE: {
+        const { providerUrl, ...sessionInfo } = request.payload;
+        renderApp(chromeMessageListener, sessionInfo, providerUrl);
+        break;
+      }
     }
-  }
-  sendResponse();
-});
+    sendResponse();
+  });
+}
 
-function renderApp(sessionInfo: ISessionInfo, providerUrl: string) {
+function renderApp(
+  chromeMessageListener: ChromeMessageListener,
+  sessionInfo: ISessionInfo,
+  providerUrl: string
+) {
   ReactDOM.render(
     <WebClip
       chromeMessageListener={chromeMessageListener}
