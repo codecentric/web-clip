@@ -55,6 +55,7 @@ export const OptionsPage = ({
           <ConnectPodSection />
           <AuthorizationSection
             extensionUrl={extensionUrl}
+            providerUrl={page.state.value.providerUrl}
             trusted={page.state.value.trustedApp}
           ></AuthorizationSection>
           <HelpSection></HelpSection>
