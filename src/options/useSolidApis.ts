@@ -1,16 +1,16 @@
 import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
 import { useEffect, useState } from 'react';
-import { Session } from '../solid-client-authn-chrome-ext/Session';
 import { ProfileApi } from './api/ProfileApi';
+import { SolidSession } from './api/SolidSession';
 
-function initializeApi(session: Session) {
+function initializeApi(session: SolidSession) {
   const store = graph();
   new UpdateManager(store);
   new Fetcher(store, { fetch: session.fetch });
   return new ProfileApi(session, store as LiveStore);
 }
 
-export const useSolidApis = (session: Session) => {
+export const useSolidApis = (session: SolidSession) => {
   const [profileApi, setProfileApi] = useState(() => {
     return initializeApi(session);
   });

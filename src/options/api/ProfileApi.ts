@@ -1,6 +1,6 @@
 import { Fetcher, LiveStore, Namespace, st, sym, UpdateManager } from 'rdflib';
-import { Session } from '../../solid-client-authn-chrome-ext/Session';
 import { ProfileStore } from './ProfileStore';
+import { SolidSession } from './SolidSession';
 
 const acl = Namespace('http://www.w3.org/ns/auth/acl#');
 
@@ -12,7 +12,7 @@ export class ProfileApi {
   private fetcher: Fetcher;
   private updater: UpdateManager;
 
-  constructor(private session: Session, liveStore: LiveStore) {
+  constructor(private session: SolidSession, liveStore: LiveStore) {
     this.store = new ProfileStore(liveStore);
     this.fetcher = liveStore.fetcher;
     this.updater = liveStore.updater;
