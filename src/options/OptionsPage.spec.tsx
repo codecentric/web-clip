@@ -117,8 +117,8 @@ describe('OptionsPage', () => {
           login: (): null => null,
           info: {
             sessionId: 'test-session',
-            isLoggedIn: true,
-            webId: 'http://alice.test#me',
+            isLoggedIn: false,
+            webId: '',
           },
         },
         redirectUrl: '',
