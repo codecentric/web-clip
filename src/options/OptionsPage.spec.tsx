@@ -146,9 +146,7 @@ describe('OptionsPage', () => {
         providerUrl: 'https://pod.provider.example',
         trustedApp: false,
       });
-      expect(
-        await screen.findByText('Your settings have been saved')
-      ).toBeInTheDocument();
+      expect(await screen.findByText('All settings saved')).toBeInTheDocument();
     });
   });
 });
