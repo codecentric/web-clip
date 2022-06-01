@@ -27,6 +27,9 @@ export const OptionsPage = ({
     return <p>Loading...</p>;
   }
 
+  const trustedApp = page.state.value.trustedApp;
+  const isLoggedIn = page.state.sessionInfo.isLoggedIn;
+
   return (
     <AuthenticationContext.Provider
       value={{
@@ -50,15 +53,15 @@ export const OptionsPage = ({
               </span>
             </div>
           )}
-          {!page.state.value.trustedApp && <ConnectPodSection />}
-          {!page.state.value.trustedApp && (
+          {!isLoggedIn && !trustedApp && <ConnectPodSection />}
+          {isLoggedIn && !trustedApp && (
             <AuthorizationSection
               extensionUrl={extensionUrl}
               providerUrl={page.state.value.providerUrl}
             ></AuthorizationSection>
           )}
 
-          {page.state.value.trustedApp && <ConnectionEstablished />}
+          {trustedApp && <ConnectionEstablished />}
         </main>
       </OptionsContext.Provider>
     </AuthenticationContext.Provider>
