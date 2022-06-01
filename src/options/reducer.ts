@@ -15,6 +15,7 @@ export enum ActionType {
   OPTIONS_SAVED = 'OPTIONS_SAVED',
   LOGGED_IN = 'LOGGED_IN',
   TRUSTED_APP = 'TRUSTED_APP',
+  DISCONNECTED_POD = 'DISCONNECTED_POD',
 }
 
 export type State = PageState<Options>;
@@ -23,7 +24,8 @@ export type Action =
   | SetProviderUrl
   | OptionsSaved
   | LoggedIn
-  | TrustedApp;
+  | TrustedApp
+  | DisconnectedPod;
 export type Dispatch = (action: Action) => void;
 
 interface OptionsLoaded {
@@ -47,6 +49,10 @@ interface OptionsSaved {
 
 interface TrustedApp {
   type: ActionType.TRUSTED_APP;
+}
+
+interface DisconnectedPod {
+  type: ActionType.DISCONNECTED_POD;
 }
 
 export default (
@@ -88,6 +94,15 @@ export default (
         value: {
           ...state.value,
           trustedApp: true,
+        },
+      };
+    case ActionType.DISCONNECTED_POD:
+      return {
+        ...state,
+        unsavedChanges: true,
+        value: {
+          ...state.value,
+          trustedApp: false,
         },
       };
   }
