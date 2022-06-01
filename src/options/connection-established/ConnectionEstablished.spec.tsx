@@ -1,8 +1,7 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { when } from 'jest-when';
 import React from 'react';
-
-import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
 import { ConnectionEstablished } from './ConnectionEstablished';
 import { useConnectionEstablished } from './useConnectionEstablished';

@@ -1,6 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
-import { useConnectPod } from '../connect-pod/useConnectPod';
 import { useOptions } from '../OptionsContext';
 import { ActionType } from '../reducer';
 import { initialState } from '../useOptionsPage';
