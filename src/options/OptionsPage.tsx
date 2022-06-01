@@ -5,7 +5,6 @@ import { AuthenticationContext } from './auth/AuthenticationContext';
 import { AuthorizationSection } from './AuthorizationSection';
 import { ConnectPodSection } from './connect-pod/ConnectPodSection';
 import { ConnectionEstablished } from './connection-established/ConnectionEstablished';
-import { GetAPodSection } from './get-a-pod/GetAPodSection';
 import { OptionsContext } from './OptionsContext';
 import { useOptionsPage } from './useOptionsPage';
 
@@ -51,7 +50,6 @@ export const OptionsPage = ({
               </span>
             </div>
           )}
-          {!page.state.value.trustedApp && <GetAPodSection />}
           {!page.state.value.trustedApp && <ConnectPodSection />}
           {!page.state.value.trustedApp && (
             <AuthorizationSection

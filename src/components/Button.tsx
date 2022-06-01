@@ -13,9 +13,9 @@ export const Button: FunctionComponent<Props> = ({
   loadingLabel,
 }) => {
   const loadingClass =
-    'animate-pulse my-1 px-4 py-2 bg-green-400 rounded text-white font-bold';
+    'whitespace-nowrap animate-pulse my-1 px-4 py-2 bg-green-400 rounded text-white font-bold';
   const defaultClass =
-    'my-1 px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold';
+    'whitespace-nowrap my-1 px-4 py-2 bg-blue-400 rounded text-white hover:opacity-90 font-bold';
   return (
     <button
       className={loading ? loadingClass : defaultClass}
