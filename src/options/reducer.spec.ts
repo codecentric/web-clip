@@ -128,4 +128,34 @@ describe('options reducer', () => {
       expect(newState.unsavedChanges).toBe(true);
     });
   });
+
+  describe('DISCONNECTED_POD', () => {
+    beforeEach(() => {
+      newState = reducer(
+        {
+          ...initialState,
+          value: {
+            ...initialState.value,
+            trustedApp: true,
+            providerUrl: 'https://old.provider.test',
+          },
+        },
+        {
+          type: ActionType.DISCONNECTED_POD,
+        }
+      );
+    });
+
+    it('keeps provider url', () => {
+      expect(newState.value.providerUrl).toBe('https://old.provider.test');
+    });
+
+    it('resets the pod trust', () => {
+      expect(newState.value.trustedApp).toBe(false);
+    });
+
+    it('indicates unsaved changes', () => {
+      expect(newState.unsavedChanges).toBe(true);
+    });
+  });
 });

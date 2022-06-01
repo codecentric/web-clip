@@ -1,12 +1,12 @@
 import React from 'react';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
+import { ProfileApi } from './api/ProfileApi';
 import { AuthenticationContext } from './auth/AuthenticationContext';
 import { AuthorizationSection } from './AuthorizationSection';
 import { ConnectPodSection } from './connect-pod/ConnectPodSection';
+import { ConnectionEstablished } from './connection-established/ConnectionEstablished';
 import { GetAPodSection } from './get-a-pod/GetAPodSection';
-import { HelpSection } from './HelpSection';
 import { OptionsContext } from './OptionsContext';
-import { ProfileApi } from './api/ProfileApi';
 import { useOptionsPage } from './useOptionsPage';
 
 interface Props {
@@ -51,14 +51,16 @@ export const OptionsPage = ({
               </span>
             </div>
           )}
-          <GetAPodSection />
-          <ConnectPodSection />
-          <AuthorizationSection
-            extensionUrl={extensionUrl}
-            providerUrl={page.state.value.providerUrl}
-            trusted={page.state.value.trustedApp}
-          ></AuthorizationSection>
-          <HelpSection></HelpSection>
+          {!page.state.value.trustedApp && <GetAPodSection />}
+          {!page.state.value.trustedApp && <ConnectPodSection />}
+          {!page.state.value.trustedApp && (
+            <AuthorizationSection
+              extensionUrl={extensionUrl}
+              providerUrl={page.state.value.providerUrl}
+            ></AuthorizationSection>
+          )}
+
+          {page.state.value.trustedApp && <ConnectionEstablished />}
         </main>
       </OptionsContext.Provider>
     </AuthenticationContext.Provider>
