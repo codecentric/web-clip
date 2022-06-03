@@ -1,5 +1,6 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { SolidSession } from './api/SolidSession';
+import { MessageHandler } from './messaging/MessageHandler';
 
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
 
@@ -22,7 +23,9 @@ export const useOptionsPage = (session: SolidSession) => {
   const { profileApi } = useSolidApis(session);
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { redirectUrl, extensionUrl } = useChromeExtension();
+  const [messageHandler] = useState(new MessageHandler(dispatch));
+
+  const { redirectUrl, extensionUrl } = useChromeExtension(messageHandler);
 
   useEffect(() => {
     loadOptions().then((options) => {
