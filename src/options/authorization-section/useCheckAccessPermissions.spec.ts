@@ -37,6 +37,27 @@ describe('useCheckAccessPermissions', () => {
         .mockResolvedValue(true);
     });
 
+    it('indicates checking access permission while checking', async () => {
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useCheckAccessPermissions('chrome-extension://extension-id', profileApi)
+      );
+
+      expect(result.all[0]).toMatchObject({
+        checking: false,
+      });
+
+      expect(result.current).toMatchObject({
+        checking: true,
+      });
+
+      await waitForNextUpdate;
+
+      expect(result.current).toMatchObject({
+        checking: false,
+      });
+      expect(result.all).toHaveLength(3);
+    });
+
     it('checks access permissions and dispatched trusted app event', async () => {
       const { waitForNextUpdate } = renderHook(() =>
         useCheckAccessPermissions('chrome-extension://extension-id', profileApi)
@@ -96,9 +117,10 @@ describe('useCheckAccessPermissions', () => {
     });
 
     it('does not check access permissions', async () => {
-      renderHook(() =>
+      const { result } = renderHook(() =>
         useCheckAccessPermissions('chrome-extension://extension-id', profileApi)
       );
+      expect(result.current.checking).toBe(false);
       expect(profileApi.hasGrantedAccessTo).not.toHaveBeenCalled();
     });
   });

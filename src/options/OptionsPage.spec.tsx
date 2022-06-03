@@ -169,7 +169,7 @@ describe('OptionsPage', () => {
           profileApi={profileApi}
           redirectUrl=""
           session={null}
-          extensionUrl=""
+          extensionUrl="chrome-extension://extension-id"
         />
       );
       const input = await screen.findByLabelText('Pod Provider URL');
@@ -182,10 +182,9 @@ describe('OptionsPage', () => {
       fireEvent.click(button);
       await screen.findByText('Signing in');
 
-      // TODO: indicate permission check
-      // expect(
-      //   await screen.findByText('Checking access permissions')
-      // ).toBeInTheDocument();
+      expect(
+        await screen.findByText('Checking access permissions')
+      ).toBeInTheDocument();
 
       resolveCheckAccessPromise(true);
 
