@@ -1,3 +1,4 @@
+import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
 import { useSolidApis } from './useSolidApis';
@@ -14,7 +15,9 @@ describe('useSolidApis', () => {
     const profileAPi = render.result.current.profileApi;
     expect(profileAPi).toBeDefined();
 
-    onLoginCallback();
+    act(() => {
+      onLoginCallback();
+    });
     expect(render.result.current.profileApi).not.toBe(profileAPi);
   });
 });

@@ -45,7 +45,7 @@ describe('useAuthorization', () => {
 
   describe('when already logged in and granting access succeeds', () => {
     let profileApi: ProfileApi;
-    beforeEach(() => {
+    beforeEach(async () => {
       session = {
         info: {
           isLoggedIn: true,
@@ -59,6 +59,7 @@ describe('useAuthorization', () => {
       const render = renderHook(() =>
         useAuthorization(session, 'https://pod.test', 'extension-id')
       );
+      await render.waitForNextUpdate();
       renderResult = render.result;
     });
 
@@ -91,7 +92,7 @@ describe('useAuthorization', () => {
 
   describe('when already logged in, but granting access fails', () => {
     let profileApi: ProfileApi;
-    beforeEach(() => {
+    beforeEach(async () => {
       session = {
         info: {
           isLoggedIn: true,
@@ -107,6 +108,7 @@ describe('useAuthorization', () => {
       const render = renderHook(() =>
         useAuthorization(session, 'https://pod.test', 'extension-id')
       );
+      await render.waitForNextUpdate();
       renderResult = render.result;
     });
 

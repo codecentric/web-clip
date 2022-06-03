@@ -16,7 +16,9 @@ describe('useLogin', () => {
 
   it('sends message to the background script on login', async () => {
     const { result } = renderHook(() => useLogin());
-    await result.current.login();
+    await act(async () => {
+      await result.current.login();
+    });
     expect(sendMessage).toHaveBeenCalledWith({ type: MessageType.LOGIN });
   });
 

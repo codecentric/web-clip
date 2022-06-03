@@ -50,7 +50,7 @@ describe('useCheckAccessPermissions', () => {
         checking: true,
       });
 
-      await waitForNextUpdate;
+      await waitForNextUpdate();
 
       expect(result.current).toMatchObject({
         checking: false,
@@ -63,7 +63,7 @@ describe('useCheckAccessPermissions', () => {
         useCheckAccessPermissions('chrome-extension://extension-id', profileApi)
       );
 
-      await waitForNextUpdate;
+      await waitForNextUpdate();
 
       expect(profileApi.hasGrantedAccessTo).toHaveBeenCalled();
       expect(dispatch).toHaveBeenCalledWith({ type: ActionType.TRUSTED_APP });
@@ -95,7 +95,7 @@ describe('useCheckAccessPermissions', () => {
         useCheckAccessPermissions('chrome-extension://extension-id', profileApi)
       );
 
-      await waitForNextUpdate;
+      await waitForNextUpdate();
 
       expect(profileApi.hasGrantedAccessTo).toHaveBeenCalled();
       expect(dispatch).not.toHaveBeenCalled();

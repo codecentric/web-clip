@@ -35,7 +35,9 @@ describe('useLogin', () => {
     const { result } = renderHook(() =>
       useLogin('https://pod.test', () => null)
     );
-    await result.current.login();
+    await act(async () => {
+      await result.current.login();
+    });
     expect(session.login).toHaveBeenCalledWith({
       oidcIssuer: 'https://pod.test',
       redirectUrl: 'https://redirect.test',
@@ -45,7 +47,9 @@ describe('useLogin', () => {
   it('calls on login after login', async () => {
     const onLogin = jest.fn();
     const { result } = renderHook(() => useLogin('https://pod.test', onLogin));
-    await result.current.login();
+    await act(async () => {
+      await result.current.login();
+    });
     expect(onLogin).toHaveBeenCalledWith({
       isLoggedIn: true,
       webId: 'http://pod.test/alice#me',

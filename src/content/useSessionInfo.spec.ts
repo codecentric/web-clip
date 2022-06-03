@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { EventEmitter } from 'events';
+import { act } from 'react-dom/test-utils';
 import { MessageType } from '../messages';
 import { useChromeMessageListener } from './chromeMessageListenerContext';
 import { useSessionInfo } from './useSessionInfo';
@@ -44,7 +45,9 @@ describe('useSessionInfo', () => {
       isLoggedIn: true,
       webId: 'WEB_ID',
     };
-    chromeMessageListener.emit(MessageType.LOGGED_IN, newSessionInfo);
+    act(() => {
+      chromeMessageListener.emit(MessageType.LOGGED_IN, newSessionInfo);
+    });
 
     expect(result.current).toEqual(newSessionInfo);
   });
