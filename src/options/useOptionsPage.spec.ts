@@ -1,18 +1,31 @@
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 
 import { when } from 'jest-when';
+import { ProfileApi } from './api/ProfileApi';
 import { useAuthentication } from './auth/AuthenticationContext';
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
 import { ActionType } from './reducer';
+import { useChromeExtension } from './useChromeExtension';
 import { useOptionsPage } from './useOptionsPage';
+import { useSolidApis } from './useSolidApis';
 
 jest.mock('./optionsStorageApi');
 jest.mock('./auth/AuthenticationContext');
 
+jest.mock('./useSolidApis');
+jest.mock('./useChromeExtension');
+
 describe('useOptionsPage', () => {
   let renderResult: RenderResult<ReturnType<typeof useOptionsPage>>;
 
+  let profileApi: ProfileApi;
   beforeEach(async () => {
+    profileApi = {} as unknown as ProfileApi;
+    when(useSolidApis).mockReturnValue({ profileApi });
+    when(useChromeExtension).mockReturnValue({
+      extensionUrl: 'chrome-extension://extension-id',
+      redirectUrl: 'https://redirect.test',
+    });
     when(useAuthentication).mockReturnValue({
       session: {
         info: {
@@ -31,7 +44,7 @@ describe('useOptionsPage', () => {
 
   describe('on mount', () => {
     beforeEach(async () => {
-      const render = renderHook(() => useOptionsPage());
+      const render = renderHook(() => useOptionsPage(null));
       renderResult = render.result;
       await render.waitForNextUpdate();
     });
@@ -52,6 +65,24 @@ describe('useOptionsPage', () => {
         },
       });
     });
+
+    it('returns the profile api', () => {
+      expect(renderResult.all[1]).toMatchObject({
+        profileApi,
+      });
+    });
+
+    it('returns the extension url', () => {
+      expect(renderResult.all[1]).toMatchObject({
+        extensionUrl: 'chrome-extension://extension-id',
+      });
+    });
+
+    it('returns the redirect url', () => {
+      expect(renderResult.all[1]).toMatchObject({
+        redirectUrl: 'https://redirect.test',
+      });
+    });
   });
 
   describe('auto saves', () => {
@@ -59,7 +90,7 @@ describe('useOptionsPage', () => {
       (saveOptions as jest.Mock).mockResolvedValue(null);
 
       const { result, waitFor, waitForNextUpdate } = renderHook(() =>
-        useOptionsPage()
+        useOptionsPage(null)
       );
 
       await waitFor(() => !result.current.state.loading);
@@ -104,8 +135,7 @@ describe('useOptionsPage', () => {
 
     it('when app is trusted', async () => {
       (saveOptions as jest.Mock).mockResolvedValue(null);
-
-      const { result, waitFor } = renderHook(() => useOptionsPage());
+      const { result, waitFor } = renderHook(() => useOptionsPage(null));
 
       await waitFor(() => !result.current.state.loading);
 
