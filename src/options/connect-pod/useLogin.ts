@@ -16,8 +16,8 @@ export const useLogin = (
         oidcIssuer,
         redirectUrl,
       });
-      await onLogin(session.info);
       setLoading(false);
+      await onLogin(session.info);
     },
   };
 };
