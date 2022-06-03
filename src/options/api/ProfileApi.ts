@@ -1,4 +1,5 @@
 import { Fetcher, LiveStore, Namespace, st, sym, UpdateManager } from 'rdflib';
+import { ExtensionUrl } from '../../chrome/urls';
 import { ProfileStore } from './ProfileStore';
 import { SolidSession } from './SolidSession';
 
@@ -30,21 +31,21 @@ export class ProfileApi {
    * @param extensionUrl The actual url of the extension
    * @param redirectUrl The pseudo-redirect url of the extension
    */
-  async canExtensionAccessPod(extensionUrl: string, redirectUrl: string) {
+  async canExtensionAccessPod(extensionUrl: ExtensionUrl, redirectUrl: URL) {
     const webId = this.session.info.webId;
     await this.fetcher.load(webId);
     // TODO: check for holdsOrigin
-    return this.store.checkAccessPermissions(webId, extensionUrl);
+    return this.store.checkAccessPermissions(webId, extensionUrl.origin);
   }
 
-  async grantAccessTo(extensionUrl: string) {
+  async grantAccessTo(extensionUrl: ExtensionUrl) {
     const webId = this.session.info.webId;
     const me = sym(webId);
     const profileDoc = me.doc();
     const trustedApp = sym(profileDoc.uri + '#trust-webclip');
     const trustStatements = [
       st(me, acl('trustedApp'), trustedApp, profileDoc),
-      st(trustedApp, acl('origin'), sym(extensionUrl), profileDoc),
+      st(trustedApp, acl('origin'), sym(extensionUrl.origin), profileDoc),
       st(trustedApp, acl('mode'), acl('Read'), profileDoc),
       st(trustedApp, acl('mode'), acl('Write'), profileDoc),
       st(trustedApp, acl('mode'), acl('Append'), profileDoc),

@@ -1,5 +1,6 @@
 import { when } from 'jest-when';
 import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
+import { ExtensionUrl } from '../../chrome/urls';
 import { Session } from '../../solid-client-authn-chrome-ext/Session';
 import { thenSparqlUpdateIsSentToUrl } from '../../test/thenSparqlUpdateIsSentToUrl';
 import { ProfileApi } from './ProfileApi';
@@ -30,8 +31,8 @@ describe('ProfileApi', () => {
       const fetcher = new Fetcher(updater.store, { fetch: fetchMock });
       const profileApi = new ProfileApi(session, fetcher.store as LiveStore);
       const result = await profileApi.canExtensionAccessPod(
-        'chrome-extension://extension-id',
-        'https://extension-id.chromiumapp.org'
+        new ExtensionUrl('chrome-extension://extension-id/'),
+        new URL('https://extension-id.chromiumapp.org/')
       );
       expect(result).toBe(false);
     });
@@ -60,8 +61,8 @@ describe('ProfileApi', () => {
       new Fetcher(store, { fetch: fetchMock });
       const profileApi = new ProfileApi(session, store as LiveStore);
       const result = await profileApi.canExtensionAccessPod(
-        'chrome-extension://extension-id',
-        'https://extension-id.chromiumapp.org'
+        new ExtensionUrl('chrome-extension://extension-id/'),
+        new URL('https://extension-id.chromiumapp.org/')
       );
       expect(result).toBe(true);
     });
@@ -81,7 +82,11 @@ describe('ProfileApi', () => {
       const updater = new UpdateManager();
       const fetcher = new Fetcher(updater.store, { fetch: fetchMock });
       const profileApi = new ProfileApi(session, fetcher.store as LiveStore);
-      await profileApi.grantAccessTo('chrome://extension-id');
+      await profileApi.grantAccessTo(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore chrome-extension:// protocoll cannot be parsed by sparql parser, therefore use chrome:// here
+        new ExtensionUrl('chrome://extension-id/')
+      );
       thenSparqlUpdateIsSentToUrl(
         fetchMock,
         'https://pod.test/alice',

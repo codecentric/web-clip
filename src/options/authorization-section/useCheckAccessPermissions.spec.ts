@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
+import { ExtensionUrl } from '../../chrome/urls';
 import { ProfileApi } from '../api/ProfileApi';
 import { useOptions } from '../OptionsContext';
 import { ActionType } from '../reducer';
@@ -34,8 +35,8 @@ describe('useCheckAccessPermissions', () => {
       // given access permissions are already granted
       when(profileApi.canExtensionAccessPod)
         .calledWith(
-          'chrome-extension://extension-id',
-          'https://extension-id.chromiumapp.org'
+          new ExtensionUrl('chrome-extension://extension-id/'),
+          new URL('https://extension-id.chromiumapp.org')
         )
         .mockResolvedValue(true);
     });
@@ -43,8 +44,8 @@ describe('useCheckAccessPermissions', () => {
     it('indicates checking access permission while checking', async () => {
       const { result, waitForNextUpdate } = renderHook(() =>
         useCheckAccessPermissions(
-          'chrome-extension://extension-id',
-          'https://extension-id.chromiumapp.org',
+          new ExtensionUrl('chrome-extension://extension-id/'),
+          new URL('https://extension-id.chromiumapp.org'),
           profileApi
         )
       );
@@ -68,8 +69,8 @@ describe('useCheckAccessPermissions', () => {
     it('checks access permissions and dispatched trusted app event', async () => {
       const { waitForNextUpdate } = renderHook(() =>
         useCheckAccessPermissions(
-          'chrome-extension://extension-id',
-          'https://extension-id.chromiumapp.org',
+          new ExtensionUrl('chrome-extension://extension-id/'),
+          new URL('https://extension-id.chromiumapp.org'),
           profileApi
         )
       );
@@ -98,8 +99,8 @@ describe('useCheckAccessPermissions', () => {
       // given access permissions are already granted
       when(profileApi.canExtensionAccessPod)
         .calledWith(
-          'chrome-extension://extension-id',
-          'https://extension-id.chromiumapp.org'
+          new ExtensionUrl('chrome-extension://extension-id/'),
+          new URL('https://extension-id.chromiumapp.org')
         )
         .mockResolvedValue(false);
     });
@@ -107,8 +108,8 @@ describe('useCheckAccessPermissions', () => {
     it('checks access permissions and dispatched trusted app event', async () => {
       const { waitForNextUpdate } = renderHook(() =>
         useCheckAccessPermissions(
-          'chrome-extension://extension-id',
-          'https://extension-id.chromiumapp.org',
+          new ExtensionUrl('chrome-extension://extension-id/'),
+          new URL('https://extension-id.chromiumapp.org'),
           profileApi
         )
       );
@@ -137,8 +138,8 @@ describe('useCheckAccessPermissions', () => {
     it('does not check access permissions', async () => {
       const { result } = renderHook(() =>
         useCheckAccessPermissions(
-          'chrome-extension://extension-id',
-          'https://extension-id.chromiumapp.org',
+          new ExtensionUrl('chrome-extension://extension-id/'),
+          new URL('https://extension-id.chromiumapp.org'),
           profileApi
         )
       );

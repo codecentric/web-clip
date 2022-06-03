@@ -4,6 +4,7 @@ import {
 } from '@inrupt/solid-client-authn-browser';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ExtensionUrl } from '../../chrome/urls';
 import { load as loadOptions } from '../../options/optionsStorageApi';
 import { AuthorizationPage } from './AuthorizationPage';
 
@@ -13,7 +14,7 @@ async function handleRedirectAfterLogin() {
 }
 
 export async function renderAuthorizationPage(
-  extensionId: string,
+  extensionUrl: ExtensionUrl,
   root: HTMLElement,
   container: HTMLElement
 ) {
@@ -22,15 +23,15 @@ export async function renderAuthorizationPage(
   const { providerUrl } = await loadOptions();
 
   console.log(
-    'This is the WebClip authorization page for extension id',
-    extensionId
+    'This is the WebClip authorization page for extension',
+    extensionUrl
   );
   document.body.replaceChildren(root);
   ReactDOM.render(
     <AuthorizationPage
       session={session}
       providerUrl={providerUrl}
-      extensionId={extensionId}
+      extensionUrl={extensionUrl}
     />,
     container
   );

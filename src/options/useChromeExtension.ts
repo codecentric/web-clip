@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { getExtensionUrl } from '../chrome/urls';
 import { Response } from '../messages';
 import { MessageHandler } from './messaging/MessageHandler';
 
@@ -18,7 +19,7 @@ export const useChromeExtension = (messageHandler: MessageHandler) => {
   }, []);
 
   return {
-    redirectUrl: chrome.identity.getRedirectURL().slice(0, -1),
-    extensionUrl: chrome.extension.getURL('').slice(0, -1),
+    redirectUrl: new URL(chrome.identity.getRedirectURL()),
+    extensionUrl: getExtensionUrl(),
   };
 };

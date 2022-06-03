@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import contentCss from './assets/content.css';
+import { getExtensionUrl } from './chrome/urls';
 import { renderAuthorizationPage } from './content/authorization-page';
 import { isOnAuthorizationPage } from './content/authorization-page/isOnAuthorizationPage';
 import { ChromeMessageListener } from './content/ChromeMessageListener';
@@ -20,9 +21,10 @@ shadowRoot.appendChild(styleTag);
 shadowRoot.appendChild(container);
 
 const extensionId = chrome.runtime.id;
+const extensionUrl = getExtensionUrl();
 
 if (isOnAuthorizationPage(extensionId)) {
-  renderAuthorizationPage(extensionId, root, container);
+  renderAuthorizationPage(extensionUrl, root, container);
 } else {
   const chromeMessageListener = new ChromeMessageListener();
 

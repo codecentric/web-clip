@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import { ExtensionUrl } from '../../chrome/urls';
 import { ProfileApi } from '../api/ProfileApi';
 import { useOptions } from '../OptionsContext';
 import { ActionType } from '../reducer';
 
 export const useCheckAccessPermissions = (
-  extensionUrl: string,
-  redirectUrl: string,
+  extensionUrl: ExtensionUrl,
+  redirectUrl: URL,
   profileApi: ProfileApi
 ) => {
   const { state, dispatch } = useOptions();

@@ -1,7 +1,8 @@
 import React from 'react';
+import { ExtensionUrl } from '../../chrome/urls';
 
 interface Props {
-  extensionUrl: string;
+  extensionUrl: ExtensionUrl;
 }
 
 export const CheckingAccessPermissions = ({ extensionUrl }: Props) => (
@@ -27,7 +28,7 @@ export const CheckingAccessPermissions = ({ extensionUrl }: Props) => (
       <div className="flex flex-col rounded border bg-slate-50 py-2 px-3 leading-tight text-gray-700 shadow">
         <span className="text-xs fontLight">Extension Origin</span>
         <div className="flex flex-row gap-2">
-          <span>{extensionUrl}</span>
+          <span>{extensionUrl.origin}</span>
         </div>
       </div>
     </div>

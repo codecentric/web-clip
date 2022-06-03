@@ -46,7 +46,7 @@ export const OptionsPage = ({ session }: Props) => {
     <AuthenticationContext.Provider
       value={{
         session,
-        redirectUrl,
+        redirectUrl: redirectUrl.toString(),
       }}
     >
       <OptionsContext.Provider value={{ state, dispatch }}>

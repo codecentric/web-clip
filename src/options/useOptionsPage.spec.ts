@@ -1,6 +1,7 @@
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 
 import { when } from 'jest-when';
+import { ExtensionUrl } from '../chrome/urls';
 import { ProfileApi } from './api/ProfileApi';
 import { useAuthentication } from './auth/AuthenticationContext';
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
@@ -23,8 +24,8 @@ describe('useOptionsPage', () => {
     profileApi = {} as unknown as ProfileApi;
     when(useSolidApis).mockReturnValue({ profileApi });
     when(useChromeExtension).mockReturnValue({
-      extensionUrl: 'chrome-extension://extension-id',
-      redirectUrl: 'https://redirect.test',
+      extensionUrl: new ExtensionUrl('chrome-extension://extension-id/'),
+      redirectUrl: new URL('https://redirect.test'),
     });
     when(useAuthentication).mockReturnValue({
       session: {
@@ -74,13 +75,13 @@ describe('useOptionsPage', () => {
 
     it('returns the extension url', () => {
       expect(renderResult.all[1]).toMatchObject({
-        extensionUrl: 'chrome-extension://extension-id',
+        extensionUrl: new ExtensionUrl('chrome-extension://extension-id/'),
       });
     });
 
     it('returns the redirect url', () => {
       expect(renderResult.all[1]).toMatchObject({
-        redirectUrl: 'https://redirect.test',
+        redirectUrl: new URL('https://redirect.test'),
       });
     });
   });

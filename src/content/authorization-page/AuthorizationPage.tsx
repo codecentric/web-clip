@@ -1,23 +1,24 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
 import React from 'react';
+import { ExtensionUrl } from '../../chrome/urls';
 import { ErrorDetails } from './ErrorDetails';
 import { useAuthorization } from './useAuthorization';
 
 interface Props {
   session: Session;
   providerUrl: string;
-  extensionId: string;
+  extensionUrl: ExtensionUrl;
 }
 
 export const AuthorizationPage = ({
   session,
   providerUrl,
-  extensionId,
+  extensionUrl,
 }: Props) => {
   const { loading, success, error } = useAuthorization(
     session,
     providerUrl,
-    extensionId
+    extensionUrl
   );
 
   return (
