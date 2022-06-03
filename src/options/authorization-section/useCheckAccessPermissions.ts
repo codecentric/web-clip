@@ -15,10 +15,10 @@ export const useCheckAccessPermissions = (
     if (state.sessionInfo.isLoggedIn) {
       setChecking(true);
       profileApi.hasGrantedAccessTo(extensionUrl).then((trusted) => {
+        setChecking(false);
         if (trusted) {
           dispatch({ type: ActionType.TRUSTED_APP });
         }
-        setChecking(false);
       });
     }
   }, [state.sessionInfo.isLoggedIn]);
