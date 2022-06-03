@@ -1,8 +1,11 @@
 import { useEffect, useReducer } from 'react';
+import { SolidSession } from './api/SolidSession';
 
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
 
 import reducer, { ActionType, State } from './reducer';
+import { useChromeExtension } from './useChromeExtension';
+import { useSolidApis } from './useSolidApis';
 
 export const initialState: State = {
   loading: true,
@@ -15,8 +18,11 @@ export const initialState: State = {
   value: { providerUrl: '', trustedApp: false },
 };
 
-export const useOptionsPage = () => {
+export const useOptionsPage = (session: SolidSession) => {
+  const { profileApi } = useSolidApis(session);
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const { redirectUrl, extensionUrl } = useChromeExtension();
 
   useEffect(() => {
     loadOptions().then((options) => {
@@ -42,5 +48,8 @@ export const useOptionsPage = () => {
   return {
     state,
     dispatch,
+    profileApi,
+    redirectUrl,
+    extensionUrl,
   };
 };

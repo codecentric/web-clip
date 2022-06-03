@@ -1,6 +1,5 @@
 import React from 'react';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
-import { ProfileApi } from './api/ProfileApi';
 import { AuthenticationContext } from './auth/AuthenticationContext';
 import { AuthorizationSection } from './authorization-section/AuthorizationSection';
 import { ConnectPodSection } from './connect-pod/ConnectPodSection';
@@ -10,9 +9,6 @@ import { useOptionsPage } from './useOptionsPage';
 
 interface Props {
   session: Session;
-  redirectUrl: string;
-  extensionUrl: string;
-  profileApi: ProfileApi;
 }
 
 const AllSaved = () => {
@@ -35,20 +31,16 @@ const AllSaved = () => {
   );
 };
 
-export const OptionsPage = ({
-  session,
-  redirectUrl,
-  extensionUrl,
-  profileApi,
-}: Props) => {
-  const page = useOptionsPage();
+export const OptionsPage = ({ session }: Props) => {
+  const { state, dispatch, profileApi, redirectUrl, extensionUrl } =
+    useOptionsPage(session);
 
-  if (page.state.loading) {
+  if (state.loading) {
     return <p>Loading...</p>;
   }
 
-  const trustedApp = page.state.value.trustedApp;
-  const isLoggedIn = page.state.sessionInfo.isLoggedIn;
+  const trustedApp = state.value.trustedApp;
+  const isLoggedIn = state.sessionInfo.isLoggedIn;
 
   return (
     <AuthenticationContext.Provider
@@ -57,16 +49,16 @@ export const OptionsPage = ({
         redirectUrl,
       }}
     >
-      <OptionsContext.Provider value={page}>
+      <OptionsContext.Provider value={{ state, dispatch }}>
         <main className="container text-lg mx-auto p-8">
           <h1 className="my-8 flex items-center gap-2 text-xl font-medium">
-            Setup WebClip {page.state.saved && <AllSaved />}
+            Setup WebClip {state.saved && <AllSaved />}
           </h1>
           {!isLoggedIn && !trustedApp && <ConnectPodSection />}
           {isLoggedIn && !trustedApp && (
             <AuthorizationSection
               extensionUrl={extensionUrl}
-              providerUrl={page.state.value.providerUrl}
+              providerUrl={state.value.providerUrl}
               profileApi={profileApi}
             ></AuthorizationSection>
           )}
