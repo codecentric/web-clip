@@ -1,10 +1,10 @@
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
+
 import { when } from 'jest-when';
 import { useAuthentication } from './auth/AuthenticationContext';
-import { ProfileApi } from './api/ProfileApi';
+import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
 import { ActionType } from './reducer';
 import { useOptionsPage } from './useOptionsPage';
-import { save as saveOptions, load as loadOptions } from './optionsStorageApi';
 
 jest.mock('./optionsStorageApi');
 jest.mock('./auth/AuthenticationContext');
@@ -12,12 +12,7 @@ jest.mock('./auth/AuthenticationContext');
 describe('useOptionsPage', () => {
   let renderResult: RenderResult<ReturnType<typeof useOptionsPage>>;
 
-  let profileApi: ProfileApi;
-
   beforeEach(async () => {
-    profileApi = {
-      hasGrantedAccessTo: jest.fn(),
-    } as unknown as ProfileApi;
     when(useAuthentication).mockReturnValue({
       session: {
         info: {
@@ -36,9 +31,7 @@ describe('useOptionsPage', () => {
 
   describe('on mount', () => {
     beforeEach(async () => {
-      const render = renderHook(() =>
-        useOptionsPage('chrome-extension://extension-id', profileApi)
-      );
+      const render = renderHook(() => useOptionsPage());
       renderResult = render.result;
       await render.waitForNextUpdate();
     });
@@ -61,24 +54,15 @@ describe('useOptionsPage', () => {
     });
   });
 
-  describe('after login', () => {
-    it('checks access permissions and saves options', async () => {
+  describe('auto saves', () => {
+    it('when provider url changes, it saves after login', async () => {
       (saveOptions as jest.Mock).mockResolvedValue(null);
 
-      // given access permissions are already granted
-      when(profileApi.hasGrantedAccessTo)
-        .calledWith('chrome-extension://extension-id')
-        .mockResolvedValue(true);
-
-      const { result, waitForNextUpdate, waitFor } = renderHook(() =>
-        useOptionsPage('chrome-extension://extension-id', profileApi)
+      const { result, waitFor, waitForNextUpdate } = renderHook(() =>
+        useOptionsPage()
       );
 
       await waitFor(() => !result.current.state.loading);
-
-      expect(result.current.state.value.providerUrl).toBe(
-        'https://pod.provider.example'
-      );
 
       act(() => {
         result.current.dispatch({
@@ -93,10 +77,10 @@ describe('useOptionsPage', () => {
           'https://new.provider.example'
       );
 
-      expect(result.current.state.value.providerUrl).toBe(
-        'https://new.provider.example'
-      );
       expect(result.current.state.loading).toBe(false);
+
+      expect(result.current.state.saved).toBe(false);
+      expect(saveOptions).not.toHaveBeenCalled();
 
       act(() => {
         result.current.dispatch({
@@ -112,55 +96,34 @@ describe('useOptionsPage', () => {
       await waitForNextUpdate();
 
       expect(result.current.state.saved).toBe(true);
-      expect(result.current.state.value.trustedApp).toBe(true);
-      expect(saveOptions).toHaveBeenCalledWith({
-        trustedApp: true,
-        providerUrl: 'https://new.provider.example',
-      });
-    });
-
-    it('checks access permissions and saves without being trusted yet', async () => {
-      (saveOptions as jest.Mock).mockResolvedValue(null);
-
-      // given access permissions are missing
-      when(profileApi.hasGrantedAccessTo)
-        .calledWith('chrome-extension://extension-id')
-        .mockResolvedValue(false);
-
-      const { result, waitFor, waitForNextUpdate } = renderHook(() =>
-        useOptionsPage('chrome-extension://extension-id', profileApi)
-      );
-
-      await waitFor(() => !result.current.state.loading);
-
-      result.current.dispatch({
-        type: ActionType.SET_PROVIDER_URL,
-        payload: 'https://new.provider.example',
-      });
-
-      await waitFor(
-        () =>
-          result.current.state.value.providerUrl ===
-          'https://new.provider.example'
-      );
-
-      result.current.dispatch({
-        type: ActionType.LOGGED_IN,
-        payload: {
-          sessionId: 'test-session',
-          webId: 'https://alice.test#me',
-          isLoggedIn: true,
-        },
-      });
-
-      await waitForNextUpdate();
-
       expect(saveOptions).toHaveBeenCalledWith({
         trustedApp: false,
         providerUrl: 'https://new.provider.example',
       });
+    });
+
+    it('when app is trusted', async () => {
+      (saveOptions as jest.Mock).mockResolvedValue(null);
+
+      const { result, waitFor } = renderHook(() => useOptionsPage());
+
+      await waitFor(() => !result.current.state.loading);
+
+      act(() => {
+        result.current.dispatch({
+          type: ActionType.TRUSTED_APP,
+        });
+      });
+
+      await waitFor(() => result.current.state.value.trustedApp === true);
+
+      expect(result.current.state.loading).toBe(false);
+
       expect(result.current.state.saved).toBe(true);
-      expect(result.current.state.value.trustedApp).toBe(false);
+      expect(saveOptions).toHaveBeenCalledWith({
+        trustedApp: true,
+        providerUrl: 'https://pod.provider.example',
+      });
     });
   });
 });
