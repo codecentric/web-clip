@@ -1,6 +1,8 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
 import { useEffect, useState } from 'react';
+import { MessageType } from '../../messages';
 import { useSolidApis } from '../../options/useSolidApis';
+import { sendMessage } from '../sendMessage';
 
 export const useAuthorization = (
   session: Session,
@@ -32,6 +34,7 @@ export const useAuthorization = (
             success: true,
             error: null,
           }));
+          return sendMessage({ type: MessageType.ACCESS_GRANTED });
         })
         .catch((error) => {
           setState((currentState) => ({

@@ -11,6 +11,7 @@ export enum MessageType {
   ADD_BOOKMARK = 'ADD_BOOKMARK',
   IMPORT_PAGE_DATA = 'IMPORT_PAGE_DATA',
   OPEN_OPTIONS = 'OPEN_OPTIONS',
+  ACCESS_GRANTED = 'ACCESS_GRANTED',
 }
 
 export type Message =
@@ -21,7 +22,8 @@ export type Message =
   | LoadProfileMessage
   | LoadBookmarkMessage
   | AddBookmarkMessage
-  | ImportPageDataMessage;
+  | ImportPageDataMessage
+  | AccessGranted;
 
 export type ActivateMessage = {
   type: MessageType.ACTIVATE;
@@ -65,6 +67,10 @@ export type ImportPageDataMessage = {
   payload: {
     url: string;
   };
+};
+
+export type AccessGranted = {
+  type: MessageType.ACCESS_GRANTED;
 };
 
 export type Response = {
