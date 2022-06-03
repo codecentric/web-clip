@@ -1,11 +1,14 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
 import { renderHook, RenderResult } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
+import { MessageType } from '../../messages';
 import { ProfileApi } from '../../options/api/ProfileApi';
 import { useSolidApis } from '../../options/useSolidApis';
+import { sendMessage } from '../sendMessage';
 import { useAuthorization } from './useAuthorization';
 
 jest.mock('../../options/useSolidApis');
+jest.mock('../sendMessage');
 
 describe('useAuthorization', () => {
   let session: Session;
@@ -77,6 +80,12 @@ describe('useAuthorization', () => {
     it('indicates success', () => {
       expect(renderResult.current.success).toBe(true);
       expect(renderResult.current.error).toBe(null);
+    });
+
+    it('tells the option page that access has been granted', () => {
+      expect(sendMessage).toHaveBeenCalledWith({
+        type: MessageType.ACCESS_GRANTED,
+      });
     });
   });
 
