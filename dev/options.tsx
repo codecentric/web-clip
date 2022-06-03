@@ -3,14 +3,12 @@ import {
   handleIncomingRedirect,
   Session,
 } from '@inrupt/solid-client-authn-browser';
-import { Fetcher, LiveStore, UpdateManager } from 'rdflib';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import 'style-loader!../src/assets/content.css';
 import { OptionsPage } from '../src/options/OptionsPage';
 import { Options } from '../src/options/optionsStorageApi';
-import { ProfileApi } from '../src/options/api/ProfileApi';
 import { Session as ChromeExtensionSession } from '../src/solid-client-authn-chrome-ext/Session';
 
 let inMemoryStorage = {
@@ -48,16 +46,5 @@ handleRedirectAfterLogin().then((session: Session) => {
 });
 
 function renderApp(session: ChromeExtensionSession) {
-  const updater = new UpdateManager();
-  const fetcher = new Fetcher(updater.store, { fetch: session.fetch });
-  const profileApi = new ProfileApi(session, fetcher.store as LiveStore);
-  ReactDOM.render(
-    <OptionsPage
-      profileApi={profileApi}
-      session={session}
-      redirectUrl={window.location.href}
-      extensionUrl="chrome-extension://extension-id"
-    />,
-    root
-  );
+  ReactDOM.render(<OptionsPage session={session} />, root);
 }
