@@ -6,16 +6,24 @@ import { useCheckAccessPermissions } from './useCheckAccessPermissions';
 
 interface Props {
   extensionUrl: string;
+  redirectUrl: string;
   providerUrl: string;
   profileApi: ProfileApi;
 }
 
 export const AuthorizationSection = ({
   extensionUrl,
+  redirectUrl,
   providerUrl,
   profileApi,
 }: Props) => {
-  const { checking } = useCheckAccessPermissions(extensionUrl, profileApi);
+  const { checking } = useCheckAccessPermissions(
+    extensionUrl,
+    redirectUrl,
+    profileApi
+  );
+
+  console.log({ extensionUrl, redirectUrl });
 
   return (
     <section>

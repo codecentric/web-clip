@@ -13,7 +13,7 @@ describe('useCheckAccessPermissions', () => {
 
   beforeEach(async () => {
     profileApi = {
-      hasGrantedAccessTo: jest.fn(),
+      canExtensionAccessPod: jest.fn(),
     } as unknown as ProfileApi;
   });
 
@@ -32,14 +32,21 @@ describe('useCheckAccessPermissions', () => {
         dispatch,
       });
       // given access permissions are already granted
-      when(profileApi.hasGrantedAccessTo)
-        .calledWith('chrome-extension://extension-id')
+      when(profileApi.canExtensionAccessPod)
+        .calledWith(
+          'chrome-extension://extension-id',
+          'https://extension-id.chromiumapp.org'
+        )
         .mockResolvedValue(true);
     });
 
     it('indicates checking access permission while checking', async () => {
       const { result, waitForNextUpdate } = renderHook(() =>
-        useCheckAccessPermissions('chrome-extension://extension-id', profileApi)
+        useCheckAccessPermissions(
+          'chrome-extension://extension-id',
+          'https://extension-id.chromiumapp.org',
+          profileApi
+        )
       );
 
       expect(result.all[0]).toMatchObject({
@@ -60,12 +67,16 @@ describe('useCheckAccessPermissions', () => {
 
     it('checks access permissions and dispatched trusted app event', async () => {
       const { waitForNextUpdate } = renderHook(() =>
-        useCheckAccessPermissions('chrome-extension://extension-id', profileApi)
+        useCheckAccessPermissions(
+          'chrome-extension://extension-id',
+          'https://extension-id.chromiumapp.org',
+          profileApi
+        )
       );
 
       await waitForNextUpdate();
 
-      expect(profileApi.hasGrantedAccessTo).toHaveBeenCalled();
+      expect(profileApi.canExtensionAccessPod).toHaveBeenCalled();
       expect(dispatch).toHaveBeenCalledWith({ type: ActionType.TRUSTED_APP });
     });
   });
@@ -85,19 +96,26 @@ describe('useCheckAccessPermissions', () => {
         dispatch,
       });
       // given access permissions are already granted
-      when(profileApi.hasGrantedAccessTo)
-        .calledWith('chrome-extension://extension-id')
+      when(profileApi.canExtensionAccessPod)
+        .calledWith(
+          'chrome-extension://extension-id',
+          'https://extension-id.chromiumapp.org'
+        )
         .mockResolvedValue(false);
     });
 
     it('checks access permissions and dispatched trusted app event', async () => {
       const { waitForNextUpdate } = renderHook(() =>
-        useCheckAccessPermissions('chrome-extension://extension-id', profileApi)
+        useCheckAccessPermissions(
+          'chrome-extension://extension-id',
+          'https://extension-id.chromiumapp.org',
+          profileApi
+        )
       );
 
       await waitForNextUpdate();
 
-      expect(profileApi.hasGrantedAccessTo).toHaveBeenCalled();
+      expect(profileApi.canExtensionAccessPod).toHaveBeenCalled();
       expect(dispatch).not.toHaveBeenCalled();
     });
   });
@@ -118,10 +136,14 @@ describe('useCheckAccessPermissions', () => {
 
     it('does not check access permissions', async () => {
       const { result } = renderHook(() =>
-        useCheckAccessPermissions('chrome-extension://extension-id', profileApi)
+        useCheckAccessPermissions(
+          'chrome-extension://extension-id',
+          'https://extension-id.chromiumapp.org',
+          profileApi
+        )
       );
       expect(result.current.checking).toBe(false);
-      expect(profileApi.hasGrantedAccessTo).not.toHaveBeenCalled();
+      expect(profileApi.canExtensionAccessPod).not.toHaveBeenCalled();
     });
   });
 });

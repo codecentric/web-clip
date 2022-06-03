@@ -12,7 +12,11 @@ describe('AuthorizationSection', () => {
     beforeEach(() => {
       const profileApi = {} as ProfileApi;
       when(useCheckAccessPermissions)
-        .calledWith('chrome-extension://extension-id', profileApi)
+        .calledWith(
+          'chrome-extension://extension-id',
+          'https://extension-id.chromiumapp.org',
+          profileApi
+        )
         .mockReturnValue({
           checking: true,
         });
@@ -20,6 +24,7 @@ describe('AuthorizationSection', () => {
       render(
         <AuthorizationSection
           extensionUrl="chrome-extension://extension-id"
+          redirectUrl="https://extension-id.chromiumapp.org"
           providerUrl="https://pod.provider.test"
           profileApi={profileApi}
         />
@@ -43,7 +48,11 @@ describe('AuthorizationSection', () => {
     beforeEach(() => {
       const profileApi = {} as ProfileApi;
       when(useCheckAccessPermissions)
-        .calledWith('chrome-extension://extension-id', profileApi)
+        .calledWith(
+          'chrome-extension://extension-id',
+          'https://extension-id.chromiumapp.org',
+          profileApi
+        )
         .mockReturnValue({
           checking: false,
         });
@@ -51,6 +60,7 @@ describe('AuthorizationSection', () => {
       render(
         <AuthorizationSection
           extensionUrl="chrome-extension://extension-id"
+          redirectUrl="https://extension-id.chromiumapp.org"
           providerUrl="https://pod.provider.test"
           profileApi={profileApi}
         />
