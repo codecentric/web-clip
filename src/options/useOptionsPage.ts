@@ -1,7 +1,6 @@
 import { useEffect, useReducer } from 'react';
 
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
-import { ProfileApi } from './api/ProfileApi';
 
 import reducer, { ActionType, State } from './reducer';
 
@@ -16,10 +15,7 @@ export const initialState: State = {
   value: { providerUrl: '', trustedApp: false },
 };
 
-export const useOptionsPage = (
-  extensionUrl: string,
-  profileApi: ProfileApi
-) => {
+export const useOptionsPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -30,16 +26,6 @@ export const useOptionsPage = (
       });
     });
   }, []);
-
-  useEffect(() => {
-    if (state.sessionInfo.isLoggedIn) {
-      profileApi.hasGrantedAccessTo(extensionUrl).then((trusted) => {
-        if (trusted) {
-          dispatch({ type: ActionType.TRUSTED_APP });
-        }
-      });
-    }
-  }, [state.sessionInfo.isLoggedIn]);
 
   function save() {
     saveOptions(state.value).then(() =>

@@ -2,10 +2,10 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { when } from 'jest-when';
 import React from 'react';
+import { ProfileApi } from './api/ProfileApi';
 import { useAuthentication } from './auth/AuthenticationContext';
 import { OptionsPage } from './OptionsPage';
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
-import { ProfileApi } from './api/ProfileApi';
 
 jest.mock('./optionsStorageApi');
 jest.mock('./auth/AuthenticationContext');
@@ -140,13 +140,58 @@ describe('OptionsPage', () => {
       const button = await screen.findByText('Connect Pod');
       fireEvent.click(button);
       await screen.findByText('Signing in');
-      await screen.findByText('Connect Pod');
+      expect(await screen.findByText('All settings saved')).toBeInTheDocument();
 
       expect(saveOptions).toHaveBeenCalledWith({
         providerUrl: 'https://pod.provider.example',
         trustedApp: false,
       });
-      expect(await screen.findByText('All settings saved')).toBeInTheDocument();
+    });
+
+    it('checks permission after login', async () => {
+      let resolveCheckAccessPromise: (value: boolean) => void = () => null;
+      when(profileApi.hasGrantedAccessTo).mockReturnValue(
+        new Promise<boolean>((resolve) => (resolveCheckAccessPromise = resolve))
+      );
+      when(useAuthentication).mockReturnValue({
+        session: {
+          login: (): null => null,
+          info: {
+            sessionId: 'test-session',
+            isLoggedIn: true,
+            webId: 'https://pod.test/alice#me',
+          },
+        },
+        redirectUrl: '',
+      });
+      render(
+        <OptionsPage
+          profileApi={profileApi}
+          redirectUrl=""
+          session={null}
+          extensionUrl=""
+        />
+      );
+      const input = await screen.findByLabelText('Pod Provider URL');
+      fireEvent.change(input, {
+        target: {
+          value: 'https://pod.provider.example',
+        },
+      });
+      const button = await screen.findByText('Connect Pod');
+      fireEvent.click(button);
+      await screen.findByText('Signing in');
+
+      // TODO: indicate permission check
+      // expect(
+      //   await screen.findByText('Checking access permissions')
+      // ).toBeInTheDocument();
+
+      resolveCheckAccessPromise(true);
+
+      expect(
+        await screen.findByText('Everything is set up correctly.')
+      ).toBeInTheDocument();
     });
   });
 });

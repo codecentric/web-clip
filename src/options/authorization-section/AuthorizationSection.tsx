@@ -1,11 +1,19 @@
 import React from 'react';
+import { ProfileApi } from '../api/ProfileApi';
+import { useCheckAccessPermissions } from './useCheckAccessPermissions';
 
 interface Props {
   extensionUrl: string;
   providerUrl: string;
+  profileApi: ProfileApi;
 }
 
-export const AuthorizationSection = ({ extensionUrl, providerUrl }: Props) => {
+export const AuthorizationSection = ({
+  extensionUrl,
+  providerUrl,
+  profileApi,
+}: Props) => {
+  useCheckAccessPermissions(extensionUrl, profileApi);
   return (
     <section>
       <p className="my-4">

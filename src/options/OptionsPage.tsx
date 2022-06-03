@@ -2,7 +2,7 @@ import React from 'react';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
 import { ProfileApi } from './api/ProfileApi';
 import { AuthenticationContext } from './auth/AuthenticationContext';
-import { AuthorizationSection } from './AuthorizationSection';
+import { AuthorizationSection } from './authorization-section/AuthorizationSection';
 import { ConnectPodSection } from './connect-pod/ConnectPodSection';
 import { ConnectionEstablished } from './connection-established/ConnectionEstablished';
 import { OptionsContext } from './OptionsContext';
@@ -41,7 +41,7 @@ export const OptionsPage = ({
   extensionUrl,
   profileApi,
 }: Props) => {
-  const page = useOptionsPage(extensionUrl, profileApi);
+  const page = useOptionsPage();
 
   if (page.state.loading) {
     return <p>Loading...</p>;
@@ -67,6 +67,7 @@ export const OptionsPage = ({
             <AuthorizationSection
               extensionUrl={extensionUrl}
               providerUrl={page.state.value.providerUrl}
+              profileApi={profileApi}
             ></AuthorizationSection>
           )}
 
