@@ -2,6 +2,7 @@ import { Session } from '@inrupt/solid-client-authn-browser';
 import { render, screen } from '@testing-library/react';
 import { when } from 'jest-when';
 import React from 'react';
+import { ExtensionUrl } from '../../chrome/urls';
 import { AuthorizationPage } from './AuthorizationPage';
 import { useAuthorization } from './useAuthorization';
 
@@ -11,9 +12,9 @@ describe('AuthorizationPage', () => {
   it('describes what is happening while loading', () => {
     const session = {} as Session;
     const providerUrl = 'https://pod.test';
-    const extensionId = 'extension-id';
+    const extensionUrl = new ExtensionUrl('chrome-extension://extension-id/');
     when(useAuthorization)
-      .calledWith(session, providerUrl, extensionId)
+      .calledWith(session, providerUrl, extensionUrl)
       .mockReturnValue({
         loading: true,
         success: false,
@@ -23,7 +24,7 @@ describe('AuthorizationPage', () => {
       <AuthorizationPage
         session={session}
         providerUrl={providerUrl}
-        extensionId={extensionId}
+        extensionUrl={extensionUrl}
       />
     );
     expect(
@@ -34,9 +35,9 @@ describe('AuthorizationPage', () => {
   it('shows success message after everything is finished', () => {
     const session = {} as Session;
     const providerUrl = 'https://pod.test';
-    const extensionId = 'extension-id';
+    const extensionUrl = new ExtensionUrl('chrome-extension://extension-id/');
     when(useAuthorization)
-      .calledWith(session, providerUrl, extensionId)
+      .calledWith(session, providerUrl, extensionUrl)
       .mockReturnValue({
         loading: false,
         success: true,
@@ -46,7 +47,7 @@ describe('AuthorizationPage', () => {
       <AuthorizationPage
         session={session}
         providerUrl={providerUrl}
-        extensionId={extensionId}
+        extensionUrl={extensionUrl}
       />
     );
     expect(
@@ -59,9 +60,9 @@ describe('AuthorizationPage', () => {
   it('shows error message when anything failed', () => {
     const session = {} as Session;
     const providerUrl = 'https://pod.test';
-    const extensionId = 'extension-id';
+    const extensionUrl = new ExtensionUrl('chrome-extension://extension-id/');
     when(useAuthorization)
-      .calledWith(session, providerUrl, extensionId)
+      .calledWith(session, providerUrl, extensionUrl)
       .mockReturnValue({
         loading: false,
         success: false,
@@ -71,7 +72,7 @@ describe('AuthorizationPage', () => {
       <AuthorizationPage
         session={session}
         providerUrl={providerUrl}
-        extensionId={extensionId}
+        extensionUrl={extensionUrl}
       />
     );
     expect(

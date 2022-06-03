@@ -1,12 +1,13 @@
 import React from 'react';
+import { ExtensionUrl } from '../../chrome/urls';
 import { ProfileApi } from '../api/ProfileApi';
 import { CheckingAccessPermissions } from './CheckingAccessPermissions';
 import { GrantAccess } from './GrantAccess';
 import { useCheckAccessPermissions } from './useCheckAccessPermissions';
 
 interface Props {
-  extensionUrl: string;
-  redirectUrl: string;
+  extensionUrl: ExtensionUrl;
+  redirectUrl: URL;
   providerUrl: string;
   profileApi: ProfileApi;
 }

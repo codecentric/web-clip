@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { when } from 'jest-when';
 import React from 'react';
+import { ExtensionUrl } from '../../chrome/urls';
 import { ProfileApi } from '../api/ProfileApi';
 import { AuthorizationSection } from './AuthorizationSection';
 import { useCheckAccessPermissions } from './useCheckAccessPermissions';
@@ -13,8 +14,8 @@ describe('AuthorizationSection', () => {
       const profileApi = {} as ProfileApi;
       when(useCheckAccessPermissions)
         .calledWith(
-          'chrome-extension://extension-id',
-          'https://extension-id.chromiumapp.org',
+          new ExtensionUrl('chrome-extension://extension-id/'),
+          new URL('https://extension-id.chromiumapp.org'),
           profileApi
         )
         .mockReturnValue({
@@ -23,8 +24,8 @@ describe('AuthorizationSection', () => {
 
       render(
         <AuthorizationSection
-          extensionUrl="chrome-extension://extension-id"
-          redirectUrl="https://extension-id.chromiumapp.org"
+          extensionUrl={new ExtensionUrl('chrome-extension://extension-id/')}
+          redirectUrl={new URL('https://extension-id.chromiumapp.org')}
           providerUrl="https://pod.provider.test"
           profileApi={profileApi}
         />
@@ -49,8 +50,8 @@ describe('AuthorizationSection', () => {
       const profileApi = {} as ProfileApi;
       when(useCheckAccessPermissions)
         .calledWith(
-          'chrome-extension://extension-id',
-          'https://extension-id.chromiumapp.org',
+          new ExtensionUrl('chrome-extension://extension-id/'),
+          new URL('https://extension-id.chromiumapp.org'),
           profileApi
         )
         .mockReturnValue({
@@ -59,8 +60,8 @@ describe('AuthorizationSection', () => {
 
       render(
         <AuthorizationSection
-          extensionUrl="chrome-extension://extension-id"
-          redirectUrl="https://extension-id.chromiumapp.org"
+          extensionUrl={new ExtensionUrl('chrome-extension://extension-id/')}
+          redirectUrl={new URL('https://extension-id.chromiumapp.org')}
           providerUrl="https://pod.provider.test"
           profileApi={profileApi}
         />

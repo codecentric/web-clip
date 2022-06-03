@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { when } from 'jest-when';
 import React from 'react';
+import { ExtensionUrl } from '../chrome/urls';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
 import { ProfileApi } from './api/ProfileApi';
 import { useAuthentication } from './auth/AuthenticationContext';
@@ -20,8 +21,8 @@ describe('OptionsPage', () => {
 
   beforeEach(() => {
     when(useChromeExtension).mockReturnValue({
-      extensionUrl: 'chrome-extension://extension-id',
-      redirectUrl: 'https://redirect.test',
+      extensionUrl: new ExtensionUrl('chrome-extension://extension-id/'),
+      redirectUrl: new URL('https://redirect.test'),
     });
     profileApi = {
       canExtensionAccessPod: jest.fn().mockResolvedValue(false),

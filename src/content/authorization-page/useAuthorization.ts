@@ -1,5 +1,6 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
 import { useEffect, useState } from 'react';
+import { ExtensionUrl } from '../../chrome/urls';
 import { MessageType } from '../../messages';
 import { useSolidApis } from '../../options/useSolidApis';
 import { sendMessage } from '../sendMessage';
@@ -7,7 +8,7 @@ import { sendMessage } from '../sendMessage';
 export const useAuthorization = (
   session: Session,
   providerUrl: string,
-  extensionId: string
+  extensionUrl: ExtensionUrl
 ) => {
   const [state, setState] = useState({
     loading: true,
@@ -26,7 +27,7 @@ export const useAuthorization = (
         .then(() => null);
     } else {
       profileApi
-        .grantAccessTo(`chrome-extension://${extensionId}`)
+        .grantAccessTo(extensionUrl)
         .then(() => {
           setState((currentState) => ({
             ...currentState,
