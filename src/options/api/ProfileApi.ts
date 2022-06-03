@@ -19,15 +19,21 @@ export class ProfileApi {
   }
 
   /**
-   * Determines whether the currently authenticated user has configured the
-   * required access permissions to the given extension origin in their
-   * profile document
+   * Determines whether the currently authenticated user either
+   * 1) has configured the required access permissions to the given extension in their
+   *    profile document
+   * or
+   * 2) uses a Pod server that does not use origin based authorization
    *
-   * @param extensionUrl
+   * Returns false if none of this is the case, true otherwise
+   *
+   * @param extensionUrl The actual url of the extension
+   * @param redirectUrl The pseudo-redirect url of the extension
    */
-  async hasGrantedAccessTo(extensionUrl: string) {
+  async canExtensionAccessPod(extensionUrl: string, redirectUrl: string) {
     const webId = this.session.info.webId;
     await this.fetcher.load(webId);
+    // TODO: check for holdsOrigin
     return this.store.checkAccessPermissions(webId, extensionUrl);
   }
 

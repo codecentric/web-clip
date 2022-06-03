@@ -5,6 +5,7 @@ import { ActionType } from '../reducer';
 
 export const useCheckAccessPermissions = (
   extensionUrl: string,
+  redirectUrl: string,
   profileApi: ProfileApi
 ) => {
   const { state, dispatch } = useOptions();
@@ -14,12 +15,14 @@ export const useCheckAccessPermissions = (
   useEffect(() => {
     if (state.sessionInfo.isLoggedIn) {
       setChecking(true);
-      profileApi.hasGrantedAccessTo(extensionUrl).then((trusted) => {
-        setChecking(false);
-        if (trusted) {
-          dispatch({ type: ActionType.TRUSTED_APP });
-        }
-      });
+      profileApi
+        .canExtensionAccessPod(extensionUrl, redirectUrl)
+        .then((trusted) => {
+          setChecking(false);
+          if (trusted) {
+            dispatch({ type: ActionType.TRUSTED_APP });
+          }
+        });
     }
   }, [state.sessionInfo.isLoggedIn]);
 

@@ -58,6 +58,7 @@ export const OptionsPage = ({ session }: Props) => {
           {isLoggedIn && !trustedApp && (
             <AuthorizationSection
               extensionUrl={extensionUrl}
+              redirectUrl={redirectUrl}
               providerUrl={state.value.providerUrl}
               profileApi={profileApi}
             ></AuthorizationSection>

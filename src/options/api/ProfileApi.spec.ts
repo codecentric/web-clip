@@ -29,8 +29,9 @@ describe('ProfileApi', () => {
       const updater = new UpdateManager();
       const fetcher = new Fetcher(updater.store, { fetch: fetchMock });
       const profileApi = new ProfileApi(session, fetcher.store as LiveStore);
-      const result = await profileApi.hasGrantedAccessTo(
-        'chrome-extension://extension-id'
+      const result = await profileApi.canExtensionAccessPod(
+        'chrome-extension://extension-id',
+        'https://extension-id.chromiumapp.org'
       );
       expect(result).toBe(false);
     });
@@ -58,8 +59,9 @@ describe('ProfileApi', () => {
       const store = graph();
       new Fetcher(store, { fetch: fetchMock });
       const profileApi = new ProfileApi(session, store as LiveStore);
-      const result = await profileApi.hasGrantedAccessTo(
-        'chrome-extension://extension-id'
+      const result = await profileApi.canExtensionAccessPod(
+        'chrome-extension://extension-id',
+        'https://extension-id.chromiumapp.org'
       );
       expect(result).toBe(true);
     });

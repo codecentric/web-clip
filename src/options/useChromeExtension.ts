@@ -18,7 +18,7 @@ export const useChromeExtension = (messageHandler: MessageHandler) => {
   }, []);
 
   return {
-    redirectUrl: chrome.identity.getRedirectURL(),
+    redirectUrl: chrome.identity.getRedirectURL().slice(0, -1),
     extensionUrl: chrome.extension.getURL('').slice(0, -1),
   };
 };

@@ -24,7 +24,7 @@ describe('OptionsPage', () => {
       redirectUrl: 'https://redirect.test',
     });
     profileApi = {
-      hasGrantedAccessTo: jest.fn().mockResolvedValue(false),
+      canExtensionAccessPod: jest.fn().mockResolvedValue(false),
     } as unknown as ProfileApi;
     when(useSolidApis).mockReturnValue({ profileApi });
   });
@@ -118,7 +118,7 @@ describe('OptionsPage', () => {
 
     it('checks permission after login', async () => {
       let resolveCheckAccessPromise: (value: boolean) => void = () => null;
-      when(profileApi.hasGrantedAccessTo).mockReturnValue(
+      when(profileApi.canExtensionAccessPod).mockReturnValue(
         new Promise<boolean>((resolve) => (resolveCheckAccessPromise = resolve))
       );
       when(useAuthentication).mockReturnValue({
