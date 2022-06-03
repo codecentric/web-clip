@@ -23,7 +23,7 @@ export const useAuthorization = (
         .login({
           oidcIssuer: providerUrl,
         })
-        .then(() => console.log('login via redirect'));
+        .then(() => null);
     } else {
       profileApi
         .grantAccessTo(`chrome-extension://${extensionId}`)

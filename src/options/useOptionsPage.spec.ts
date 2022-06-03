@@ -139,13 +139,13 @@ describe('useOptionsPage', () => {
 
       await waitFor(() => !result.current.state.loading);
 
-      act(() => {
+      await act(async () => {
         result.current.dispatch({
           type: ActionType.TRUSTED_APP,
         });
-      });
 
-      await waitFor(() => result.current.state.value.trustedApp === true);
+        await waitFor(() => result.current.state.value.trustedApp === true);
+      });
 
       expect(result.current.state.loading).toBe(false);
 

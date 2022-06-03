@@ -1,9 +1,9 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
 import { MessageType } from '../messages';
-import { usePageData } from './usePageData';
 
 import { sendMessage } from './sendMessage';
+import { usePageData } from './usePageData';
 
 jest.mock('./sendMessage');
 
@@ -15,7 +15,7 @@ describe('usePageData', () => {
     });
   });
 
-  it('sends message to data from page', () => {
+  it('sends message to data from page', async () => {
     when(sendMessage)
       .calledWith({
         type: MessageType.IMPORT_PAGE_DATA,
@@ -24,7 +24,10 @@ describe('usePageData', () => {
         },
       })
       .mockResolvedValue(undefined);
-    renderHook(() => usePageData('https://page.example'));
+    const { waitForNextUpdate } = renderHook(() =>
+      usePageData('https://page.example')
+    );
+    await waitForNextUpdate();
     expect(sendMessage).toHaveBeenCalledWith({
       type: MessageType.IMPORT_PAGE_DATA,
       payload: {
