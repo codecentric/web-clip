@@ -59,7 +59,6 @@ export const OptionsPage = ({ session }: Props) => {
             <AuthorizationSection
               extensionUrl={extensionUrl}
               redirectUrl={redirectUrl}
-              providerUrl={state.value.providerUrl}
               profileApi={profileApi}
             ></AuthorizationSection>
           )}

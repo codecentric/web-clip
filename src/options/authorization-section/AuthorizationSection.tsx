@@ -8,14 +8,12 @@ import { useCheckAccessPermissions } from './useCheckAccessPermissions';
 interface Props {
   extensionUrl: ExtensionUrl;
   redirectUrl: URL;
-  providerUrl: string;
   profileApi: ProfileApi;
 }
 
 export const AuthorizationSection = ({
   extensionUrl,
   redirectUrl,
-  providerUrl,
   profileApi,
 }: Props) => {
   const { checking } = useCheckAccessPermissions(
@@ -30,7 +28,10 @@ export const AuthorizationSection = ({
       {checking ? (
         <CheckingAccessPermissions extensionUrl={extensionUrl} />
       ) : (
-        <GrantAccess providerUrl={providerUrl} extensionUrl={extensionUrl} />
+        <GrantAccess
+          authorizationPageBaseUrl={profileApi.getProfileDocUrl()}
+          extensionUrl={extensionUrl}
+        />
       )}
     </section>
   );
