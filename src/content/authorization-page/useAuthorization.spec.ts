@@ -55,6 +55,7 @@ describe('useAuthorization', () => {
         info: {
           isLoggedIn: true,
         },
+        logout: jest.fn(),
         login: jest.fn(),
       } as unknown as Session;
       profileApi = {
@@ -97,6 +98,10 @@ describe('useAuthorization', () => {
         type: MessageType.ACCESS_GRANTED,
       });
     });
+
+    it('logs out', () => {
+      expect(session.logout).toHaveBeenCalled();
+    });
   });
 
   describe('when already logged in, but granting access fails', () => {
@@ -106,6 +111,7 @@ describe('useAuthorization', () => {
         info: {
           isLoggedIn: true,
         },
+        logout: jest.fn(),
         login: jest.fn(),
       } as unknown as Session;
       profileApi = {
@@ -135,6 +141,10 @@ describe('useAuthorization', () => {
       expect(renderResult.current.error).toEqual(
         new Error('granting access failed')
       );
+    });
+
+    it('logs out', () => {
+      expect(session.logout).toHaveBeenCalled();
     });
   });
 });
