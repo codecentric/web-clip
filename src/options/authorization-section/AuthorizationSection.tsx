@@ -24,8 +24,6 @@ export const AuthorizationSection = ({
     profileApi
   );
 
-  console.log({ extensionUrl, redirectUrl });
-
   return (
     <section>
       <h2 className="text-lg font-medium my-8">Authorize WebClip</h2>
