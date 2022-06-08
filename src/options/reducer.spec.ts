@@ -146,8 +146,8 @@ describe('options reducer', () => {
       );
     });
 
-    it('keeps provider url', () => {
-      expect(newState.value.providerUrl).toBe('https://old.provider.test');
+    it('clears provider url', () => {
+      expect(newState.value.providerUrl).toBe('');
     });
 
     it('resets the pod trust', () => {
