@@ -1,4 +1,7 @@
-import { IRedirectHandler, IRedirector } from '@inrupt/solid-client-authn-core';
+import {
+  IIncomingRedirectHandler,
+  IRedirector,
+} from '@inrupt/solid-client-authn-core';
 import { launchWebAuthFlow } from './launchWebAuthFlow';
 import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
 
@@ -6,7 +9,7 @@ export type RedirectInfo = ISessionInfo & { fetch: typeof fetch };
 
 export class ChromeExtensionRedirector implements IRedirector {
   constructor(
-    private readonly redirectHandler: IRedirectHandler,
+    private readonly redirectHandler: IIncomingRedirectHandler,
     private readonly afterRedirect: (info: RedirectInfo, error?: Error) => void
   ) {}
 
