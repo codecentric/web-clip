@@ -74,4 +74,18 @@ describe('useLogin', () => {
       loading: false,
     });
   });
+
+  it('indicates error when login fails', async () => {
+    when(session.login).mockRejectedValue(new Error('login failed'));
+    const { result } = renderHook(() =>
+      useLogin('https://pod.test', () => null)
+    );
+    await act(async () => {
+      await result.current.login();
+    });
+    expect(result.current).toMatchObject({
+      loading: false,
+      error: new Error('login failed'),
+    });
+  });
 });

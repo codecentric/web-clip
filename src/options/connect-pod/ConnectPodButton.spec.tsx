@@ -13,6 +13,7 @@ describe('LoginButton', () => {
       .calledWith('http://pod.test', expect.anything())
       .mockReturnValue({
         loading: false,
+        error: null,
         login,
       });
     render(
@@ -28,6 +29,7 @@ describe('LoginButton', () => {
       .calledWith('http://pod.test', expect.anything())
       .mockReturnValue({
         loading: true,
+        error: null,
         login: jest.fn(),
       });
     render(
