@@ -1,7 +1,4 @@
-import {
-  getDefaultSession,
-  handleIncomingRedirect,
-} from '@inrupt/solid-client-authn-browser';
+import { Session } from '@inrupt/solid-client-authn-browser';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ExtensionUrl } from '../../chrome/urls';
@@ -9,8 +6,14 @@ import { load as loadOptions } from '../../options/optionsStorageApi';
 import { AuthorizationPage } from './AuthorizationPage';
 
 async function handleRedirectAfterLogin() {
-  await handleIncomingRedirect();
-  return getDefaultSession();
+  const session = new Session({
+    sessionInfo: {
+      sessionId: 'webclip-auth-session',
+      isLoggedIn: false,
+    },
+  });
+  await session.handleIncomingRedirect();
+  return session;
 }
 
 export async function renderAuthorizationPage(

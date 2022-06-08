@@ -35,8 +35,9 @@ export const useAuthorization = (
             success: true,
             error: null,
           }));
-          return sendMessage({ type: MessageType.ACCESS_GRANTED });
         })
+        .then(() => session.logout())
+        .then(() => sendMessage({ type: MessageType.ACCESS_GRANTED }))
         .catch((error) => {
           setState((currentState) => ({
             ...currentState,
@@ -44,6 +45,7 @@ export const useAuthorization = (
             success: false,
             error,
           }));
+          return session.logout();
         });
     }
   }, []);
