@@ -17,7 +17,7 @@ describe('useConnectionEstablished', () => {
   beforeEach(() => {
     dispatch = jest.fn();
     session = {
-      logout: jest.fn(),
+      logout: jest.fn().mockResolvedValue(null),
     } as unknown as SolidSession;
     when(useAuthentication).mockReturnValue({
       session,

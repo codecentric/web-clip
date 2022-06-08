@@ -7,8 +7,8 @@ export const useConnectionEstablished = () => {
   const { session } = useAuthentication();
   return {
     providerUrl: state.value.providerUrl,
-    disconnect: () => {
-      session.logout();
+    disconnect: async () => {
+      await session.logout();
       dispatch({ type: ActionType.DISCONNECTED_POD });
     },
   };
