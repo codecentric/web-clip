@@ -20,12 +20,11 @@ export class MessageHandler {
   ): boolean | Promise<Response> {
     switch (request.type) {
       case MessageType.ACCESS_GRANTED:
-        return closeTab(sender.tab.id).then(() => {
-          this.dispatch({
-            type: ActionType.TRUSTED_APP,
-          });
-          return {};
+        closeTab(sender.tab.id);
+        this.dispatch({
+          type: ActionType.TRUSTED_APP,
         });
+        return Promise.resolve({});
     }
     return false;
   }
