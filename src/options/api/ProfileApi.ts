@@ -34,7 +34,10 @@ export class ProfileApi {
   async canExtensionAccessPod(extensionUrl: ExtensionUrl, redirectUrl: URL) {
     const webId = this.session.info.webId;
     await this.fetcher.load(webId);
-    // TODO: check for holdsOrigin
+    if (!this.store.holdsOrigin(webId, redirectUrl.origin)) {
+      // assume the pod provider does NOT use origin based authorization
+      return true;
+    }
     return this.store.checkAccessPermissions(webId, extensionUrl.origin);
   }
 
