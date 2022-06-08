@@ -6,18 +6,37 @@ export const useLogin = (
   oidcIssuer: string,
   onLogin: (sessionInfo: ISessionInfo) => void
 ) => {
-  const [loading, setLoading] = useState(false);
+  const [state, setState] = useState({
+    loading: false,
+    error: null,
+  });
   const { session, redirectUrl } = useAuthentication();
-  return {
-    loading,
-    login: async () => {
-      setLoading(true);
+
+  const login = async () => {
+    setState({
+      loading: true,
+      error: null,
+    });
+    try {
       await session.login({
         oidcIssuer,
         redirectUrl,
       });
-      setLoading(false);
+      setState({
+        loading: false,
+        error: null,
+      });
       await onLogin(session.info);
-    },
+    } catch (error) {
+      setState({
+        loading: false,
+        error,
+      });
+    }
+  };
+
+  return {
+    ...state,
+    login,
   };
 };
