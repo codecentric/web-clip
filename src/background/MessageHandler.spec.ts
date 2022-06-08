@@ -16,9 +16,21 @@ describe('MessageHandler', () => {
   beforeEach(() => {
     solidApi = mockSolidApi();
     store = {
-      importFromUrl: jest.fn(),
+      importFromUrl: jest.fn().mockResolvedValue(null),
     } as undefined as Store;
     messageHandler = new MessageHandler(solidApi as unknown as SolidApi, store);
+  });
+
+  describe('handle unknown types', () => {
+    it('returns false synchronously', async () => {
+      const result = messageHandler.handleMessage(
+        {
+          type: MessageType.ACCESS_GRANTED,
+        },
+        {}
+      );
+      expect(result).toEqual(false);
+    });
   });
 
   describe('handle type OPEN_OPTIONS', () => {
