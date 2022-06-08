@@ -10,15 +10,18 @@ describe('ProfileApi', () => {
     jest.resetAllMocks();
   });
 
-  describe('hasGrantedAccessTo', () => {
-    it('returns false if fetched user profile does not contain trusted app', async () => {
+  describe('canExtensionAccessPod', () => {
+    it('returns false if fetched user profile does contain origin of redirect url as origin, but not the real extension origin', async () => {
       const fetchMock = jest.fn();
       when(fetchMock)
         .calledWith('https://pod.test/alice', expect.anything())
         .mockResolvedValue(
           turtleResponse(`
-          <https://pod.example/#me>
-            <http://www.w3.org/2006/vcard/ns#fn> "Solid User" .
+          @prefix acl: <http://www.w3.org/ns/auth/acl#> .
+        <https://pod.test/alice#me> acl:trustedApp [
+          acl:origin <https://extension-id.chromiumapp.org> ;
+          acl:mode acl:Read, acl:Write, acl:Append ;
+        ] .
           `)
         );
 
@@ -37,7 +40,7 @@ describe('ProfileApi', () => {
       expect(result).toBe(false);
     });
 
-    it('returns true if fetched user profile contains trusted app', async () => {
+    it('returns true if fetched user profile contains real extension origin as trusted app', async () => {
       const session = {
         info: {
           webId: 'https://pod.test/alice#me',
@@ -51,9 +54,38 @@ describe('ProfileApi', () => {
           turtleResponse(`
         @prefix acl: <http://www.w3.org/ns/auth/acl#> .
         <https://pod.test/alice#me> acl:trustedApp [
+          acl:origin <https://extension-id.chromiumapp.org> ;
+          acl:mode acl:Read, acl:Write, acl:Append ;
+        ], [
           acl:origin <chrome-extension://extension-id> ;
           acl:mode acl:Read, acl:Write, acl:Append ;
         ] .
+        `)
+        );
+
+      const store = graph();
+      new Fetcher(store, { fetch: fetchMock });
+      const profileApi = new ProfileApi(session, store as LiveStore);
+      const result = await profileApi.canExtensionAccessPod(
+        new ExtensionUrl('chrome-extension://extension-id/'),
+        new URL('https://extension-id.chromiumapp.org/')
+      );
+      expect(result).toBe(true);
+    });
+
+    it('if the user profile does not hold fake origin, assume no access needs to be granted', async () => {
+      const session = {
+        info: {
+          webId: 'https://pod.test/alice#me',
+        },
+      } as Session;
+
+      const fetchMock = jest.fn();
+      when(fetchMock)
+        .calledWith('https://pod.test/alice', expect.anything())
+        .mockResolvedValue(
+          turtleResponse(`
+        <https://pod.test/alice#me> <http://schema.org/description> "profile without trusted apps" .
         `)
         );
 
