@@ -30,7 +30,7 @@ export const AuthorizationSection = ({
       {checking ? (
         <CheckingAccessPermissions extensionUrl={extensionUrl} />
       ) : (
-        <GrantAccess providerUrl={providerUrl} />
+        <GrantAccess providerUrl={providerUrl} extensionUrl={extensionUrl} />
       )}
     </section>
   );
