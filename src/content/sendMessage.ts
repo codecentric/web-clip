@@ -5,11 +5,13 @@ export async function sendMessage(message: Message) {
     chrome.runtime.sendMessage(message, function (response?: Response) {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
-      }
-      if (response.errorMessage) {
+      } else if (!response) {
+        reject(new Error(`response to ${message.type} message was null`));
+      } else if (response.errorMessage) {
         reject(new Error(response.errorMessage));
+      } else {
+        resolve(response.payload);
       }
-      resolve(response?.payload);
     });
   });
 }

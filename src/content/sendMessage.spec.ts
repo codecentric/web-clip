@@ -11,6 +11,17 @@ describe('messages', () => {
         expect.any(Function)
       );
     });
+    it('promise rejects if response is null', async () => {
+      when(chrome.runtime.sendMessage).mockImplementation(
+        (message: unknown, callback?: (response: Response) => void) => {
+          callback(null);
+        }
+      );
+      const promise = sendMessage({ type: MessageType.LOGIN });
+      await expect(promise).rejects.toEqual(
+        new Error('response to LOGIN message was null')
+      );
+    });
     it('promise resolves to callback response', async () => {
       when(chrome.runtime.sendMessage).mockImplementation(
         (message: unknown, callback?: (response: Response) => void) => {
