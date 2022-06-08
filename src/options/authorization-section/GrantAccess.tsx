@@ -1,10 +1,12 @@
 import React from 'react';
+import { ExtensionUrl } from '../../chrome/urls';
 
 interface Props {
   providerUrl: string;
+  extensionUrl: ExtensionUrl;
 }
 
-export const GrantAccess = ({ providerUrl }: Props) => (
+export const GrantAccess = ({ providerUrl, extensionUrl }: Props) => (
   <div className="flex flex-col gap-2">
     <div className="flex gap-2 font-semibold text-blue-500">
       <svg
@@ -27,7 +29,7 @@ export const GrantAccess = ({ providerUrl }: Props) => (
       <div className="flex flex-col rounded border bg-slate-50 py-2 px-3 leading-tight text-gray-700 shadow">
         <span className="text-xs fontLight">Extension Origin</span>
         <div className="flex flex-row gap-2">
-          <span>chrome-extension://extension-id</span>
+          <span>{extensionUrl.origin}</span>
           <a
             target="_blank"
             className="mx-2.5 flex gap-1 rounded p-0 text-blue-500 underline hover:text-gray-800 hover:underline"
