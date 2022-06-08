@@ -37,7 +37,7 @@ describe('MessageHandler', () => {
 
   describe('when ACCESS_GRANTED handled', () => {
     beforeEach(async () => {
-      when(closeTab).mockResolvedValue(null);
+      when(closeTab).mockReturnValue(null);
       const handler = new MessageHandler(dispatch);
       result = handler.handleMessage(
         {
