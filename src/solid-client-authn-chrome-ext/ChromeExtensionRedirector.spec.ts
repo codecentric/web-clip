@@ -1,4 +1,4 @@
-import { IRedirectHandler } from '@inrupt/solid-client-authn-core';
+import { IIncomingRedirectHandler } from '@inrupt/solid-client-authn-core';
 import { ChromeExtensionRedirector } from './ChromeExtensionRedirector';
 import { launchWebAuthFlow } from './launchWebAuthFlow';
 
@@ -9,7 +9,7 @@ describe('ChromeExtensionRedirector', () => {
     jest.resetAllMocks();
   });
 
-  function mockRedirectHandler(): IRedirectHandler {
+  function mockRedirectHandler(): IIncomingRedirectHandler {
     return {
       handle: jest.fn(),
       canHandle: jest.fn(),

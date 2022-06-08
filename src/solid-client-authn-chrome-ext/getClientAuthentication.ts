@@ -25,10 +25,10 @@ import ClientRegistrar from '@inrupt/solid-client-authn-browser/dist/login/oidc/
 import IssuerConfigFetcher from '@inrupt/solid-client-authn-browser/dist/login/oidc/IssuerConfigFetcher';
 import AuthorizationCodeWithPkceOidcHandler from '@inrupt/solid-client-authn-browser/dist/login/oidc/oidcHandlers/AuthorizationCodeWithPkceOidcHandler';
 import OidcLoginHandler from '@inrupt/solid-client-authn-browser/dist/login/oidc/OidcLoginHandler';
-import AggregateRedirectHandler from '@inrupt/solid-client-authn-browser/dist/login/oidc/redirectHandler/AggregateRedirectHandler';
-import { AuthCodeRedirectHandler } from '@inrupt/solid-client-authn-browser/dist/login/oidc/redirectHandler/AuthCodeRedirectHandler';
-import { ErrorOidcHandler } from '@inrupt/solid-client-authn-browser/dist/login/oidc/redirectHandler/ErrorOidcHandler';
-import { FallbackRedirectHandler } from '@inrupt/solid-client-authn-browser/dist/login/oidc/redirectHandler/FallbackRedirectHandler';
+import AggregateRedirectHandler from '@inrupt/solid-client-authn-browser/dist/login/oidc/AggregateRedirectHandler';
+import { AuthCodeRedirectHandler } from '@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/AuthCodeRedirectHandler';
+import { ErrorOidcHandler } from '@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/ErrorOidcHandler';
+import { FallbackRedirectHandler } from '@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/FallbackRedirectHandler';
 import TokenRefresher from '@inrupt/solid-client-authn-browser/dist/login/oidc/refresh/TokenRefresher';
 import GeneralLogoutHandler from '@inrupt/solid-client-authn-browser/dist/logout/GeneralLogoutHandler';
 import { SessionInfoManager } from '@inrupt/solid-client-authn-browser/dist/sessionInfo/SessionInfoManager';
