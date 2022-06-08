@@ -1,3 +1,4 @@
+import { when } from 'jest-when';
 import { closeTab } from '../../chrome/closeTab';
 import { MessageType, Response } from '../../messages';
 import { ActionType, Dispatch } from '../reducer';
@@ -6,13 +7,39 @@ import { MessageHandler } from './MessageHandler';
 jest.mock('../../chrome/closeTab');
 
 describe('MessageHandler', () => {
+  let dispatch: Dispatch;
+  let result: Promise<Response> | boolean;
+  let handler: MessageHandler;
+
+  beforeEach(() => {
+    dispatch = jest.fn();
+    handler = new MessageHandler(dispatch);
+  });
+
+  describe('when message is not relevant', () => {
+    beforeEach(() => {
+      result = handler.handleMessage(
+        {
+          type: MessageType.LOGIN,
+        },
+        {
+          tab: {
+            id: 123456,
+          } as chrome.tabs.Tab,
+        }
+      );
+    });
+
+    it('returns false synchronously', () => {
+      expect(result).toBe(false);
+    });
+  });
+
   describe('when ACCESS_GRANTED handled', () => {
-    let dispatch: Dispatch;
-    let result: Response;
     beforeEach(async () => {
-      dispatch = jest.fn();
+      when(closeTab).mockResolvedValue(null);
       const handler = new MessageHandler(dispatch);
-      result = await handler.handleMessage(
+      result = handler.handleMessage(
         {
           type: MessageType.ACCESS_GRANTED,
         },
@@ -30,8 +57,8 @@ describe('MessageHandler', () => {
       });
     });
 
-    it('it returns nothing', async () => {
-      expect(result).toEqual({});
+    it('it resolves to empty response', async () => {
+      await expect(result).resolves.toEqual({});
     });
 
     it('it closes the sending tab', async () => {

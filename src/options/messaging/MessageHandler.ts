@@ -6,18 +6,27 @@ import MessageSender = chrome.runtime.MessageSender;
 export class MessageHandler {
   constructor(private readonly dispatch: Dispatch) {}
 
-  async handleMessage(
+  /**
+   * Handles the given request, if it is relevant for the option page and return and aysnc response.
+   * Returns false synchronously, if the given request is not handled.
+   *
+   * @param request
+   * @param sender
+   */
+  handleMessage(
     request: Message,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sender: MessageSender
-  ): Promise<Response> {
+  ): boolean | Promise<Response> {
     switch (request.type) {
       case MessageType.ACCESS_GRANTED:
-        await closeTab(sender.tab.id);
-        this.dispatch({
-          type: ActionType.TRUSTED_APP,
+        return closeTab(sender.tab.id).then(() => {
+          this.dispatch({
+            type: ActionType.TRUSTED_APP,
+          });
+          return {};
         });
-        return {};
     }
+    return false;
   }
 }

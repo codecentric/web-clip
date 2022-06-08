@@ -10,42 +10,41 @@ export class MessageHandler {
     private readonly store: Store
   ) {}
 
-  async handleMessage(
+  handleMessage(
     request: Message,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sender: MessageSender
-  ): Promise<Response> {
+  ): boolean | Promise<Response> {
     switch (request.type) {
       case MessageType.OPEN_OPTIONS:
         openOptionsPage();
-        return {};
+        return Promise.resolve({});
       case MessageType.LOGIN:
-        await this.solidApi.login();
-        return {};
+        return this.solidApi.login().then(() => ({}));
       case MessageType.LOAD_PROFILE: {
-        const profile = await this.solidApi.loadProfile();
-        return {
+        return this.solidApi.loadProfile().then((profile) => ({
           payload: profile,
-        };
+        }));
       }
       case MessageType.LOAD_BOOKMARK: {
-        const bookmark = await this.solidApi.loadBookmark(request.payload.page);
-        return {
-          payload: bookmark,
-        };
+        return this.solidApi
+          .loadBookmark(request.payload.page)
+          .then((bookmark) => ({
+            payload: bookmark,
+          }));
       }
       case MessageType.ADD_BOOKMARK: {
-        const result = await this.solidApi.bookmark(
-          request.payload.page,
-          request.payload.bookmark
-        );
-        return {
-          payload: result,
-        };
+        return this.solidApi
+          .bookmark(request.payload.page, request.payload.bookmark)
+          .then((result) => ({
+            payload: result,
+          }));
       }
       case MessageType.IMPORT_PAGE_DATA: {
-        await this.store.importFromUrl(request.payload.url);
-        return {};
+        return this.store.importFromUrl(request.payload.url).then(() => ({}));
+      }
+      default: {
+        return false;
       }
     }
   }

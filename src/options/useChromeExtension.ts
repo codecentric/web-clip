@@ -10,11 +10,15 @@ export const useChromeExtension = (messageHandler: MessageHandler) => {
       sender,
       sendResponse: (response: Response) => void
     ) {
-      messageHandler
-        .handleMessage(request, sender)
-        .then(sendResponse)
-        .catch((error) => sendResponse({ errorMessage: error.toString() }));
-      return true; // indicate async response
+      const result = messageHandler.handleMessage(request, sender);
+
+      if (result instanceof Promise) {
+        result
+          .then(sendResponse)
+          .catch((error) => sendResponse({ errorMessage: error.toString() }));
+        return true; // indicate async response
+      }
+      return result;
     });
   }, []);
 
