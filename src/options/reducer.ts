@@ -102,6 +102,7 @@ export default (
         unsavedChanges: true,
         value: {
           ...state.value,
+          providerUrl: '',
           trustedApp: false,
         },
       };
