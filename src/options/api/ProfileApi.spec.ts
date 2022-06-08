@@ -136,6 +136,19 @@ describe('ProfileApi', () => {
       );
     });
   });
+
+  describe('getProfileDocUrl', () => {
+    it('returns the url of the WebID profile document', () => {
+      const session = {
+        info: {
+          webId: 'https://pod.test/alice#me',
+        },
+      } as Session;
+      const store = graph();
+      const profileApi = new ProfileApi(session, store as LiveStore);
+      expect(profileApi.getProfileDocUrl()).toEqual('https://pod.test/alice');
+    });
+  });
 });
 
 function turtleResponse(bodyText: string) {

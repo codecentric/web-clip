@@ -26,6 +26,7 @@ describe('OptionsPage', () => {
     });
     profileApi = {
       canExtensionAccessPod: jest.fn().mockResolvedValue(false),
+      getProfileDocUrl: () => '',
     } as unknown as ProfileApi;
     when(useSolidApis).mockReturnValue({ profileApi });
   });

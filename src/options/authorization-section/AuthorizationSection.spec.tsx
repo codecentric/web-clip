@@ -11,7 +11,9 @@ jest.mock('./useCheckAccessPermissions');
 describe('AuthorizationSection', () => {
   describe('while checking access permissions', () => {
     beforeEach(() => {
-      const profileApi = {} as ProfileApi;
+      const profileApi = {
+        getProfileDocUrl: () => 'https://pod.example/alice',
+      } as unknown as ProfileApi;
       when(useCheckAccessPermissions)
         .calledWith(
           new ExtensionUrl('chrome-extension://extension-id/'),
@@ -26,7 +28,6 @@ describe('AuthorizationSection', () => {
         <AuthorizationSection
           extensionUrl={new ExtensionUrl('chrome-extension://extension-id/')}
           redirectUrl={new URL('https://extension-id.chromiumapp.org')}
-          providerUrl="https://pod.provider.test"
           profileApi={profileApi}
         />
       );
@@ -47,7 +48,9 @@ describe('AuthorizationSection', () => {
 
   describe('after checking access permission', () => {
     beforeEach(() => {
-      const profileApi = {} as ProfileApi;
+      const profileApi = {
+        getProfileDocUrl: () => 'https://pod.example/alice',
+      } as unknown as ProfileApi;
       when(useCheckAccessPermissions)
         .calledWith(
           new ExtensionUrl('chrome-extension://extension-id/'),
@@ -62,7 +65,6 @@ describe('AuthorizationSection', () => {
         <AuthorizationSection
           extensionUrl={new ExtensionUrl('chrome-extension://extension-id/')}
           redirectUrl={new URL('https://extension-id.chromiumapp.org')}
-          providerUrl="https://pod.provider.test"
           profileApi={profileApi}
         />
       );
@@ -79,6 +81,9 @@ describe('AuthorizationSection', () => {
         .queryAllByRole('link')
         .find((it) => it.textContent === 'Grant access');
       expect(grantAccessLink).toBeInTheDocument();
+      expect(grantAccessLink.getAttribute('href')).toBe(
+        `https://pod.example/alice/.web-clip/${chrome.runtime.id}`
+      );
     });
 
     it('displays the extension url', () => {

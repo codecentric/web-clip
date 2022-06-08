@@ -55,4 +55,8 @@ export class ProfileApi {
     ];
     return this.updater.update([], trustStatements);
   }
+
+  getProfileDocUrl() {
+    return sym(this.session.info.webId).doc().uri;
+  }
 }
