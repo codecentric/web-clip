@@ -18,8 +18,8 @@
 <g id="node1" class="node">
 <title>events</title>
 <g id="a_node1"><a xlink:title="events">
-<path fill="#ffffcc" stroke="#c0c0c0" d="M534,-100C534,-100 492,-100 492,-100 489,-100 486,-97 486,-94 486,-94 486,-88 486,-88 486,-85 489,-82 492,-82 492,-82 534,-82 534,-82 537,-82 540,-85 540,-88 540,-88 540,-94 540,-94 540,-97 537,-100 534,-100"/>
-<text text-anchor="middle" x="513" y="-88.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#c0c0c0">events</text>
+<path fill="#ffffcc" stroke="#c0c0c0" d="M534,-103C534,-103 492,-103 492,-103 489,-103 486,-100 486,-97 486,-97 486,-91 486,-91 486,-88 489,-85 492,-85 492,-85 534,-85 534,-85 537,-85 540,-88 540,-91 540,-91 540,-97 540,-97 540,-100 537,-103 534,-103"/>
+<text text-anchor="middle" x="513" y="-91.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#c0c0c0">events</text>
 </a>
 </g>
 </g>
@@ -27,91 +27,91 @@
 <g id="node2" class="node">
 <title>src/api/</title>
 <g id="a_node2"><a xlink:href="src/api/" xlink:title="api">
-<polygon fill="#ffffcc" stroke="#000000" points="314.5,-134 262.5,-134 260.5,-132 260.5,-116 312.5,-116 314.5,-118 314.5,-134"/>
-<polyline fill="none" stroke="#000000" points="312.5,-132 260.5,-132 "/>
-<polyline fill="none" stroke="#000000" points="312.5,-132 312.5,-116 "/>
-<polyline fill="none" stroke="#000000" points="312.5,-132 314.5,-134 "/>
-<text text-anchor="start" x="281" y="-122.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">api</text>
+<polygon fill="#ffffcc" stroke="#000000" points="314.5,-162 262.5,-162 260.5,-160 260.5,-144 312.5,-144 314.5,-146 314.5,-162"/>
+<polyline fill="none" stroke="#000000" points="312.5,-160 260.5,-160 "/>
+<polyline fill="none" stroke="#000000" points="312.5,-160 312.5,-144 "/>
+<polyline fill="none" stroke="#000000" points="312.5,-160 314.5,-162 "/>
+<text text-anchor="start" x="281" y="-150.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">api</text>
 </a>
 </g>
-</g>
-<!-- src/chrome/ -->
-<g id="node3" class="node">
-<title>src/chrome/</title>
-<g id="a_node3"><a xlink:href="src/chrome/" xlink:title="chrome">
-<polygon fill="#ffffcc" stroke="#000000" points="429,-69 377,-69 375,-67 375,-51 427,-51 429,-53 429,-69"/>
-<polyline fill="none" stroke="#000000" points="427,-67 375,-67 "/>
-<polyline fill="none" stroke="#000000" points="427,-67 427,-51 "/>
-<polyline fill="none" stroke="#000000" points="427,-67 429,-69 "/>
-<text text-anchor="start" x="386.5" y="-57.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">chrome</text>
-</a>
-</g>
-</g>
-<!-- src/api/&#45;&gt;src/chrome/ -->
-<g id="edge1" class="edge">
-<title>src/api/&#45;&gt;src/chrome/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M303.4207,-115.962C323.474,-104.5781 358.0132,-84.9707 380.4249,-72.2479"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="381.6642,-73.9592 385.8454,-69.1708 379.5907,-70.3067 381.6642,-73.9592"/>
-</g>
-<!-- src/store/ -->
-<g id="node4" class="node">
-<title>src/store/</title>
-<g id="a_node4"><a xlink:href="src/store/" xlink:title="store">
-<polygon fill="#ffffcc" stroke="#000000" points="429,-175 377,-175 375,-173 375,-157 427,-157 429,-159 429,-175"/>
-<polyline fill="none" stroke="#000000" points="427,-173 375,-173 "/>
-<polyline fill="none" stroke="#000000" points="427,-173 427,-157 "/>
-<polyline fill="none" stroke="#000000" points="427,-173 429,-175 "/>
-<text text-anchor="start" x="391.5" y="-163.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">store</text>
-</a>
-</g>
-</g>
-<!-- src/api/&#45;&gt;src/store/ -->
-<g id="edge2" class="edge">
-<title>src/api/&#45;&gt;src/store/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M312.0965,-134.0506C319.1622,-136.6346 326.8814,-139.4426 334,-142 345.8391,-146.2532 358.8608,-150.8652 370.3128,-154.899"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.7868,-156.9401 376.1437,-156.9508 371.1809,-152.9782 369.7868,-156.9401"/>
-</g>
-<!-- src/solid&#45;client&#45;authn&#45;chrome&#45;ext/ -->
-<g id="node5" class="node">
-<title>src/solid&#45;client&#45;authn&#45;chrome&#45;ext/</title>
-<g id="a_node5"><a xlink:href="src/solid-client-authn-chrome-ext/" xlink:title="solid&#45;client&#45;authn&#45;chrome&#45;ext">
-<polygon fill="#ffffcc" stroke="#000000" points="470,-209 336,-209 334,-207 334,-191 468,-191 470,-193 470,-209"/>
-<polyline fill="none" stroke="#000000" points="468,-207 334,-207 "/>
-<polyline fill="none" stroke="#000000" points="468,-207 468,-191 "/>
-<polyline fill="none" stroke="#000000" points="468,-207 470,-209 "/>
-<text text-anchor="start" x="342" y="-197.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">solid&#45;client&#45;authn&#45;chrome&#45;ext</text>
-</a>
-</g>
-</g>
-<!-- src/api/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/ -->
-<g id="edge3" class="edge">
-<title>src/api/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M310.1198,-134.1179C314.1499,-136.5336 318.0096,-139.4762 321,-143 332.5494,-156.6099 321.0227,-168.7441 334,-181 336.8657,-183.7064 340.0843,-186.0326 343.5221,-188.0315"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="342.7914,-190.018 349.0853,-190.9109 344.722,-186.2879 342.7914,-190.018"/>
 </g>
 <!-- src/domain/ -->
-<g id="node6" class="node">
+<g id="node3" class="node">
 <title>src/domain/</title>
-<g id="a_node6"><a xlink:href="src/domain/" xlink:title="domain">
-<polygon fill="#ffffcc" stroke="#000000" points="429,-136 377,-136 375,-134 375,-118 427,-118 429,-120 429,-136"/>
-<polyline fill="none" stroke="#000000" points="427,-134 375,-134 "/>
-<polyline fill="none" stroke="#000000" points="427,-134 427,-118 "/>
-<polyline fill="none" stroke="#000000" points="427,-134 429,-136 "/>
-<text text-anchor="start" x="386.5" y="-124.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">domain</text>
+<g id="a_node3"><a xlink:href="src/domain/" xlink:title="domain">
+<polygon fill="#ffffcc" stroke="#000000" points="429,-104 377,-104 375,-102 375,-86 427,-86 429,-88 429,-104"/>
+<polyline fill="none" stroke="#000000" points="427,-102 375,-102 "/>
+<polyline fill="none" stroke="#000000" points="427,-102 427,-86 "/>
+<polyline fill="none" stroke="#000000" points="427,-102 429,-104 "/>
+<text text-anchor="start" x="386.5" y="-92.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">domain</text>
 </a>
 </g>
 </g>
 <!-- src/api/&#45;&gt;src/domain/ -->
-<g id="edge4" class="edge">
+<g id="edge1" class="edge">
 <title>src/api/&#45;&gt;src/domain/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M314.6349,-125.474C330.773,-125.7559 351.3742,-126.1157 368.518,-126.4152"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="368.6273,-128.5173 374.6631,-126.5225 368.7007,-124.3179 368.6273,-128.5173"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M297.1419,-143.9056C306.0936,-135.8782 320.0968,-124.3419 334,-117 344.9318,-111.2272 357.6545,-106.6155 369.1181,-103.1355"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.8138,-105.1201 374.982,-101.4187 368.6336,-101.0893 369.8138,-105.1201"/>
+</g>
+<!-- src/solid&#45;client&#45;authn&#45;chrome&#45;ext/ -->
+<g id="node4" class="node">
+<title>src/solid&#45;client&#45;authn&#45;chrome&#45;ext/</title>
+<g id="a_node4"><a xlink:href="src/solid-client-authn-chrome-ext/" xlink:title="solid&#45;client&#45;authn&#45;chrome&#45;ext">
+<polygon fill="#ffffcc" stroke="#000000" points="470,-210 336,-210 334,-208 334,-192 468,-192 470,-194 470,-210"/>
+<polyline fill="none" stroke="#000000" points="468,-208 334,-208 "/>
+<polyline fill="none" stroke="#000000" points="468,-208 468,-192 "/>
+<polyline fill="none" stroke="#000000" points="468,-208 470,-210 "/>
+<text text-anchor="start" x="342" y="-198.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">solid&#45;client&#45;authn&#45;chrome&#45;ext</text>
+</a>
+</g>
+</g>
+<!-- src/api/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/ -->
+<g id="edge2" class="edge">
+<title>src/api/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M306.4305,-162.0986C311.3245,-164.7365 316.4838,-167.781 321,-171 327.403,-175.5638 327.1075,-179.2158 334,-183 338.8741,-185.676 344.1654,-187.9695 349.5714,-189.9319"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="349.1115,-191.9934 355.4682,-191.9338 350.4618,-188.0164 349.1115,-191.9934"/>
+</g>
+<!-- src/store/ -->
+<g id="node5" class="node">
+<title>src/store/</title>
+<g id="a_node5"><a xlink:href="src/store/" xlink:title="store">
+<polygon fill="#ffffcc" stroke="#000000" points="429,-177 377,-177 375,-175 375,-159 427,-159 429,-161 429,-177"/>
+<polyline fill="none" stroke="#000000" points="427,-175 375,-175 "/>
+<polyline fill="none" stroke="#000000" points="427,-175 427,-159 "/>
+<polyline fill="none" stroke="#000000" points="427,-175 429,-177 "/>
+<text text-anchor="start" x="391.5" y="-165.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">store</text>
+</a>
+</g>
+</g>
+<!-- src/api/&#45;&gt;src/store/ -->
+<g id="edge3" class="edge">
+<title>src/api/&#45;&gt;src/store/</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M314.6349,-156.5548C330.773,-158.669 351.3742,-161.3678 368.518,-163.6137"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="368.4411,-165.7215 374.6631,-164.4187 368.9867,-161.5571 368.4411,-165.7215"/>
+</g>
+<!-- src/chrome/ -->
+<g id="node6" class="node">
+<title>src/chrome/</title>
+<g id="a_node6"><a xlink:href="src/chrome/" xlink:title="chrome">
+<polygon fill="#ffffcc" stroke="#000000" points="429,-141 377,-141 375,-139 375,-123 427,-123 429,-125 429,-141"/>
+<polyline fill="none" stroke="#000000" points="427,-139 375,-139 "/>
+<polyline fill="none" stroke="#000000" points="427,-139 427,-123 "/>
+<polyline fill="none" stroke="#000000" points="427,-139 429,-141 "/>
+<text text-anchor="start" x="386.5" y="-129.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">chrome</text>
+</a>
+</g>
+</g>
+<!-- src/api/&#45;&gt;src/chrome/ -->
+<g id="edge4" class="edge">
+<title>src/api/&#45;&gt;src/chrome/</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M314.6349,-148.0233C330.773,-145.0635 351.3742,-141.2851 368.518,-138.1408"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.1404,-140.1618 374.6631,-137.0138 368.3826,-136.0307 369.1404,-140.1618"/>
 </g>
 <!-- src/solid&#45;client&#45;authn&#45;chrome&#45;ext/&#45;&gt;events -->
 <g id="edge31" class="edge">
 <title>src/solid&#45;client&#45;authn&#45;chrome&#45;ext/&#45;&gt;events</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" stroke-opacity="0.200000" d="M462.0456,-190.9709C467.846,-188.4003 473.3066,-185.1367 478,-181 500.13,-161.4947 508.3736,-126.2843 511.3651,-106.1729"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-opacity="0.200000" points="513.4482,-106.4384 512.1628,-100.2128 509.2853,-105.8812 513.4482,-106.4384"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" stroke-opacity="0.200000" d="M463.8884,-191.9438C468.9955,-189.5792 473.7997,-186.642 478,-183 499.9769,-163.9439 508.2658,-129.2875 511.3088,-109.308"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-opacity="0.200000" points="513.4201,-109.3678 512.1519,-103.1387 509.2588,-108.7991 513.4201,-109.3678"/>
 </g>
 <!-- src/assets/ -->
 <g id="node7" class="node">
@@ -129,106 +129,106 @@
 <g id="node8" class="node">
 <title>src/background.ts</title>
 <g id="a_node8"><a xlink:href="src/background.ts" xlink:title="background.ts">
-<path fill="#ddfeff" stroke="#000000" d="M157,-163C157,-163 95,-163 95,-163 92,-163 89,-160 89,-157 89,-157 89,-151 89,-151 89,-148 92,-145 95,-145 95,-145 157,-145 157,-145 160,-145 163,-148 163,-151 163,-151 163,-157 163,-157 163,-160 160,-163 157,-163"/>
-<text text-anchor="start" x="97" y="-151.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">background.ts</text>
+<path fill="#ddfeff" stroke="#000000" d="M157,-155C157,-155 95,-155 95,-155 92,-155 89,-152 89,-149 89,-149 89,-143 89,-143 89,-140 92,-137 95,-137 95,-137 157,-137 157,-137 160,-137 163,-140 163,-143 163,-143 163,-149 163,-149 163,-152 160,-155 157,-155"/>
+<text text-anchor="start" x="97" y="-143.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">background.ts</text>
 </a>
 </g>
-</g>
-<!-- src/background.ts&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/ -->
-<g id="edge8" class="edge">
-<title>src/background.ts&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M140.3398,-163.0043C150.0565,-168.7104 163.379,-175.7848 176,-180 209.3348,-191.1332 219.0532,-189.2744 254,-193 277.8322,-195.5407 303.9216,-197.1592 327.4681,-198.1903"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="327.6333,-200.299 333.7163,-198.4529 327.8098,-196.1027 327.6333,-200.299"/>
 </g>
 <!-- src/background.ts&#45;&gt;src/domain/ -->
 <g id="edge6" class="edge">
 <title>src/background.ts&#45;&gt;src/domain/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M163.1303,-150.984C167.4685,-150.6451 171.8316,-150.3105 176,-150 240.4191,-145.202 256.8218,-147.348 321,-140 336.7242,-138.1997 354.0598,-135.5128 368.645,-133.0482"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.1553,-135.0915 374.7147,-132.0088 368.4463,-130.9518 369.1553,-135.0915"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M138.5747,-136.9307C148.3515,-130.2661 162.4821,-121.4559 176,-116 240.3899,-90.012 323.2148,-89.8508 368.5884,-92.2748"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="368.6248,-94.3804 374.7364,-92.6316 368.8682,-90.1874 368.6248,-94.3804"/>
+</g>
+<!-- src/background.ts&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/ -->
+<g id="edge8" class="edge">
+<title>src/background.ts&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M138.0042,-155.2405C147.7019,-162.1831 161.9953,-171.2765 176,-176 224.8538,-192.4773 282.6837,-198.6488 327.6147,-200.7415"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="327.7821,-202.8506 333.8668,-201.0104 327.9626,-198.6544 327.7821,-202.8506"/>
 </g>
 <!-- src/background/ -->
 <g id="node9" class="node">
 <title>src/background/</title>
 <g id="a_node9"><a xlink:href="src/background/" xlink:title="background">
-<polygon fill="#ffffcc" stroke="#000000" points="241,-174 178,-174 176,-172 176,-156 239,-156 241,-158 241,-174"/>
-<polyline fill="none" stroke="#000000" points="239,-172 176,-172 "/>
-<polyline fill="none" stroke="#000000" points="239,-172 239,-156 "/>
-<polyline fill="none" stroke="#000000" points="239,-172 241,-174 "/>
-<text text-anchor="start" x="184" y="-162.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">background</text>
+<polygon fill="#ffffcc" stroke="#000000" points="241,-170 178,-170 176,-168 176,-152 239,-152 241,-154 241,-170"/>
+<polyline fill="none" stroke="#000000" points="239,-168 176,-168 "/>
+<polyline fill="none" stroke="#000000" points="239,-168 239,-152 "/>
+<polyline fill="none" stroke="#000000" points="239,-168 241,-170 "/>
+<text text-anchor="start" x="184" y="-158.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">background</text>
 </a>
 </g>
 </g>
 <!-- src/background.ts&#45;&gt;src/background/ -->
 <g id="edge5" class="edge">
 <title>src/background.ts&#45;&gt;src/background/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M163.3878,-158.985C165.4769,-159.2636 167.5793,-159.5439 169.6733,-159.8231"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="169.6837,-161.943 175.9086,-160.6545 170.2388,-157.7798 169.6837,-161.943"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M163.3878,-152.7978C165.4769,-153.1776 167.5793,-153.5599 169.6733,-153.9406"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="169.6297,-156.067 175.9086,-155.0743 170.3811,-151.9348 169.6297,-156.067"/>
 </g>
 <!-- src/options/ -->
 <g id="node10" class="node">
 <title>src/options/</title>
 <g id="a_node10"><a xlink:href="src/options/" xlink:title="no&#45;orphans">
-<polygon fill="#ccffcc" stroke="#ffa500" points="235.5,-112 183.5,-112 181.5,-110 181.5,-94 233.5,-94 235.5,-96 235.5,-112"/>
-<polyline fill="none" stroke="#ffa500" points="233.5,-110 181.5,-110 "/>
-<polyline fill="none" stroke="#ffa500" points="233.5,-110 233.5,-94 "/>
-<polyline fill="none" stroke="#ffa500" points="233.5,-110 235.5,-112 "/>
-<text text-anchor="start" x="193" y="-100.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#ffa500">options</text>
+<polygon fill="#ccffcc" stroke="#ffa500" points="235.5,-140 183.5,-140 181.5,-138 181.5,-122 233.5,-122 235.5,-124 235.5,-140"/>
+<polyline fill="none" stroke="#ffa500" points="233.5,-138 181.5,-138 "/>
+<polyline fill="none" stroke="#ffa500" points="233.5,-138 233.5,-122 "/>
+<polyline fill="none" stroke="#ffa500" points="233.5,-138 235.5,-140 "/>
+<text text-anchor="start" x="193" y="-128.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#ffa500">options</text>
 </a>
 </g>
 </g>
 <!-- src/background.ts&#45;&gt;src/options/ -->
 <g id="edge7" class="edge">
 <title>src/background.ts&#45;&gt;src/options/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M140.7493,-144.8822C154.1235,-136.6146 173.9429,-124.3626 188.6943,-115.2435"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="189.879,-116.9801 193.8783,-112.0388 187.6705,-113.4076 189.879,-116.9801"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M163.3878,-139.2022C167.3048,-138.49 171.2687,-137.7693 175.1364,-137.0661"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="175.5871,-139.1187 181.1146,-135.9792 174.8357,-134.9864 175.5871,-139.1187"/>
 </g>
 <!-- src/background/&#45;&gt;src/api/ -->
 <g id="edge10" class="edge">
 <title>src/background/&#45;&gt;src/api/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M226.4263,-155.9234C237.638,-150.2466 252.1948,-142.876 264.2844,-136.7547"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="265.2403,-138.6246 269.6446,-134.0407 263.343,-134.8776 265.2403,-138.6246"/>
-</g>
-<!-- src/background/&#45;&gt;src/store/ -->
-<g id="edge12" class="edge">
-<title>src/background/&#45;&gt;src/store/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M233.2212,-174.0692C239.876,-176.1055 247.1348,-177.9677 254,-179 293.1721,-184.8902 338.6084,-179.0347 368.6955,-173.4064"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.382,-175.4127 374.875,-172.2131 368.5857,-171.2889 369.382,-175.4127"/>
-</g>
-<!-- src/background/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/ -->
-<g id="edge11" class="edge">
-<title>src/background/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M226.6793,-174.006C234.8446,-177.6777 244.7143,-181.6128 254,-184 277.6516,-190.0804 304.007,-193.8519 327.8478,-196.1907"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="327.6815,-198.2843 333.8517,-196.755 328.0746,-194.1027 327.6815,-198.2843"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M241.0884,-157.6999C245.3148,-157.2719 249.6501,-156.8329 253.8927,-156.4033"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="254.2608,-158.4768 260.0186,-155.7829 253.8376,-154.2982 254.2608,-158.4768"/>
 </g>
 <!-- src/background/&#45;&gt;src/domain/ -->
 <g id="edge9" class="edge">
 <title>src/background/&#45;&gt;src/domain/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M241.4242,-171.7324C264.6398,-174.9051 295.9357,-175.9298 321,-165 328.7833,-161.606 326.9015,-155.6594 334,-151 344.5167,-144.0969 357.2542,-138.9153 368.8488,-135.1673"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.6745,-137.1104 374.79,-133.3365 368.4376,-133.0966 369.6745,-137.1104"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M229.313,-151.8427C233.2366,-149.9904 237.2755,-147.9963 241,-146 246.9794,-142.7951 247.7978,-140.749 254,-138 291.9541,-121.1778 338.267,-108.9515 368.8647,-101.9295"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.3785,-103.9664 374.7675,-100.5946 368.4521,-99.8698 369.3785,-103.9664"/>
+</g>
+<!-- src/background/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/ -->
+<g id="edge11" class="edge">
+<title>src/background/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M241.2373,-169.9306C245.5191,-171.0114 249.8566,-172.0629 254,-173 283.2851,-179.6232 316.0722,-185.9377 343.329,-190.8881"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="343.1368,-192.9873 349.4146,-191.9874 343.8835,-188.8542 343.1368,-192.9873"/>
+</g>
+<!-- src/background/&#45;&gt;src/store/ -->
+<g id="edge12" class="edge">
+<title>src/background/&#45;&gt;src/store/</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M241.2365,-166.6472C245.5184,-167.2061 249.8561,-167.6831 254,-168 293.3457,-171.0089 338.7473,-170.4077 368.7789,-169.4449"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.0212,-171.538 374.9463,-169.2352 368.8783,-167.3404 369.0212,-171.538"/>
 </g>
 <!-- src/options/&#45;&gt;src/api/ -->
 <g id="edge27" class="edge">
 <title>src/options/&#45;&gt;src/api/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M235.6873,-110.5712C241.6458,-112.2305 248.0195,-114.0054 254.187,-115.723"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="253.9191,-117.8282 260.2626,-117.4149 255.0459,-113.7822 253.9191,-117.8282"/>
-</g>
-<!-- src/options/&#45;&gt;src/chrome/ -->
-<g id="edge28" class="edge">
-<title>src/options/&#45;&gt;src/chrome/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M235.9067,-98.5205C258.7653,-94.6322 292.1411,-88.6013 321,-82 336.7854,-78.3892 354.1291,-73.7678 368.7038,-69.6935"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.5621,-71.6335 374.768,-67.9854 368.4233,-67.5908 369.5621,-71.6335"/>
-</g>
-<!-- src/options/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/ -->
-<g id="edge26" class="edge">
-<title>src/options/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M218.5096,-112.1705C227.4291,-120.0845 241.0395,-131.5427 254,-140 287.4594,-161.8338 296.7946,-166.4395 334,-181 341.7317,-184.0258 350.1324,-186.7806 358.3069,-189.1959"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="358.1523,-191.3364 364.499,-190.9756 359.3125,-187.2998 358.1523,-191.3364"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M235.6873,-138.5712C241.6458,-140.2305 248.0195,-142.0054 254.187,-143.723"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="253.9191,-145.8282 260.2626,-145.4149 255.0459,-141.7822 253.9191,-145.8282"/>
 </g>
 <!-- src/options/&#45;&gt;src/domain/ -->
 <g id="edge30" class="edge">
 <title>src/options/&#45;&gt;src/domain/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M235.888,-103.5971C258.7355,-104.36 292.1055,-106.0899 321,-110 336.8232,-112.1413 354.1719,-115.6268 368.7401,-118.8861"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="368.4845,-120.9816 374.8009,-120.2646 369.416,-116.8862 368.4845,-120.9816"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M228.0687,-121.9869C235.9719,-118.6852 245.2727,-115.2179 254,-113 292.6437,-103.1792 338.369,-98.6599 368.6614,-96.6179"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.0299,-98.6986 374.8831,-96.2187 368.7609,-94.5073 369.0299,-98.6986"/>
+</g>
+<!-- src/options/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/ -->
+<g id="edge26" class="edge">
+<title>src/options/&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M232.6209,-140.0772C235.6245,-141.7823 238.51,-143.7503 241,-146 249.4271,-153.6139 244.6726,-161.5203 254,-168 278.8449,-185.2596 291.4478,-173.5326 321,-180 329.0892,-181.7703 346.0365,-186.1283 362.3486,-190.4183"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="361.9748,-192.4914 368.3119,-191.9908 363.0457,-188.4302 361.9748,-192.4914"/>
+</g>
+<!-- src/options/&#45;&gt;src/chrome/ -->
+<g id="edge28" class="edge">
+<title>src/options/&#45;&gt;src/chrome/</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M235.8134,-131.1412C270.6751,-131.3213 330.9586,-131.6329 368.5403,-131.8271"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="368.8147,-133.9284 374.8255,-131.8596 368.8365,-129.7285 368.8147,-133.9284"/>
 </g>
 <!-- src/components/ -->
 <g id="node11" class="node">
@@ -245,8 +245,8 @@
 <!-- src/options/&#45;&gt;src/components/ -->
 <g id="edge29" class="edge">
 <title>src/options/&#45;&gt;src/components/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M228.435,-93.9157C238.6332,-89.2684 251.1591,-83.5604 262.0476,-78.5986"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="262.9823,-80.4804 267.5713,-76.0814 261.2407,-76.6586 262.9823,-80.4804"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M219.8188,-121.8304C233.3114,-110.8996 255.9579,-92.5531 271.3022,-80.1223"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="272.862,-81.5613 276.2022,-76.1526 270.2182,-78.2978 272.862,-81.5613"/>
 </g>
 <!-- src/content.tsx -->
 <g id="node12" class="node">
@@ -257,17 +257,17 @@
 </a>
 </g>
 </g>
-<!-- src/content.tsx&#45;&gt;src/chrome/ -->
-<g id="edge14" class="edge">
-<title>src/content.tsx&#45;&gt;src/chrome/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M63.9057,-135.8264C68.4966,-132.6661 72.984,-128.7121 76,-124 93.5297,-96.6122 66.8141,-75.7733 89,-52 116.2118,-22.8412 136.4217,-34.9266 176,-30 239.9509,-22.0395 262.378,-3.2315 321,-30 329.0249,-33.6644 326.4193,-40.4877 334,-45 344.4386,-51.2134 357.1593,-54.8602 368.7623,-56.9978"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="368.4473,-59.0742 374.71,-57.9837 369.1342,-54.9307 368.4473,-59.0742"/>
-</g>
 <!-- src/content.tsx&#45;&gt;src/domain/ -->
 <g id="edge16" class="edge">
 <title>src/content.tsx&#45;&gt;src/domain/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M47.9004,-154.2398C52.0161,-171.6859 63.5143,-209.3087 89,-227 144.6405,-265.6236 177.1713,-260.6618 241,-238 284.172,-222.6722 291.1,-207.7096 321,-173 328.4125,-164.3952 325.2277,-158.2135 334,-151 344.0551,-142.7317 357.161,-137.2206 369.1802,-133.5911"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.7706,-135.6066 374.9752,-131.9566 368.6304,-131.5643 369.7706,-135.6066"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M50.9352,-135.7687C57.1037,-124.091 67.8419,-103.2949 76,-85 82.42,-70.6029 77.4468,-62.7246 89,-52 118.6721,-24.4559 135.9715,-31.0686 176,-25 239.7164,-15.3402 268.4178,12.2585 321,-25 335.2216,-35.0771 322.3969,-48.9934 334,-62 343.3176,-72.4447 356.6757,-79.9145 369.0898,-85.0753"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="368.3569,-87.0436 374.7092,-87.2864 369.8948,-83.1353 368.3569,-87.0436"/>
+</g>
+<!-- src/content.tsx&#45;&gt;src/chrome/ -->
+<g id="edge14" class="edge">
+<title>src/content.tsx&#45;&gt;src/chrome/</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M47.9004,-154.2398C52.0161,-171.6859 63.5143,-209.3087 89,-227 144.6405,-265.6236 177.5957,-261.8232 241,-238 285.2263,-221.3826 287.6719,-201.4864 321,-168 327.2233,-161.7472 326.6117,-157.8208 334,-153 344.486,-146.158 357.3255,-141.4422 369.0121,-138.2414"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.7114,-140.23 374.9998,-136.7025 368.6659,-136.1622 369.7114,-140.23"/>
 </g>
 <!-- src/content.tsx&#45;&gt;src/assets/ -->
 <g id="edge13" class="edge">
@@ -290,38 +290,38 @@
 <!-- src/content.tsx&#45;&gt;src/content/ -->
 <g id="edge15" class="edge">
 <title>src/content.tsx&#45;&gt;src/content/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M60.5692,-135.8365C65.6523,-132.3756 71.2656,-128.2431 76,-124 90.9247,-110.6241 105.7822,-92.9973 115.3735,-80.9069"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="117.0982,-82.1107 119.1465,-76.0928 113.7924,-79.5199 117.0982,-82.1107"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M55.4912,-135.7461C69.4445,-122.1416 95.592,-96.6478 111.8258,-80.8198"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="113.6911,-81.9341 116.5211,-76.2419 110.7591,-78.9269 113.6911,-81.9341"/>
 </g>
 <!-- src/content/&#45;&gt;events -->
 <g id="edge21" class="edge">
 <title>src/content/&#45;&gt;events</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" stroke-opacity="0.200000" d="M134.5533,-57.9138C143.7765,-48.8402 159.3859,-35.4787 176,-30 237.2026,-9.8176 256.6286,-26.9319 321,-30 391.016,-33.3371 416.7498,-10.9148 478,-45 490.5775,-51.9993 500.0485,-65.5963 505.9455,-76.2003"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-opacity="0.200000" points="504.1987,-77.3905 508.851,-81.7226 507.9157,-75.4348 504.1987,-77.3905"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" stroke-opacity="0.200000" d="M133.319,-57.8341C142.1638,-47.5695 158.1047,-31.5187 176,-25 236.5521,-2.9427 257.468,-14.1937 321,-25 383.8828,-35.6958 453.3048,-65.4874 488.9494,-82.2165"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-opacity="0.200000" points="488.4673,-84.3118 494.7887,-84.9825 490.2653,-80.5161 488.4673,-84.3118"/>
 </g>
 <!-- src/content/&#45;&gt;src/api/ -->
 <g id="edge19" class="edge">
 <title>src/content/&#45;&gt;src/api/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M131.7825,-76.1692C139.9637,-88.2211 156.1544,-108.9224 176,-118 200.3448,-129.1355 230.85,-130.2983 253.7961,-129.0051"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="254.2117,-131.0819 260.0562,-128.5815 253.9281,-126.8915 254.2117,-131.0819"/>
-</g>
-<!-- src/content/&#45;&gt;src/chrome/ -->
-<g id="edge17" class="edge">
-<title>src/content/&#45;&gt;src/chrome/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M139.2987,-57.8264C148.988,-51.7237 162.6942,-44.2528 176,-41 243.0326,-24.6131 324.2047,-39.5678 368.7402,-50.6315"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="368.4437,-52.7228 374.7759,-52.1632 369.4768,-48.6518 368.4437,-52.7228"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M153.0166,-76.1582C176.9708,-84.8188 212.4771,-99.0012 241,-116 252.5154,-122.8628 264.3206,-132.2911 273.1549,-139.9125"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="271.8415,-141.5539 277.7364,-143.9329 274.6117,-138.397 271.8415,-141.5539"/>
 </g>
 <!-- src/content/&#45;&gt;src/domain/ -->
 <g id="edge20" class="edge">
 <title>src/content/&#45;&gt;src/domain/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M153.0135,-61.2073C199.7138,-51.796 293.2125,-35.7869 321,-52 331.142,-57.9175 326.291,-66.1429 334,-75 347.817,-90.8748 367.1551,-105.0983 381.6783,-114.6399"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="380.6115,-116.4507 386.792,-117.9378 382.8878,-112.921 380.6115,-116.4507"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M139.2987,-57.8264C148.988,-51.7237 162.6942,-44.2528 176,-41 238.601,-25.6964 259.3207,-22.325 321,-41 347.1594,-48.9204 372.5923,-68.3833 387.7774,-81.6449"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="386.646,-83.4499 392.5205,-85.8789 389.4429,-80.3166 386.646,-83.4499"/>
+</g>
+<!-- src/content/&#45;&gt;src/chrome/ -->
+<g id="edge17" class="edge">
+<title>src/content/&#45;&gt;src/chrome/</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M153.1794,-60.503C200.6024,-49.8672 295.8202,-31.8392 321,-52 341.6217,-68.5113 316.2028,-90.4773 334,-110 342.9078,-119.7714 356.1822,-125.22 368.6444,-128.2513"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="368.3662,-130.3396 374.6743,-129.5537 369.2529,-126.2343 368.3662,-130.3396"/>
 </g>
 <!-- src/content/&#45;&gt;src/options/ -->
 <g id="edge18" class="edge">
 <title>src/content/&#45;&gt;src/options/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M146.8182,-76.0843C157.4682,-80.7316 170.5491,-86.4396 181.92,-91.4014"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="181.3493,-93.4436 187.6884,-93.9186 183.0291,-89.5941 181.3493,-93.4436"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M136.0023,-76.3179C145.8614,-85.3275 161.5117,-99.1684 176,-110 179.8587,-112.8848 184.1062,-115.8015 188.2217,-118.5057"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="187.1448,-120.31 193.3249,-121.799 189.4222,-116.781 187.1448,-120.31"/>
 </g>
 <!-- src/content/&#45;&gt;src/components/ -->
 <g id="edge22" class="edge">
@@ -341,8 +341,8 @@
 <!-- src/options.tsx&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/ -->
 <g id="edge24" class="edge">
 <title>src/options.tsx&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M156.2099,-197.1605C180.2505,-195.4114 214.1894,-195.9274 241,-208 248.4505,-211.3549 246.451,-217.8731 254,-221 281.5111,-232.3955 291.4614,-224.7668 321,-221 336.7617,-218.99 353.8409,-214.8643 368.2346,-210.7975"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="369.0467,-212.7487 374.2272,-209.0645 367.88,-208.714 369.0467,-212.7487"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M156.2099,-197.1605C180.2505,-195.4114 214.1894,-195.9274 241,-208 248.4505,-211.3549 246.451,-217.8731 254,-221 281.5111,-232.3955 291.4401,-224.5954 321,-221 336.2236,-219.1483 352.7096,-215.4074 366.8098,-211.6566"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="367.4585,-213.6565 372.6961,-210.054 366.3551,-209.604 367.4585,-213.6565"/>
 </g>
 <!-- src/options.tsx&#45;&gt;src/assets/ -->
 <g id="edge25" class="edge">
@@ -353,18 +353,18 @@
 <!-- src/options.tsx&#45;&gt;src/options/ -->
 <g id="edge23" class="edge">
 <title>src/options.tsx&#45;&gt;src/options/</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M138.0358,-191.9078C145.638,-185.8584 155.4202,-177.4887 163,-169 169.8149,-161.3679 170.2014,-158.4301 176,-150 183.6137,-138.9311 192.2667,-126.4208 198.729,-117.0915"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="200.565,-118.1289 202.2563,-112.0011 197.1128,-115.7367 200.565,-118.1289"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M134.6088,-191.8629C142.1627,-183.8052 153.4082,-171.7122 163,-161 168.8849,-154.4277 168.948,-151.3006 176,-146 177.2605,-145.0525 178.5904,-144.1455 179.9637,-143.2803"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="181.2586,-144.9586 185.4194,-140.1525 179.1696,-141.3149 181.2586,-144.9586"/>
 </g>
 <!-- src/types/ -->
 <g id="node15" class="node">
 <title>src/types/</title>
 <g id="a_node15"><a xlink:href="src/types/" xlink:title="types">
-<polygon fill="#ccffcc" stroke="#000000" points="73,-118 21,-118 19,-116 19,-100 71,-100 73,-102 73,-118"/>
-<polyline fill="none" stroke="#000000" points="71,-116 19,-116 "/>
-<polyline fill="none" stroke="#000000" points="71,-116 71,-100 "/>
-<polyline fill="none" stroke="#000000" points="71,-116 73,-118 "/>
-<text text-anchor="start" x="35" y="-106.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">types</text>
+<polygon fill="#ccffcc" stroke="#000000" points="73,-79 21,-79 19,-77 19,-61 71,-61 73,-63 73,-79"/>
+<polyline fill="none" stroke="#000000" points="71,-77 19,-77 "/>
+<polyline fill="none" stroke="#000000" points="71,-77 71,-61 "/>
+<polyline fill="none" stroke="#000000" points="71,-77 73,-79 "/>
+<text text-anchor="start" x="35" y="-67.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">types</text>
 </a>
 </g>
 </g>

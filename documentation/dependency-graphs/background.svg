@@ -16,8 +16,8 @@
 </g>
 <g id="clust2" class="cluster">
 <title>cluster_src/api</title>
-<path fill="#ffffff" stroke="#000000" stroke-width="2" d="M389,-228C389,-228 717.5,-228 717.5,-228 723.5,-228 729.5,-234 729.5,-240 729.5,-240 729.5,-312 729.5,-312 729.5,-318 723.5,-324 717.5,-324 717.5,-324 389,-324 389,-324 383,-324 377,-318 377,-312 377,-312 377,-240 377,-240 377,-234 383,-228 389,-228"/>
-<text text-anchor="middle" x="553.25" y="-312.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00" fill="#000000">api</text>
+<path fill="#ffffff" stroke="#000000" stroke-width="2" d="M379,-228C379,-228 717.5,-228 717.5,-228 723.5,-228 729.5,-234 729.5,-240 729.5,-240 729.5,-312 729.5,-312 729.5,-318 723.5,-324 717.5,-324 717.5,-324 379,-324 379,-324 373,-324 367,-318 367,-312 367,-312 367,-240 367,-240 367,-234 373,-228 379,-228"/>
+<text text-anchor="middle" x="548.25" y="-312.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00" fill="#000000">api</text>
 </g>
 <g id="clust3" class="cluster">
 <title>cluster_src/background</title>
@@ -53,12 +53,12 @@
 </a>
 </g>
 </g>
-<!-- src/api/SolidApi.ts -->
+<!-- src/api/BookmarkApi.ts -->
 <g id="node2" class="node">
-<title>src/api/SolidApi.ts</title>
-<g id="a_node2"><a xlink:href="src/api/SolidApi.ts" xlink:title="SolidApi.ts">
-<path fill="#ddfeff" stroke="#000000" d="M439,-268C439,-268 391,-268 391,-268 388,-268 385,-265 385,-262 385,-262 385,-256 385,-256 385,-253 388,-250 391,-250 391,-250 439,-250 439,-250 442,-250 445,-253 445,-256 445,-256 445,-262 445,-262 445,-265 442,-268 439,-268"/>
-<text text-anchor="start" x="393" y="-256.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">SolidApi.ts</text>
+<title>src/api/BookmarkApi.ts</title>
+<g id="a_node2"><a xlink:href="src/api/BookmarkApi.ts" xlink:title="BookmarkApi.ts">
+<path fill="#ddfeff" stroke="#000000" d="M449,-268C449,-268 381,-268 381,-268 378,-268 375,-265 375,-262 375,-262 375,-256 375,-256 375,-253 378,-250 381,-250 381,-250 449,-250 449,-250 452,-250 455,-253 455,-256 455,-256 455,-262 455,-262 455,-265 452,-268 449,-268"/>
+<text text-anchor="start" x="383" y="-256.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">BookmarkApi.ts</text>
 </a>
 </g>
 </g>
@@ -71,9 +71,9 @@
 </a>
 </g>
 </g>
-<!-- src/api/SolidApi.ts&#45;&gt;src/domain/Bookmark.ts -->
+<!-- src/api/BookmarkApi.ts&#45;&gt;src/domain/Bookmark.ts -->
 <g id="edge1" class="edge">
-<title>src/api/SolidApi.ts&#45;&gt;src/domain/Bookmark.ts</title>
+<title>src/api/BookmarkApi.ts&#45;&gt;src/domain/Bookmark.ts</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M438.9102,-249.9446C451.0544,-244.1016 464.915,-235.2718 473,-223 486.1062,-203.1069 464.679,-187.3531 481,-170 488.8312,-161.6736 500.07,-157.3938 511.2573,-155.3278"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="511.8248,-157.3661 517.4452,-154.3961 511.1994,-153.2129 511.8248,-157.3661"/>
 </g>
@@ -86,9 +86,9 @@
 </a>
 </g>
 </g>
-<!-- src/api/SolidApi.ts&#45;&gt;src/domain/PageMetaData.ts -->
+<!-- src/api/BookmarkApi.ts&#45;&gt;src/domain/PageMetaData.ts -->
 <g id="edge2" class="edge">
-<title>src/api/SolidApi.ts&#45;&gt;src/domain/PageMetaData.ts</title>
+<title>src/api/BookmarkApi.ts&#45;&gt;src/domain/PageMetaData.ts</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M431.6763,-249.9261C456.045,-236.6667 501.4376,-211.9678 528.6667,-197.1519"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="529.9207,-198.8604 534.1873,-194.1481 527.9133,-195.1712 529.9207,-198.8604"/>
 </g>
@@ -101,9 +101,9 @@
 </a>
 </g>
 </g>
-<!-- src/api/SolidApi.ts&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/Session.ts -->
+<!-- src/api/BookmarkApi.ts&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/Session.ts -->
 <g id="edge3" class="edge">
-<title>src/api/SolidApi.ts&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/Session.ts</title>
+<title>src/api/BookmarkApi.ts&#45;&gt;src/solid&#45;client&#45;authn&#45;chrome&#45;ext/Session.ts</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M439.4987,-249.9904C451.6553,-244.1999 465.3436,-235.4047 473,-223 493.6269,-189.5807 459.7692,-168.039 481,-135 489.2762,-122.1207 503.2582,-112.9451 516.5597,-106.6594"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="517.5782,-108.5045 522.2001,-104.1401 515.8653,-104.6697 517.5782,-108.5045"/>
 </g>
@@ -116,9 +116,9 @@
 </a>
 </g>
 </g>
-<!-- src/api/SolidApi.ts&#45;&gt;src/store/BookmarkStore.ts -->
+<!-- src/api/BookmarkApi.ts&#45;&gt;src/store/BookmarkStore.ts -->
 <g id="edge4" class="edge">
-<title>src/api/SolidApi.ts&#45;&gt;src/store/BookmarkStore.ts</title>
+<title>src/api/BookmarkApi.ts&#45;&gt;src/store/BookmarkStore.ts</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M422.2747,-268.3617C433.6159,-282.4849 456.7395,-309.4507 481,-327 493.3407,-335.9269 508.3872,-343.5849 521.3632,-349.3606"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="520.8224,-351.4152 527.1623,-351.8796 522.4958,-347.5629 520.8224,-351.4152"/>
 </g>
@@ -131,11 +131,11 @@
 </a>
 </g>
 </g>
-<!-- src/api/SolidApi.ts&#45;&gt;src/api/generateDatePathForToday.ts -->
+<!-- src/api/BookmarkApi.ts&#45;&gt;src/api/generateDatePathForToday.ts -->
 <g id="edge5" class="edge">
-<title>src/api/SolidApi.ts&#45;&gt;src/api/generateDatePathForToday.ts</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M445.1828,-259C454.0795,-259 464.2424,-259 474.6707,-259"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="474.8339,-261.1001 480.8338,-259 474.8338,-256.9001 474.8339,-261.1001"/>
+<title>src/api/BookmarkApi.ts&#45;&gt;src/api/generateDatePathForToday.ts</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M455.0689,-259C461.3078,-259 467.9263,-259 474.6554,-259"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="474.8587,-261.1001 480.8587,-259 474.8587,-256.9001 474.8587,-261.1001"/>
 </g>
 <!-- src/api/generateUuid.ts -->
 <g id="node8" class="node">
@@ -146,10 +146,10 @@
 </a>
 </g>
 </g>
-<!-- src/api/SolidApi.ts&#45;&gt;src/api/generateUuid.ts -->
+<!-- src/api/BookmarkApi.ts&#45;&gt;src/api/generateUuid.ts -->
 <g id="edge6" class="edge">
-<title>src/api/SolidApi.ts&#45;&gt;src/api/generateUuid.ts</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M445.2105,-265.9486C456.4413,-268.51 469.2963,-271.4162 481,-274 488.3008,-275.6118 496.0357,-277.2944 503.5976,-278.9255"/>
+<title>src/api/BookmarkApi.ts&#45;&gt;src/api/generateUuid.ts</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M454.419,-268.0428C463.1662,-270.026 472.3943,-272.1001 481,-274 488.3008,-275.6118 496.0357,-277.2944 503.5976,-278.9255"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="503.588,-281.0714 509.8955,-280.2808 504.4716,-276.9654 503.588,-281.0714"/>
 </g>
 <!-- src/api/now.ts -->
@@ -161,10 +161,10 @@
 </a>
 </g>
 </g>
-<!-- src/api/SolidApi.ts&#45;&gt;src/api/now.ts -->
+<!-- src/api/BookmarkApi.ts&#45;&gt;src/api/now.ts -->
 <g id="edge7" class="edge">
-<title>src/api/SolidApi.ts&#45;&gt;src/api/now.ts</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M445.3157,-250.6175C456.4449,-247.9373 469.206,-245.3234 481,-244 544.5904,-236.8648 619.4311,-242.9793 661.481,-247.7261"/>
+<title>src/api/BookmarkApi.ts&#45;&gt;src/api/now.ts</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M447.9897,-249.9825C458.4604,-247.5313 470.1402,-245.2185 481,-244 544.5904,-236.8648 619.4311,-242.9793 661.481,-247.7261"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="661.2406,-249.8122 667.442,-248.4148 661.7227,-245.6399 661.2406,-249.8122"/>
 </g>
 <!-- src/solid&#45;client&#45;authn&#45;chrome&#45;ext/Session.ts&#45;&gt;events -->
@@ -365,9 +365,9 @@
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M201.5587,-350.8177C215.1415,-350.058 230.4594,-346.5427 240,-336 261.1135,-312.6689 230.4156,-216.9105 253,-195 269.7225,-178.7765 332.4387,-179.3399 374.75,-181.7723"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="374.7201,-183.8743 380.8367,-182.143 374.9755,-179.6821 374.7201,-183.8743"/>
 </g>
-<!-- src/background/createMessageHandler.ts&#45;&gt;src/api/SolidApi.ts -->
+<!-- src/background/createMessageHandler.ts&#45;&gt;src/api/BookmarkApi.ts -->
 <g id="edge21" class="edge">
-<title>src/background/createMessageHandler.ts&#45;&gt;src/api/SolidApi.ts</title>
+<title>src/background/createMessageHandler.ts&#45;&gt;src/api/BookmarkApi.ts</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M231.5208,-399.9506C234.5581,-398.265 237.4162,-396.2964 240,-394 253.028,-382.421 242.0088,-370.5276 253,-357 288.0223,-313.8956 347.3829,-285 383.6992,-270.334"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="384.5203,-272.2676 389.3226,-268.1024 382.971,-268.3637 384.5203,-272.2676"/>
 </g>
@@ -389,9 +389,9 @@
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M217.1705,-399.9409C224.8252,-398.135 232.6751,-396.1316 240,-394 250.6626,-390.897 262.1648,-386.919 272.2766,-383.201"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="273.1625,-385.112 278.0527,-381.0505 271.697,-381.176 273.1625,-385.112"/>
 </g>
-<!-- src/background/MessageHandler.ts&#45;&gt;src/api/SolidApi.ts -->
+<!-- src/background/MessageHandler.ts&#45;&gt;src/api/BookmarkApi.ts -->
 <g id="edge16" class="edge">
-<title>src/background/MessageHandler.ts&#45;&gt;src/api/SolidApi.ts</title>
+<title>src/background/MessageHandler.ts&#45;&gt;src/api/BookmarkApi.ts</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M310.3291,-362.7527C330.4698,-342.7887 378.091,-295.5853 401.514,-272.3677"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="403.0777,-273.7746 405.8606,-268.0592 400.1209,-270.7917 403.0777,-273.7746"/>
 </g>

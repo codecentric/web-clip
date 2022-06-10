@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Profile } from '../api/SolidApi';
+import { Profile } from '../api/BookmarkApi';
 import { MessageType } from '../domain/messages';
 import { sendMessage } from './sendMessage';
 

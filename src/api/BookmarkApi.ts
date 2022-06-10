@@ -31,7 +31,7 @@ function getIndex(storageUrl: string): NamedNode {
   return sym(urlJoin(storageUrl, 'webclip', 'index.ttl'));
 }
 
-export class SolidApi {
+export class BookmarkApi {
   private readonly me: NamedNode;
   private readonly session: Session | ChromeExtensionSession;
   private readonly store: BookmarkStore;
@@ -64,6 +64,9 @@ export class SolidApi {
     this.providerUrl = providerUrl;
   }
 
+  /**
+   * @deprecated TODO: move to AuthenticationApi
+   */
   async login(options: ILoginInputOptions = {}) {
     if (!this.providerUrl) {
       throw new Error('No pod provider URL configured');
@@ -75,6 +78,9 @@ export class SolidApi {
     });
   }
 
+  /**
+   * @deprecated TODO: move to ProfileApi
+   */
   async loadProfile(): Promise<Profile> {
     if (!this.me) {
       throw new Error('No user is logged in.');
@@ -83,6 +89,9 @@ export class SolidApi {
     return this.getProfile();
   }
 
+  /**
+   * @deprecated TODO: move to ProfileApi
+   */
   private getProfile(): Profile {
     const name: string =
       this.graph.anyValue(this.me, this.ns.vcard('fn')) || 'Anonymous';
@@ -114,6 +123,9 @@ export class SolidApi {
     return { uri: clip.uri };
   }
 
+  /**
+   * @deprecated TODO: move to ProfileApi
+   */
   private getStorageUrl() {
     const storageUrl = this.graph.anyValue(this.me, this.ns.space('storage'));
     if (!storageUrl) {

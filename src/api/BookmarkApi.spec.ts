@@ -5,7 +5,7 @@ import { givenStoreContaining } from '../test/givenStoreContaining';
 import { thenSparqlUpdateIsSentToUrl } from '../test/thenSparqlUpdateIsSentToUrl';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
-import { SolidApi } from './SolidApi';
+import { BookmarkApi } from './BookmarkApi';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('./generateUuid');
@@ -21,12 +21,12 @@ describe('SolidApi', () => {
     it('logs in against the configured provider url', async () => {
       // when I log in
       const login = jest.fn();
-      const solidApi = new SolidApi(
+      const api = new BookmarkApi(
         { info: { isLoggedIn: false }, login } as unknown as Session,
         new BookmarkStore(),
         'https://pod.provider.example'
       );
-      await solidApi.login();
+      await api.login();
       // then I can log in at that pod provider and am redirected to the current page after that
       expect(login).toHaveBeenCalledWith({
         oidcIssuer: 'https://pod.provider.example',
@@ -36,13 +36,13 @@ describe('SolidApi', () => {
 
     it('login fails if provider url is not present yet', async () => {
       // when I try to log in
-      const solidApi = new SolidApi(
+      const api = new BookmarkApi(
         { info: { isLoggedIn: false } } as Session,
         new BookmarkStore(),
         undefined
       );
       // then I see this error
-      await expect(() => solidApi.login()).rejects.toEqual(
+      await expect(() => api.login()).rejects.toEqual(
         new Error('No pod provider URL configured')
       );
     });
@@ -52,7 +52,7 @@ describe('SolidApi', () => {
     describe('profile can be read after being loaded', () => {
       it('name is Anonymous, when profile contains no name', async () => {
         const authenticatedFetch = mockFetchWithResponse('');
-        const solidApi = new SolidApi(
+        const api = new BookmarkApi(
           {
             info: {
               webId: 'https://pod.example/#me',
@@ -64,7 +64,7 @@ describe('SolidApi', () => {
           'https://pod.provider.example'
         );
 
-        const result = await solidApi.loadProfile();
+        const result = await api.loadProfile();
 
         expect(authenticatedFetch).toHaveBeenCalledWith(
           'https://pod.example/',
@@ -82,7 +82,7 @@ describe('SolidApi', () => {
             <http://www.w3.org/2006/vcard/ns#fn> "Solid User" .
           `);
 
-        const solidApi = new SolidApi(
+        const api = new BookmarkApi(
           {
             info: {
               webId: 'https://pod.example/#me',
@@ -94,7 +94,7 @@ describe('SolidApi', () => {
           'https://pod.provider.example'
         );
 
-        const result = await solidApi.loadProfile();
+        const result = await api.loadProfile();
 
         expect(authenticatedFetch).toHaveBeenCalledWith(
           'https://pod.example/',
@@ -107,15 +107,13 @@ describe('SolidApi', () => {
       });
     });
     it('profile cannot be loaded, when noone is logged in', async () => {
-      const solidApi = new SolidApi(
+      const api = new BookmarkApi(
         { info: { isLoggedIn: false } } as Session,
         new BookmarkStore(),
         'https://pod.provider.example'
       );
 
-      await expect(solidApi.loadProfile()).rejects.toThrow(
-        'No user is logged in.'
-      );
+      await expect(api.loadProfile()).rejects.toThrow('No user is logged in.');
     });
   });
 
@@ -133,7 +131,7 @@ describe('SolidApi', () => {
           `
       );
 
-      const solidApi = new SolidApi(
+      const api = new BookmarkApi(
         {
           info: {
             webId: 'https://pod.example/#me',
@@ -145,7 +143,7 @@ describe('SolidApi', () => {
         'https://pod.provider.example'
       );
 
-      await solidApi.bookmark({
+      await api.bookmark({
         type: 'WebPage',
         url: 'https://myfavouriteurl.example',
         name: 'I love this page',
@@ -183,7 +181,7 @@ describe('SolidApi', () => {
           `
       );
 
-      const solidApi = new SolidApi(
+      const api = new BookmarkApi(
         {
           info: {
             webId: 'https://pod.example/#me',
@@ -195,7 +193,7 @@ describe('SolidApi', () => {
         'https://pod.provider.example'
       );
 
-      await solidApi.bookmark({
+      await api.bookmark({
         type: 'WebPage',
         url: 'https://myfavouriteurl.example',
         name: 'I love this page',
@@ -220,7 +218,7 @@ describe('SolidApi', () => {
 
       const store = new BookmarkStore();
 
-      const solidApi = new SolidApi(
+      const api = new BookmarkApi(
         {
           info: {
             webId: 'https://pod.example/#me',
@@ -233,7 +231,7 @@ describe('SolidApi', () => {
       );
 
       await expect(
-        solidApi.bookmark({
+        api.bookmark({
           type: 'WebPage',
           url: 'https://myfavouriteurl.example',
           name: 'I love this page',
@@ -261,7 +259,7 @@ describe('SolidApi', () => {
         `
       );
 
-      const solidApi = new SolidApi(
+      const api = new BookmarkApi(
         {
           info: {
             webId: 'https://pod.example/#me',
@@ -273,7 +271,7 @@ describe('SolidApi', () => {
         'https://pod.provider.example'
       );
 
-      await solidApi.bookmark({
+      await api.bookmark({
         type: 'WebPage',
         url: 'https://shop.example/product/0815.html',
         name: 'WiFi cable at Example Shop - Product Details',
@@ -316,7 +314,7 @@ describe('SolidApi', () => {
           `
       );
 
-      const solidApi = new SolidApi(
+      const api = new BookmarkApi(
         {
           info: {
             webId: 'https://pod.example/#me',
@@ -328,7 +326,7 @@ describe('SolidApi', () => {
         'https://pod.provider.example'
       );
 
-      const result = await solidApi.bookmark({
+      const result = await api.bookmark({
         type: 'WebPage',
         url: 'https://myfavouriteurl.example',
         name: 'I love this page',
@@ -352,7 +350,7 @@ describe('SolidApi', () => {
           `
       );
 
-      const solidApi = new SolidApi(
+      const api = new BookmarkApi(
         {
           info: {
             webId: 'https://pod.example/#me',
@@ -364,7 +362,7 @@ describe('SolidApi', () => {
         'https://pod.provider.example'
       );
 
-      await solidApi.bookmark(
+      await api.bookmark(
         {
           type: 'WebPage',
           url: 'https://myfavouriteurl.example',
@@ -407,7 +405,7 @@ describe('SolidApi', () => {
           `
       );
 
-      const solidApi = new SolidApi(
+      const api = new BookmarkApi(
         {
           info: {
             webId: 'https://pod.example/#me',
@@ -419,7 +417,7 @@ describe('SolidApi', () => {
         'https://pod.provider.example'
       );
 
-      await solidApi.bookmark(
+      await api.bookmark(
         {
           type: 'WebPage',
           url: 'https://myfavouriteurl.example',
@@ -463,7 +461,7 @@ describe('SolidApi', () => {
           `
         );
 
-        const solidApi = new SolidApi(
+        const api = new BookmarkApi(
           {
             info: {
               webId: 'https://pod.example/#me',
@@ -475,7 +473,7 @@ describe('SolidApi', () => {
           'https://pod.provider.example'
         );
 
-        result = await solidApi.loadBookmark({
+        result = await api.loadBookmark({
           type: 'WebPage',
           url: 'https://myfavouriteurl.example',
           name: 'I love this page',
@@ -512,7 +510,7 @@ describe('SolidApi', () => {
           `
         );
 
-        const solidApi = new SolidApi(
+        const api = new BookmarkApi(
           {
             info: {
               webId: 'https://pod.example/#me',
@@ -524,7 +522,7 @@ describe('SolidApi', () => {
           'https://pod.provider.example'
         );
 
-        result = await solidApi.loadBookmark({
+        result = await api.loadBookmark({
           type: 'WebPage',
           url: 'https://myfavouriteurl.example',
           name: 'I love this page',
@@ -561,7 +559,7 @@ describe('SolidApi', () => {
           `
         );
 
-        const solidApi = new SolidApi(
+        const api = new BookmarkApi(
           {
             info: {
               webId: 'https://pod.example/#me',
@@ -573,7 +571,7 @@ describe('SolidApi', () => {
           'https://pod.provider.example'
         );
 
-        result = await solidApi.loadBookmark({
+        result = await api.loadBookmark({
           type: 'WebPage',
           url: 'https://myfavouriteurl.example',
           name: 'I love this page',

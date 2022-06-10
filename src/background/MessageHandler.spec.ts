@@ -1,10 +1,10 @@
 import { when } from 'jest-when';
-import { SolidApi } from '../api/SolidApi';
+import { BookmarkApi } from '../api/BookmarkApi';
 import { Bookmark } from '../domain/Bookmark';
 import { MessageType } from '../domain/messages';
 import { PageMetaData } from '../domain/PageMetaData';
 import { BookmarkStore } from '../store/BookmarkStore';
-import { mockSolidApi, SolidApiMock } from '../test/solidApiMock';
+import { mockBookmarkApi, BookmarkApiMock } from '../test/bookmarkApiMock';
 import { MessageHandler } from './MessageHandler';
 import { openOptionsPage } from './openOptionsPage';
 
@@ -12,14 +12,17 @@ jest.mock('./openOptionsPage');
 
 describe('MessageHandler', () => {
   let messageHandler: MessageHandler;
-  let solidApi: SolidApiMock;
+  let bookmarkApi: BookmarkApiMock;
   let store: BookmarkStore;
   beforeEach(() => {
-    solidApi = mockSolidApi();
+    bookmarkApi = mockBookmarkApi();
     store = {
       importFromUrl: jest.fn().mockResolvedValue(null),
     } as undefined as BookmarkStore;
-    messageHandler = new MessageHandler(solidApi as unknown as SolidApi, store);
+    messageHandler = new MessageHandler(
+      bookmarkApi as unknown as BookmarkApi,
+      store
+    );
   });
 
   describe('handle unknown types', () => {
@@ -55,14 +58,14 @@ describe('MessageHandler', () => {
         },
         {}
       );
-      expect(solidApi.login).toHaveBeenCalledWith();
+      expect(bookmarkApi.login).toHaveBeenCalledWith();
       expect(result).toEqual({});
     });
   });
 
   describe('handle type LOAD_PROFILE', () => {
     it('calls loadProfile and returns result', async () => {
-      solidApi.loadProfile.mockResolvedValue({
+      bookmarkApi.loadProfile.mockResolvedValue({
         name: 'Jane Doe',
       });
 
@@ -72,7 +75,7 @@ describe('MessageHandler', () => {
         },
         {}
       );
-      expect(solidApi.loadProfile).toHaveBeenCalled();
+      expect(bookmarkApi.loadProfile).toHaveBeenCalled();
       expect(result).toEqual({
         payload: {
           name: 'Jane Doe',
@@ -91,7 +94,9 @@ describe('MessageHandler', () => {
       const bookmark: Bookmark = {
         uri: 'https://pod.example/bookmark#it',
       };
-      when(solidApi.loadBookmark).calledWith(page).mockResolvedValue(bookmark);
+      when(bookmarkApi.loadBookmark)
+        .calledWith(page)
+        .mockResolvedValue(bookmark);
 
       const result = await messageHandler.handleMessage(
         {
@@ -118,7 +123,7 @@ describe('MessageHandler', () => {
       const bookmark: Bookmark = {
         uri: 'https://pod.example/bookmark#it',
       };
-      when(solidApi.bookmark)
+      when(bookmarkApi.bookmark)
         .calledWith(page, bookmark)
         .mockResolvedValue(bookmark);
 
