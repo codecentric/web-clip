@@ -21,7 +21,10 @@ export const initialState: State = {
 
 export const useOptionsPage = (session: SolidSession) => {
   const { profileApi } = useSolidApis(session);
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    sessionInfo: session.info,
+  });
 
   const [messageHandler] = useState(new MessageHandler(dispatch));
 
