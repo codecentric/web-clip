@@ -14,6 +14,7 @@ import { PageContent } from '../src/content/PageContent';
 let handler: MessageHandler;
 
 chrome.runtime = {
+  id: 'fake-extension-id',
   onMessage: () => {
     return '';
   },
@@ -27,6 +28,10 @@ chrome.runtime = {
 chrome.identity = {
   getRedirectURL: () => window.location.href,
 } as unknown as typeof chrome.identity;
+
+chrome.extension = {
+  getURL: (path: string) => `chrome-extension://${chrome.runtime.id}${path}`,
+} as unknown as typeof chrome.extension;
 
 async function handleRedirectAfterLogin() {
   await handleIncomingRedirect();
