@@ -4,17 +4,17 @@ import { when } from 'jest-when';
 import React from 'react';
 import { ExtensionUrl } from '../chrome/urls';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
-import { ProfileApi } from './api/ProfileApi';
+import { ProfileApi } from '../api/ProfileApi';
 import { useAuthentication } from './auth/AuthenticationContext';
 import { OptionsPage } from './OptionsPage';
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
 import { useChromeExtension } from './useChromeExtension';
-import { useSolidApis } from './useSolidApis';
+import { useSolidApis } from '../api/useSolidApis';
 
 jest.mock('./optionsStorageApi');
 jest.mock('./auth/AuthenticationContext');
 jest.mock('./useChromeExtension');
-jest.mock('./useSolidApis');
+jest.mock('../api/useSolidApis');
 
 describe('OptionsPage', () => {
   let profileApi: ProfileApi;

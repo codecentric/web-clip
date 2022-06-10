@@ -1,8 +1,8 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { when } from 'jest-when';
-import React from 'react';
 import { ExtensionUrl } from '../../chrome/urls';
-import { ProfileApi } from '../api/ProfileApi';
+import { ProfileApi } from '../../api/ProfileApi';
 import { AuthorizationSection } from './AuthorizationSection';
 import { useCheckAccessPermissions } from './useCheckAccessPermissions';
 

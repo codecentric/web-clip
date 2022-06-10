@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ExtensionUrl } from '../../chrome/urls';
-import { ProfileApi } from '../api/ProfileApi';
+import { ProfileApi } from '../../api/ProfileApi';
 import { useOptions } from '../OptionsContext';
 import { ActionType } from '../reducer';
 

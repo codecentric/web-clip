@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
 import { ExtensionUrl } from '../../chrome/urls';
-import { ProfileApi } from '../api/ProfileApi';
+import { ProfileApi } from '../../api/ProfileApi';
 import { useOptions } from '../OptionsContext';
 import { ActionType } from '../reducer';
 import { initialState } from '../useOptionsPage';

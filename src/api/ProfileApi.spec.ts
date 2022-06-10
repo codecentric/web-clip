@@ -1,8 +1,8 @@
 import { when } from 'jest-when';
 import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
-import { ExtensionUrl } from '../../chrome/urls';
-import { Session } from '../../solid-client-authn-chrome-ext/Session';
-import { thenSparqlUpdateIsSentToUrl } from '../../test/thenSparqlUpdateIsSentToUrl';
+import { ExtensionUrl } from '../chrome/urls';
+import { Session } from '../solid-client-authn-chrome-ext/Session';
+import { thenSparqlUpdateIsSentToUrl } from '../test/thenSparqlUpdateIsSentToUrl';
 import { ProfileApi } from './ProfileApi';
 
 describe('ProfileApi', () => {

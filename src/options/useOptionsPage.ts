@@ -1,12 +1,12 @@
 import { useEffect, useReducer, useState } from 'react';
-import { SolidSession } from './api/SolidSession';
+import { SolidSession } from '../api/SolidSession';
 import { MessageHandler } from './messaging/MessageHandler';
 
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
 
 import reducer, { ActionType, State } from './reducer';
 import { useChromeExtension } from './useChromeExtension';
-import { useSolidApis } from './useSolidApis';
+import { useSolidApis } from '../api/useSolidApis';
 
 export const initialState: State = {
   loading: true,

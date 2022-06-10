@@ -3,12 +3,12 @@ import { renderHook, RenderResult } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
 import { ExtensionUrl } from '../../chrome/urls';
 import { MessageType } from '../../domain/messages';
-import { ProfileApi } from '../../options/api/ProfileApi';
-import { useSolidApis } from '../../options/useSolidApis';
+import { ProfileApi } from '../../api/ProfileApi';
+import { useSolidApis } from '../../api/useSolidApis';
 import { sendMessage } from '../sendMessage';
 import { useAuthorization } from './useAuthorization';
 
-jest.mock('../../options/useSolidApis');
+jest.mock('../../api/useSolidApis');
 jest.mock('../sendMessage');
 
 describe('useAuthorization', () => {

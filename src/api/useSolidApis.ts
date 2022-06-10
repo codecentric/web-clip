@@ -1,7 +1,7 @@
 import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
 import { useEffect, useState } from 'react';
-import { ProfileApi } from './api/ProfileApi';
-import { SolidSession } from './api/SolidSession';
+import { ProfileApi } from './ProfileApi';
+import { SolidSession } from './SolidSession';
 
 function initializeApi(session: SolidSession) {
   const store = graph();

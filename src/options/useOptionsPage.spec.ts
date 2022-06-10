@@ -3,18 +3,18 @@ import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
 import { ExtensionUrl } from '../chrome/urls';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
-import { ProfileApi } from './api/ProfileApi';
+import { ProfileApi } from '../api/ProfileApi';
 import { useAuthentication } from './auth/AuthenticationContext';
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
 import { ActionType } from './reducer';
 import { useChromeExtension } from './useChromeExtension';
 import { useOptionsPage } from './useOptionsPage';
-import { useSolidApis } from './useSolidApis';
+import { useSolidApis } from '../api/useSolidApis';
 
 jest.mock('./optionsStorageApi');
 jest.mock('./auth/AuthenticationContext');
 
-jest.mock('./useSolidApis');
+jest.mock('../api/useSolidApis');
 jest.mock('./useChromeExtension');
 
 describe('useOptionsPage', () => {

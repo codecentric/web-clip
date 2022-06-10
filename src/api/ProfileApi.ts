@@ -1,6 +1,6 @@
 import { Fetcher, LiveStore, Namespace, st, sym, UpdateManager } from 'rdflib';
-import { ExtensionUrl } from '../../chrome/urls';
-import { ProfileStore } from './ProfileStore';
+import { ExtensionUrl } from '../chrome/urls';
+import { ProfileStore } from '../store/ProfileStore';
 import { SolidSession } from './SolidSession';
 
 const acl = Namespace('http://www.w3.org/ns/auth/acl#');
