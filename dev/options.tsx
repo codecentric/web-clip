@@ -17,6 +17,7 @@ let inMemoryStorage = {
 };
 
 chrome.runtime = {
+  id: 'fake-extension-id',
   onMessage: {
     addListener: () => {
       return;
