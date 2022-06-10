@@ -16,6 +16,14 @@ let inMemoryStorage = {
   trustedApp: false,
 };
 
+chrome.runtime = {
+  onMessage: {
+    addListener: () => {
+      return;
+    },
+  },
+} as unknown as typeof chrome.runtime;
+
 chrome.storage = {
   sync: {
     get: (defaultOptions: Options, callback: (options: Options) => void) => {
@@ -30,6 +38,14 @@ chrome.storage = {
     },
   },
 } as unknown as typeof chrome.storage;
+
+chrome.identity = {
+  getRedirectURL: () => window.location.href,
+} as unknown as typeof chrome.identity;
+
+chrome.extension = {
+  getURL: (path: string) => `chrome-extension://fake-extension-id${path}`,
+} as unknown as typeof chrome.extension;
 
 const root = document.getElementById('root');
 
