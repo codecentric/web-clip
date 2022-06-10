@@ -1,5 +1,5 @@
 import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
-import { MessageType } from '../messages';
+import { MessageType } from '../domain/messages';
 import Tab = chrome.tabs.Tab;
 
 export function activateWebClipForTab(

@@ -2,7 +2,7 @@ import { activateWebClipForTab } from './background/activate';
 import { createMessageHandler } from './background/createMessageHandler';
 import { MessageHandler } from './background/MessageHandler';
 import { sendMessageToActiveTab } from './background/sendMessageToActiveTab';
-import { MessageType, Response } from './messages';
+import { MessageType, Response } from './domain/messages';
 import { subscribeOption } from './options/optionsStorageApi';
 import { Session } from './solid-client-authn-chrome-ext/Session';
 

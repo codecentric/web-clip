@@ -1,4 +1,4 @@
-import { Message } from '../messages';
+import { Message } from '../domain/messages';
 
 export function sendMessageToActiveTab(message: Message) {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {

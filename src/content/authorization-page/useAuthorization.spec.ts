@@ -2,7 +2,7 @@ import { Session } from '@inrupt/solid-client-authn-browser';
 import { renderHook, RenderResult } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
 import { ExtensionUrl } from '../../chrome/urls';
-import { MessageType } from '../../messages';
+import { MessageType } from '../../domain/messages';
 import { ProfileApi } from '../../options/api/ProfileApi';
 import { useSolidApis } from '../../options/useSolidApis';
 import { sendMessage } from '../sendMessage';

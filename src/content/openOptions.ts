@@ -1,4 +1,4 @@
-import { MessageType } from '../messages';
+import { MessageType } from '../domain/messages';
 import { sendMessage } from './sendMessage';
 
 export const openOptions = () =>

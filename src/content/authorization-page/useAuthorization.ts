@@ -1,7 +1,7 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
 import { useEffect, useState } from 'react';
 import { ExtensionUrl } from '../../chrome/urls';
-import { MessageType } from '../../messages';
+import { MessageType } from '../../domain/messages';
 import { useSolidApis } from '../../options/useSolidApis';
 import { sendMessage } from '../sendMessage';
 

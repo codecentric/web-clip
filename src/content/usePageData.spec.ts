@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
-import { MessageType } from '../messages';
+import { MessageType } from '../domain/messages';
 
 import { sendMessage } from './sendMessage';
 import { usePageData } from './usePageData';

@@ -1,10 +1,11 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
+import { Bookmark } from '../domain/Bookmark';
 import { Store } from '../store/Store';
 import { givenStoreContaining } from '../test/givenStoreContaining';
 import { thenSparqlUpdateIsSentToUrl } from '../test/thenSparqlUpdateIsSentToUrl';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
-import { Bookmark, SolidApi } from './SolidApi';
+import { SolidApi } from './SolidApi';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('./generateUuid');

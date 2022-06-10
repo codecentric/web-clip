@@ -1,7 +1,8 @@
 import { when } from 'jest-when';
-import { Bookmark, SolidApi } from '../api/SolidApi';
-import { PageMetaData } from '../content/usePage';
-import { MessageType } from '../messages';
+import { SolidApi } from '../api/SolidApi';
+import { Bookmark } from '../domain/Bookmark';
+import { MessageType } from '../domain/messages';
+import { PageMetaData } from '../domain/PageMetaData';
 import { Store } from '../store/Store';
 import { mockSolidApi, SolidApiMock } from '../test/solidApiMock';
 import { MessageHandler } from './MessageHandler';

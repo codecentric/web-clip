@@ -1,4 +1,4 @@
-import { Message, Response } from '../messages';
+import { Message, Response } from '../domain/messages';
 
 export async function sendMessage(message: Message) {
   return new Promise((resolve, reject) => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Profile } from '../api/SolidApi';
-import { MessageType } from '../messages';
+import { MessageType } from '../domain/messages';
 import { sendMessage } from './sendMessage';
 
 interface AsyncState<T> {

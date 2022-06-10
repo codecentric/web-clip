@@ -1,5 +1,5 @@
 import { closeTab } from '../../chrome/closeTab';
-import { Message, MessageType, Response } from '../../messages';
+import { Message, MessageType, Response } from '../../domain/messages';
 import { ActionType, Dispatch } from '../reducer';
 import MessageSender = chrome.runtime.MessageSender;
 

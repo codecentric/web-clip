@@ -1,8 +1,4 @@
-export interface PageMetaData {
-  type: 'WebPage';
-  url: string;
-  name: string;
-}
+import { PageMetaData } from '../domain/PageMetaData';
 
 export const usePage = (): PageMetaData => {
   return {

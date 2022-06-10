@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { getExtensionUrl } from '../chrome/urls';
-import { Response } from '../messages';
+import { Response } from '../domain/messages';
 import { MessageHandler } from './messaging/MessageHandler';
 
 export const useChromeExtension = (messageHandler: MessageHandler) => {

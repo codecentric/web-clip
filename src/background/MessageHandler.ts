@@ -1,5 +1,5 @@
 import { SolidApi } from '../api/SolidApi';
-import { Message, MessageType, Response } from '../messages';
+import { Message, MessageType, Response } from '../domain/messages';
 import { Store } from '../store/Store';
 import { openOptionsPage } from './openOptionsPage';
 import MessageSender = chrome.runtime.MessageSender;

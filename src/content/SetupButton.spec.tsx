@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { MessageType } from '../messages';
+import { MessageType } from '../domain/messages';
 import { sendMessage } from './sendMessage';
 import { SetupButton } from './SetupButton';
 

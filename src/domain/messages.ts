@@ -1,6 +1,6 @@
 import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
-import { Bookmark } from './api/SolidApi';
-import { PageMetaData } from './content/usePage';
+import { Bookmark } from './Bookmark';
+import { PageMetaData } from './PageMetaData';
 
 export enum MessageType {
   ACTIVATE = 'ACTIVATE',

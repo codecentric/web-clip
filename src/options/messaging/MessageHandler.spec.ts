@@ -1,6 +1,6 @@
 import { when } from 'jest-when';
 import { closeTab } from '../../chrome/closeTab';
-import { MessageType, Response } from '../../messages';
+import { MessageType, Response } from '../../domain/messages';
 import { ActionType, Dispatch } from '../reducer';
 import { MessageHandler } from './MessageHandler';
 

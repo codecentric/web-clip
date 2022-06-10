@@ -8,7 +8,7 @@ import { renderAuthorizationPage } from './content/authorization-page';
 import { isOnAuthorizationPage } from './content/authorization-page/isOnAuthorizationPage';
 import { ChromeMessageListener } from './content/ChromeMessageListener';
 import { WebClip } from './content/WebClip';
-import { MessageType } from './messages';
+import { MessageType } from './domain/messages';
 
 const root = document.createElement('div');
 root.id = 'webclip';

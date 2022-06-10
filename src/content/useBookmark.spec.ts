@@ -1,9 +1,9 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
-import { MessageType } from '../messages';
+import { MessageType } from '../domain/messages';
+import { PageMetaData } from '../domain/PageMetaData';
 import { sendMessage } from './sendMessage';
 import { useBookmark } from './useBookmark';
-import { PageMetaData } from './usePage';
 
 jest.mock('./sendMessage');
 

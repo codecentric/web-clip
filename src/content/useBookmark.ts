@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Bookmark } from '../api/SolidApi';
-import { MessageType } from '../messages';
+import { Bookmark } from '../domain/Bookmark';
+import { MessageType } from '../domain/messages';
+import { PageMetaData } from '../domain/PageMetaData';
 import { sendMessage } from './sendMessage';
-import { PageMetaData } from './usePage';
 
 interface AsyncState<T> {
   loading: boolean;

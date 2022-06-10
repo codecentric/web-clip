@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MessageType } from '../messages';
+import { MessageType } from '../domain/messages';
 import { sendMessage } from './sendMessage';
 
 export const usePageData = (url: string) => {

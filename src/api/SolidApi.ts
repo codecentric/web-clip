@@ -15,7 +15,8 @@ import {
 } from 'rdflib';
 import solidNamespace from 'solid-namespace';
 import urlJoin from 'url-join';
-import { PageMetaData } from '../content/usePage';
+import { Bookmark } from '../domain/Bookmark';
+import { PageMetaData } from '../domain/PageMetaData';
 import { Session as ChromeExtensionSession } from '../solid-client-authn-chrome-ext/Session';
 import { Store } from '../store/Store';
 import { generateDatePathForToday } from './generateDatePathForToday';
@@ -24,10 +25,6 @@ import { now } from './now';
 
 export interface Profile {
   name: string;
-}
-
-export interface Bookmark {
-  uri: string;
 }
 
 function getIndex(storageUrl: string): NamedNode {
