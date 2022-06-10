@@ -1,11 +1,11 @@
 import { graph, sym } from 'rdflib';
 import { givenStoreContaining } from '../test/givenStoreContaining';
-import { Store } from './Store';
+import { BookmarkStore } from './BookmarkStore';
 
-describe('Store', () => {
+describe('BookmarkStore', () => {
   describe('getIndexedBookmark', () => {
     it('does not find index bookmark in empty store', () => {
-      const store = new Store(graph());
+      const store = new BookmarkStore(graph());
       const result = store.getIndexedBookmark(
         sym('https://page.test'),
         sym('https://pod.example/webclip/index.ttl')
@@ -22,7 +22,7 @@ describe('Store', () => {
           <http://storage.example/webclip/irrelevant#it> a schema:BookmarkAction; schema:object <https://irrelevant.example> .
         `
       );
-      const store = new Store(rdfGraph);
+      const store = new BookmarkStore(rdfGraph);
       const result = store.getIndexedBookmark(
         sym('https://page.test'),
         sym('https://pod.example/webclip/index.ttl')
@@ -39,7 +39,7 @@ describe('Store', () => {
           <http://storage.example/webclip/relevant#it> a schema:BookmarkAction; schema:object <https://page.test> .
         `
       );
-      const store = new Store(rdfGraph);
+      const store = new BookmarkStore(rdfGraph);
       const result = store.getIndexedBookmark(
         sym('https://page.test'),
         sym('https://pod.example/webclip/index.ttl')
@@ -56,7 +56,7 @@ describe('Store', () => {
           <http://storage.example/webclip/irrelevant#it> a schema:BookmarkAction; schema:irrelevant <https://page.test> .
         `
       );
-      const store = new Store(rdfGraph);
+      const store = new BookmarkStore(rdfGraph);
       const result = store.getIndexedBookmark(
         sym('https://page.test'),
         sym('https://pod.example/webclip/index.ttl')
@@ -73,7 +73,7 @@ describe('Store', () => {
           <http://storage.example/webclip/irrelevant#it> a schema:BookmarkAction; schema:object <https://page.test> .
         `
       );
-      const store = new Store(rdfGraph);
+      const store = new BookmarkStore(rdfGraph);
       const result = store.getIndexedBookmark(
         sym('https://page.test'),
         sym('https://pod.example/webclip/index.ttl')
@@ -91,7 +91,7 @@ describe('Store', () => {
           <http://storage.example/webclip/irrelevant#it> a schema:WatchAction; schema:object <https://page.test> .
         `
     );
-    const store = new Store(rdfGraph);
+    const store = new BookmarkStore(rdfGraph);
     const result = store.getIndexedBookmark(
       sym('https://page.test'),
       sym('https://pod.example/webclip/index.ttl')

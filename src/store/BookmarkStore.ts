@@ -4,7 +4,7 @@ import solidNamespace from 'solid-namespace';
 import { createRelations } from './createRelations';
 import { importToStore } from './importToStore';
 
-export class Store {
+export class BookmarkStore {
   private readonly graph: IndexedFormula;
   private ns: Record<string, (alias: string) => NamedNode>;
 

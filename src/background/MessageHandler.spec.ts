@@ -3,7 +3,7 @@ import { SolidApi } from '../api/SolidApi';
 import { Bookmark } from '../domain/Bookmark';
 import { MessageType } from '../domain/messages';
 import { PageMetaData } from '../domain/PageMetaData';
-import { Store } from '../store/Store';
+import { BookmarkStore } from '../store/BookmarkStore';
 import { mockSolidApi, SolidApiMock } from '../test/solidApiMock';
 import { MessageHandler } from './MessageHandler';
 import { openOptionsPage } from './openOptionsPage';
@@ -13,12 +13,12 @@ jest.mock('./openOptionsPage');
 describe('MessageHandler', () => {
   let messageHandler: MessageHandler;
   let solidApi: SolidApiMock;
-  let store: Store;
+  let store: BookmarkStore;
   beforeEach(() => {
     solidApi = mockSolidApi();
     store = {
       importFromUrl: jest.fn().mockResolvedValue(null),
-    } as undefined as Store;
+    } as undefined as BookmarkStore;
     messageHandler = new MessageHandler(solidApi as unknown as SolidApi, store);
   });
 

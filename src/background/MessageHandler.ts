@@ -1,13 +1,13 @@
 import { SolidApi } from '../api/SolidApi';
 import { Message, MessageType, Response } from '../domain/messages';
-import { Store } from '../store/Store';
+import { BookmarkStore } from '../store/BookmarkStore';
 import { openOptionsPage } from './openOptionsPage';
 import MessageSender = chrome.runtime.MessageSender;
 
 export class MessageHandler {
   constructor(
     private readonly solidApi: SolidApi,
-    private readonly store: Store
+    private readonly store: BookmarkStore
   ) {}
 
   handleMessage(

@@ -41,8 +41,8 @@
 </g>
 <g id="clust7" class="cluster">
 <title>cluster_src/store</title>
-<path fill="#ffffff" stroke="#000000" stroke-width="2" d="M528,-340C528,-340 905,-340 905,-340 911,-340 917,-346 917,-352 917,-352 917,-410 917,-410 917,-416 911,-422 905,-422 905,-422 528,-422 528,-422 522,-422 516,-416 516,-410 516,-410 516,-352 516,-352 516,-346 522,-340 528,-340"/>
-<text text-anchor="middle" x="716.5" y="-410.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00" fill="#000000">store</text>
+<path fill="#ffffff" stroke="#000000" stroke-width="2" d="M510.5,-340C510.5,-340 905,-340 905,-340 911,-340 917,-346 917,-352 917,-352 917,-410 917,-410 917,-416 911,-422 905,-422 905,-422 510.5,-422 510.5,-422 504.5,-422 498.5,-416 498.5,-410 498.5,-410 498.5,-352 498.5,-352 498.5,-346 504.5,-340 510.5,-340"/>
+<text text-anchor="middle" x="707.75" y="-410.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00" fill="#000000">store</text>
 </g>
 <!-- events -->
 <g id="node1" class="node">
@@ -107,18 +107,18 @@
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M439.4987,-249.9904C451.6553,-244.1999 465.3436,-235.4047 473,-223 493.6269,-189.5807 459.7692,-168.039 481,-135 489.2762,-122.1207 503.2582,-112.9451 516.5597,-106.6594"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="517.5782,-108.5045 522.2001,-104.1401 515.8653,-104.6697 517.5782,-108.5045"/>
 </g>
-<!-- src/store/Store.ts -->
+<!-- src/store/BookmarkStore.ts -->
 <g id="node6" class="node">
-<title>src/store/Store.ts</title>
-<g id="a_node6"><a xlink:href="src/store/Store.ts" xlink:title="Store.ts">
-<path fill="#ddfeff" stroke="#000000" d="M572,-370C572,-370 530,-370 530,-370 527,-370 524,-367 524,-364 524,-364 524,-358 524,-358 524,-355 527,-352 530,-352 530,-352 572,-352 572,-352 575,-352 578,-355 578,-358 578,-358 578,-364 578,-364 578,-367 575,-370 572,-370"/>
-<text text-anchor="start" x="535.5" y="-358.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">Store.ts</text>
+<title>src/store/BookmarkStore.ts</title>
+<g id="a_node6"><a xlink:href="src/store/BookmarkStore.ts" xlink:title="BookmarkStore.ts">
+<path fill="#ddfeff" stroke="#000000" d="M589.5,-370C589.5,-370 512.5,-370 512.5,-370 509.5,-370 506.5,-367 506.5,-364 506.5,-364 506.5,-358 506.5,-358 506.5,-355 509.5,-352 512.5,-352 512.5,-352 589.5,-352 589.5,-352 592.5,-352 595.5,-355 595.5,-358 595.5,-358 595.5,-364 595.5,-364 595.5,-367 592.5,-370 589.5,-370"/>
+<text text-anchor="start" x="514.5" y="-358.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#000000">BookmarkStore.ts</text>
 </a>
 </g>
 </g>
-<!-- src/api/SolidApi.ts&#45;&gt;src/store/Store.ts -->
+<!-- src/api/SolidApi.ts&#45;&gt;src/store/BookmarkStore.ts -->
 <g id="edge4" class="edge">
-<title>src/api/SolidApi.ts&#45;&gt;src/store/Store.ts</title>
+<title>src/api/SolidApi.ts&#45;&gt;src/store/BookmarkStore.ts</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M422.2747,-268.3617C433.6159,-282.4849 456.7395,-309.4507 481,-327 493.3407,-335.9269 508.3872,-343.5849 521.3632,-349.3606"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="520.8224,-351.4152 527.1623,-351.8796 522.4958,-347.5629 520.8224,-351.4152"/>
 </g>
@@ -227,11 +227,11 @@
 </a>
 </g>
 </g>
-<!-- src/store/Store.ts&#45;&gt;src/store/createRelations.ts -->
+<!-- src/store/BookmarkStore.ts&#45;&gt;src/store/createRelations.ts -->
 <g id="edge37" class="edge">
-<title>src/store/Store.ts&#45;&gt;src/store/createRelations.ts</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M578.329,-360.2382C596.6886,-359.7264 621.4457,-359.0364 643.3882,-358.4247"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="643.5557,-360.521 649.4948,-358.2545 643.4386,-356.3226 643.5557,-360.521"/>
+<title>src/store/BookmarkStore.ts&#45;&gt;src/store/createRelations.ts</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M595.6177,-359.7563C610.7254,-359.3352 627.7153,-358.8616 643.294,-358.4273"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="643.4765,-360.5232 649.4157,-358.2567 643.3594,-356.3248 643.4765,-360.5232"/>
 </g>
 <!-- src/store/importToStore.ts -->
 <g id="node26" class="node">
@@ -242,11 +242,11 @@
 </a>
 </g>
 </g>
-<!-- src/store/Store.ts&#45;&gt;src/store/importToStore.ts -->
+<!-- src/store/BookmarkStore.ts&#45;&gt;src/store/importToStore.ts -->
 <g id="edge38" class="edge">
-<title>src/store/Store.ts&#45;&gt;src/store/importToStore.ts</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M578.329,-365.9516C597.6629,-369.4546 624.0912,-374.243 646.8561,-378.3677"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="646.5853,-380.4527 652.8636,-379.4561 647.3342,-376.32 646.5853,-380.4527"/>
+<title>src/store/BookmarkStore.ts&#45;&gt;src/store/importToStore.ts</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M595.6177,-369.084C611.885,-372.0314 630.3344,-375.3742 646.8548,-378.3674"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="646.568,-380.4496 652.8463,-379.453 647.3168,-376.3169 646.568,-380.4496"/>
 </g>
 <!-- src/api/generateDatePathForToday.ts&#45;&gt;src/api/now.ts -->
 <g id="edge8" class="edge">
@@ -377,9 +377,9 @@
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M233.3426,-399.8155C235.7665,-398.1432 238.0082,-396.2165 240,-394 274.0847,-356.0695 226.8079,-323.7547 253,-280 281.8748,-231.7637 328.2312,-256.2996 357,-208 365.3512,-193.9793 353.4164,-146.4953 365,-135 382.1235,-118.007 449.5041,-129.4699 473,-124 490.8878,-119.8356 510.2444,-112.656 525.2,-106.4826"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="526.1894,-108.3449 530.9094,-104.0867 524.5642,-104.472 526.1894,-108.3449"/>
 </g>
-<!-- src/background/createMessageHandler.ts&#45;&gt;src/store/Store.ts -->
+<!-- src/background/createMessageHandler.ts&#45;&gt;src/store/BookmarkStore.ts -->
 <g id="edge23" class="edge">
-<title>src/background/createMessageHandler.ts&#45;&gt;src/store/Store.ts</title>
+<title>src/background/createMessageHandler.ts&#45;&gt;src/store/BookmarkStore.ts</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M234.0362,-413.89C295.3628,-417.1524 392.1231,-417.7737 473,-398 493.8765,-392.8959 515.8375,-381.9014 531.1186,-373.2166"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="532.2941,-374.9625 536.4318,-370.1366 530.1877,-371.3289 532.2941,-374.9625"/>
 </g>
@@ -395,11 +395,11 @@
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M310.3291,-362.7527C330.4698,-342.7887 378.091,-295.5853 401.514,-272.3677"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="403.0777,-273.7746 405.8606,-268.0592 400.1209,-270.7917 403.0777,-273.7746"/>
 </g>
-<!-- src/background/MessageHandler.ts&#45;&gt;src/store/Store.ts -->
+<!-- src/background/MessageHandler.ts&#45;&gt;src/store/BookmarkStore.ts -->
 <g id="edge18" class="edge">
-<title>src/background/MessageHandler.ts&#45;&gt;src/store/Store.ts</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M349.2182,-368.8579C354.5423,-368.5492 359.8853,-368.256 365,-368 418.391,-365.3273 480.4496,-363.1857 517.6783,-362.0049"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="517.9527,-364.0974 523.8836,-361.8097 517.8205,-359.8995 517.9527,-364.0974"/>
+<title>src/background/MessageHandler.ts&#45;&gt;src/store/BookmarkStore.ts</title>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M349.2182,-368.8579C354.5423,-368.5492 359.8853,-368.256 365,-368 410.6111,-365.7167 462.548,-363.8211 499.926,-362.581"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="500.3353,-364.6687 506.2629,-362.3724 500.197,-360.471 500.3353,-364.6687"/>
 </g>
 <!-- src/background/MessageHandler.ts&#45;&gt;src/domain/messages.ts -->
 <g id="edge17" class="edge">

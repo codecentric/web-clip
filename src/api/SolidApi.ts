@@ -18,7 +18,7 @@ import urlJoin from 'url-join';
 import { Bookmark } from '../domain/Bookmark';
 import { PageMetaData } from '../domain/PageMetaData';
 import { Session as ChromeExtensionSession } from '../solid-client-authn-chrome-ext/Session';
-import { Store } from '../store/Store';
+import { BookmarkStore } from '../store/BookmarkStore';
 import { generateDatePathForToday } from './generateDatePathForToday';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
@@ -34,7 +34,7 @@ function getIndex(storageUrl: string): NamedNode {
 export class SolidApi {
   private readonly me: NamedNode;
   private readonly session: Session | ChromeExtensionSession;
-  private readonly store: Store;
+  private readonly store: BookmarkStore;
 
   /**
    * @deprecated Use this.store instead
@@ -49,7 +49,7 @@ export class SolidApi {
 
   constructor(
     session: Session | ChromeExtensionSession,
-    store: Store,
+    store: BookmarkStore,
     providerUrl: string,
     redirectUrl: string = window.location.href
   ) {

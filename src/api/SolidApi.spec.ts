@@ -1,6 +1,6 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
 import { Bookmark } from '../domain/Bookmark';
-import { Store } from '../store/Store';
+import { BookmarkStore } from '../store/BookmarkStore';
 import { givenStoreContaining } from '../test/givenStoreContaining';
 import { thenSparqlUpdateIsSentToUrl } from '../test/thenSparqlUpdateIsSentToUrl';
 import { generateUuid } from './generateUuid';
@@ -23,7 +23,7 @@ describe('SolidApi', () => {
       const login = jest.fn();
       const solidApi = new SolidApi(
         { info: { isLoggedIn: false }, login } as unknown as Session,
-        new Store(),
+        new BookmarkStore(),
         'https://pod.provider.example'
       );
       await solidApi.login();
@@ -38,7 +38,7 @@ describe('SolidApi', () => {
       // when I try to log in
       const solidApi = new SolidApi(
         { info: { isLoggedIn: false } } as Session,
-        new Store(),
+        new BookmarkStore(),
         undefined
       );
       // then I see this error
@@ -60,7 +60,7 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new Store(),
+          new BookmarkStore(),
           'https://pod.provider.example'
         );
 
@@ -90,7 +90,7 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new Store(),
+          new BookmarkStore(),
           'https://pod.provider.example'
         );
 
@@ -109,7 +109,7 @@ describe('SolidApi', () => {
     it('profile cannot be loaded, when noone is logged in', async () => {
       const solidApi = new SolidApi(
         { info: { isLoggedIn: false } } as Session,
-        new Store(),
+        new BookmarkStore(),
         'https://pod.provider.example'
       );
 
@@ -141,7 +141,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store),
+        new BookmarkStore(store),
         'https://pod.provider.example'
       );
 
@@ -191,7 +191,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store),
+        new BookmarkStore(store),
         'https://pod.provider.example'
       );
 
@@ -218,7 +218,7 @@ describe('SolidApi', () => {
       const authenticatedFetch = mockFetchWithResponse('');
       (generateUuid as jest.Mock).mockReturnValue('some-uuid');
 
-      const store = new Store();
+      const store = new BookmarkStore();
 
       const solidApi = new SolidApi(
         {
@@ -269,7 +269,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store),
+        new BookmarkStore(store),
         'https://pod.provider.example'
       );
 
@@ -324,7 +324,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store),
+        new BookmarkStore(store),
         'https://pod.provider.example'
       );
 
@@ -360,7 +360,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store),
+        new BookmarkStore(store),
         'https://pod.provider.example'
       );
 
@@ -415,7 +415,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new Store(store),
+        new BookmarkStore(store),
         'https://pod.provider.example'
       );
 
@@ -471,7 +471,7 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new Store(store),
+          new BookmarkStore(store),
           'https://pod.provider.example'
         );
 
@@ -520,7 +520,7 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new Store(store),
+          new BookmarkStore(store),
           'https://pod.provider.example'
         );
 
@@ -569,7 +569,7 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new Store(store),
+          new BookmarkStore(store),
           'https://pod.provider.example'
         );
 
