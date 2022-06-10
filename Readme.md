@@ -16,20 +16,30 @@ First install all dependencies by running
 npm install
 ```
 
-### Content page via Webpack dev server
+### Limited development mode via Webpack dev server
 
-To run an example page with the plugins content page run
+To run a pure web application version of the extension execute
 
 ```shell
 npm run dev
 ```
 
-You can use the WebClip popup on the example page with a login to the local
-development pod (see [below](#local-pod-for-testing)).
+Be aware that this mode mocks the chrome API and not everything will work the
+same way as the real extension would. So make sure to always
+[test the full extension via chrome](#full-extension-via-chrome).
 
-The Options page and the browser integration can not be tested this way, see
-section ["Full extension via chrome"](#full-extension-via-chrome) how to start
-the full plugin locally.
+You can use the WebClip popup [on the example page](http://localhost:8080) with
+a login to [the local development pod](#local-pod-for-testing).
+
+The option page can also be opened via the icon in the UI, or directly visited
+at http://localhost:8080/options.html.
+
+Some features, like granting access to a remote pod, can not be tested that way,
+but the limited dev mode is a good way to test simple UI-focused changes,
+without having to rebuild and reload the whole plugin.
+
+To test the real extension, integrated with the browser API, see section
+["Full extension via chrome"](#full-extension-via-chrome).
 
 ### Local pod for testing
 
