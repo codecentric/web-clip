@@ -2,6 +2,7 @@ import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 
 import { when } from 'jest-when';
 import { ExtensionUrl } from '../chrome/urls';
+import { Session } from '../solid-client-authn-chrome-ext/Session';
 import { ProfileApi } from './api/ProfileApi';
 import { useAuthentication } from './auth/AuthenticationContext';
 import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
@@ -45,7 +46,7 @@ describe('useOptionsPage', () => {
 
   describe('on mount', () => {
     beforeEach(async () => {
-      const render = renderHook(() => useOptionsPage(null));
+      const render = renderHook(() => useOptionsPage(new Session()));
       renderResult = render.result;
       await render.waitForNextUpdate();
     });
@@ -84,6 +85,17 @@ describe('useOptionsPage', () => {
         redirectUrl: new URL('https://redirect.test'),
       });
     });
+
+    it('returns the session info', () => {
+      expect(renderResult.all[1]).toMatchObject({
+        state: {
+          sessionInfo: {
+            sessionId: expect.stringMatching('^[a-f0-9-]+$'),
+            isLoggedIn: false,
+          },
+        },
+      });
+    });
   });
 
   describe('auto saves', () => {
@@ -91,7 +103,7 @@ describe('useOptionsPage', () => {
       (saveOptions as jest.Mock).mockResolvedValue(null);
 
       const { result, waitFor, waitForNextUpdate } = renderHook(() =>
-        useOptionsPage(null)
+        useOptionsPage(new Session())
       );
 
       await waitFor(() => !result.current.state.loading);
@@ -136,7 +148,9 @@ describe('useOptionsPage', () => {
 
     it('when app is trusted', async () => {
       (saveOptions as jest.Mock).mockResolvedValue(null);
-      const { result, waitFor } = renderHook(() => useOptionsPage(null));
+      const { result, waitFor } = renderHook(() =>
+        useOptionsPage(new Session())
+      );
 
       await waitFor(() => !result.current.state.loading);
 
