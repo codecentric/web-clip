@@ -23,6 +23,7 @@ jobs:
 
       - run: npm ci
       - run: npm run lint
+      - run: npm run dependencies:check
       - run: npm test
       - run: npm run build
 
