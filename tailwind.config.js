@@ -1,6 +1,5 @@
 module.exports = {
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
+  content: ['./src/**/*.{html,tsx}', './dev/**/*.{html,tsx}'],
   theme: {
     fontSize: {
       xs: ['12px', '16px'],
@@ -53,9 +52,6 @@ module.exports = {
         max: 2147483647,
       },
     },
-  },
-  variants: {
-    extend: {},
   },
   plugins: [],
 };

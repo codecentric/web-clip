@@ -4,6 +4,7 @@ import { AuthenticationContext } from './auth/AuthenticationContext';
 import { AuthorizationSection } from './authorization-section/AuthorizationSection';
 import { ConnectPodSection } from './connect-pod/ConnectPodSection';
 import { ConnectionEstablished } from './connection-established/ConnectionEstablished';
+import { HelpSection } from './HelpSection';
 import { OptionsContext } from './OptionsContext';
 import { useOptionsPage } from './useOptionsPage';
 
@@ -64,6 +65,7 @@ export const OptionsPage = ({ session }: Props) => {
           )}
 
           {trustedApp && <ConnectionEstablished />}
+          <HelpSection />
         </main>
       </OptionsContext.Provider>
     </AuthenticationContext.Provider>
