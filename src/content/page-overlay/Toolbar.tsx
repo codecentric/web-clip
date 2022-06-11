@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '../components/Button';
-import { ErrorMessage } from '../components/ErrorMessage';
+import { Button } from '../../components/Button';
+import { ErrorMessage } from '../../components/ErrorMessage';
 import { useBookmark } from './useBookmark';
 import { usePage } from './usePage';
 

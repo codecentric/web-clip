@@ -1,8 +1,8 @@
 import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
 import React from 'react';
-import { ChromeMessageListener } from './ChromeMessageListener';
+import { ChromeMessageListener } from '../messaging/ChromeMessageListener';
 
-import { ChromeMessageListenerContext } from './chromeMessageListenerContext';
+import { ChromeMessageListenerContext } from '../messaging/chromeMessageListenerContext';
 import { PageContent } from './PageContent';
 
 interface Props {

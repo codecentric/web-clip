@@ -6,7 +6,7 @@ import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateDatePathForToday } from '../api/generateDatePathForToday';
 import { generateUuid } from '../api/generateUuid';
 import { now } from '../api/now';
-import { PageContent } from '../content/PageContent';
+import { PageContent } from '../content/page-overlay/PageContent';
 import { createMessageHandler } from '../background/createMessageHandler';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
 

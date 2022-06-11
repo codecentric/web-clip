@@ -1,11 +1,11 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
-import { MessageType } from '../domain/messages';
-import { PageMetaData } from '../domain/PageMetaData';
-import { sendMessage } from './sendMessage';
+import { MessageType } from '../../domain/messages';
+import { PageMetaData } from '../../domain/PageMetaData';
+import { sendMessage } from '../messaging/sendMessage';
 import { useBookmark } from './useBookmark';
 
-jest.mock('./sendMessage');
+jest.mock('../messaging/sendMessage');
 
 describe('useBookmark', () => {
   beforeEach(() => {

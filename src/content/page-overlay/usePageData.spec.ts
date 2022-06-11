@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
-import { MessageType } from '../domain/messages';
+import { MessageType } from '../../domain/messages';
 
-import { sendMessage } from './sendMessage';
+import { sendMessage } from '../messaging/sendMessage';
 import { usePageData } from './usePageData';
 
-jest.mock('./sendMessage');
+jest.mock('../messaging/sendMessage');
 
 describe('usePageData', () => {
   it('is loading initially', () => {

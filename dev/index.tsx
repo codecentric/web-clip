@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 import contentCss from '../src/assets/content.css';
 import { createMessageHandler } from '../src/background/createMessageHandler';
 import { MessageHandler } from '../src/background/MessageHandler';
-import { PageContent } from '../src/content/PageContent';
+import { PageContent } from '../src/content/page-overlay/PageContent';
 
 let handler: MessageHandler;
 

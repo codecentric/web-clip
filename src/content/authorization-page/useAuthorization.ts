@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { ExtensionUrl } from '../../chrome/urls';
 import { MessageType } from '../../domain/messages';
 import { useSolidApis } from '../../api/useSolidApis';
-import { sendMessage } from '../sendMessage';
+import { sendMessage } from '../messaging/sendMessage';
 
 export const useAuthorization = (
   session: Session,

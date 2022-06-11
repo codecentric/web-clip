@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { EventEmitter } from 'events';
 import { act } from 'react-dom/test-utils';
-import { MessageType } from '../domain/messages';
-import { useChromeMessageListener } from './chromeMessageListenerContext';
+import { MessageType } from '../../domain/messages';
+import { useChromeMessageListener } from '../messaging/chromeMessageListenerContext';
 import { useSessionInfo } from './useSessionInfo';
 
-jest.mock('./chromeMessageListenerContext');
+jest.mock('../messaging/chromeMessageListenerContext');
 
 describe('useSessionInfo', () => {
   let chromeMessageListener: EventEmitter;

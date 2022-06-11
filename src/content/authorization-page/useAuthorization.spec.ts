@@ -5,11 +5,11 @@ import { ExtensionUrl } from '../../chrome/urls';
 import { MessageType } from '../../domain/messages';
 import { ProfileApi } from '../../api/ProfileApi';
 import { useSolidApis } from '../../api/useSolidApis';
-import { sendMessage } from '../sendMessage';
+import { sendMessage } from '../messaging/sendMessage';
 import { useAuthorization } from './useAuthorization';
 
 jest.mock('../../api/useSolidApis');
-jest.mock('../sendMessage');
+jest.mock('../messaging/sendMessage');
 
 describe('useAuthorization', () => {
   let session: Session;

@@ -6,8 +6,8 @@ import contentCss from './assets/content.css';
 import { getExtensionUrl } from './chrome/urls';
 import { renderAuthorizationPage } from './content/authorization-page';
 import { isOnAuthorizationPage } from './content/authorization-page/isOnAuthorizationPage';
-import { ChromeMessageListener } from './content/ChromeMessageListener';
-import { WebClip } from './content/WebClip';
+import { ChromeMessageListener } from './content/messaging/ChromeMessageListener';
+import { WebClip } from './content/page-overlay/WebClip';
 import { MessageType } from './domain/messages';
 
 const root = document.createElement('div');

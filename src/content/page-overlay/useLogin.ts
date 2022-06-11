@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
-import { MessageType } from '../domain/messages';
-import { sendMessage } from './sendMessage';
+import { MessageType } from '../../domain/messages';
+import { sendMessage } from '../messaging/sendMessage';
 
 export const useLogin = () => {
   const [state, setState] = useState({

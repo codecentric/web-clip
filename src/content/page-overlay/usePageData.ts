@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { MessageType } from '../domain/messages';
-import { sendMessage } from './sendMessage';
+import { MessageType } from '../../domain/messages';
+import { sendMessage } from '../messaging/sendMessage';
 
 export const usePageData = (url: string) => {
   const [loading, setLoading] = useState(true);

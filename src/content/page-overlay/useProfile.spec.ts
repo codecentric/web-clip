@@ -1,10 +1,10 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
-import { MessageType } from '../domain/messages';
-import { sendMessage } from './sendMessage';
+import { MessageType } from '../../domain/messages';
+import { sendMessage } from '../messaging/sendMessage';
 import { useProfile } from './useProfile';
 
-jest.mock('./sendMessage');
+jest.mock('../messaging/sendMessage');
 
 describe('useProfile', () => {
   it('it returns a loading status while the profile is loading', () => {

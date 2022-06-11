@@ -1,4 +1,4 @@
-import { PageMetaData } from '../domain/PageMetaData';
+import { PageMetaData } from '../../domain/PageMetaData';
 
 export const usePage = (): PageMetaData => {
   return {
