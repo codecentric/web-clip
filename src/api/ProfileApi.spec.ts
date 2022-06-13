@@ -3,6 +3,7 @@ import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
 import { ExtensionUrl } from '../chrome/urls';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
 import { thenSparqlUpdateIsSentToUrl } from '../test/thenSparqlUpdateIsSentToUrl';
+import { turtleResponse } from '../test/turtleResponse';
 import { ProfileApi } from './ProfileApi';
 
 describe('ProfileApi', () => {
@@ -150,17 +151,3 @@ describe('ProfileApi', () => {
     });
   });
 });
-
-function turtleResponse(bodyText: string) {
-  return {
-    ok: true,
-    headers: new Headers({
-      'Content-Type': 'text/turtle',
-      'wac-allow': 'user="read write append control",public=""',
-      'ms-author-via': 'SPARQL',
-    }),
-    status: 200,
-    statusText: 'OK',
-    text: async () => bodyText,
-  };
-}
