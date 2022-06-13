@@ -1,5 +1,4 @@
 import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
-import { Storage } from '../domain/Storage';
 import { Options } from './optionsStorageApi';
 
 interface PageState<T> {

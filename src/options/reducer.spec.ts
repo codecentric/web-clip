@@ -1,4 +1,3 @@
-import { Storage } from '../domain/Storage';
 import reducer, { ActionType, State } from './reducer';
 import { initialState } from './useOptionsPage';
 
