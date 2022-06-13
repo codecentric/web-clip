@@ -25,7 +25,7 @@ export const ChooseStorage = () => {
       <label className="block text-gray-700 text-sm font-bold mb-2">
         <p>Storage Location</p>
         <Input
-          value={containerUrl}
+          value={containerUrl ?? ''}
           aria-invalid={!!validationError}
           onChange={(event) => setContainerUrl(event.target.value)}
         />
