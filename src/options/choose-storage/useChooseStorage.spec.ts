@@ -134,6 +134,13 @@ describe('useChooseStorage', () => {
           )
         );
       });
+
+      it('clears validation error when value changed', () => {
+        act(() => {
+          renderResult.current.setContainerUrl('http://new.url.test/');
+        });
+        expect(renderResult.current.validationError).toBe(null);
+      });
     });
   });
 

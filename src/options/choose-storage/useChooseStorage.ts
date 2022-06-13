@@ -37,6 +37,7 @@ export function useChooseStorage() {
     setState((state) => ({
       ...state,
       manualChanges: true,
+      validationError: null,
       containerUrl,
     }));
 
