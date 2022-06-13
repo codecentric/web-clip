@@ -19,7 +19,11 @@ export class StorageApi {
   }
 
   async validateIfContainer(containerUrl: string): Promise<boolean> {
-    await this.fetcher.load(containerUrl);
+    try {
+      await this.fetcher.load(containerUrl);
+    } catch (err) {
+      return false;
+    }
     return this.store.isContainer(containerUrl);
   }
 }

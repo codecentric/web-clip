@@ -1,11 +1,18 @@
 import React, { ChangeEvent } from 'react';
 import { Button } from '../../components/Button';
+import { ErrorMessage } from '../../components/ErrorMessage';
 import { Input } from '../../components/Input';
 import { useChooseStorage } from './useChooseStorage';
 
 export const ChooseStorage = () => {
-  const { loading, manualChanges, containerUrl, setContainerUrl, submit } =
-    useChooseStorage();
+  const {
+    loading,
+    manualChanges,
+    containerUrl,
+    setContainerUrl,
+    submit,
+    validationError,
+  } = useChooseStorage();
   return (
     <div>
       <p className="my-4 font-thin">
@@ -22,6 +29,7 @@ export const ChooseStorage = () => {
           onChange={(event) => setContainerUrl(event.target.value)}
         />
       </label>
+      {validationError && <ErrorMessage error={validationError} />}
       <Button loading={loading} loadingLabel="Please wait..." onClick={submit}>
         {manualChanges ? 'Submit' : 'Confirm'}
       </Button>

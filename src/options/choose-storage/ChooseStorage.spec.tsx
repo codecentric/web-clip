@@ -12,6 +12,7 @@ describe('ChooseStorage', () => {
     beforeEach(() => {
       when(useChooseStorage).mockReturnValue({
         loading: true,
+        submitting: false,
         containerUrl: '',
         manualChanges: false,
         setContainerUrl: jest.fn(),
@@ -34,6 +35,7 @@ describe('ChooseStorage', () => {
       setContainerUrl = jest.fn();
       when(useChooseStorage).mockReturnValue({
         loading: false,
+        submitting: false,
         manualChanges: false,
         containerUrl: 'https://pod.example/alice/webclip/',
         setContainerUrl,
@@ -84,6 +86,7 @@ describe('ChooseStorage', () => {
       setContainerUrl = jest.fn();
       when(useChooseStorage).mockReturnValue({
         loading: false,
+        submitting: false,
         containerUrl: null,
         manualChanges: true,
         setContainerUrl,
@@ -117,6 +120,26 @@ describe('ChooseStorage', () => {
       expect(continueButton).toBeInTheDocument();
       userEvent.click(continueButton);
       expect(submit).toHaveBeenCalled();
+    });
+  });
+
+  describe('after submitting an invalid container url', () => {
+    beforeEach(() => {
+      when(useChooseStorage).mockReturnValue({
+        loading: false,
+        submitting: false,
+        manualChanges: false,
+        containerUrl: 'https://pod.example/alice/webclip/',
+        setContainerUrl: () => null,
+        validationError: new Error('Please choose a valid container'),
+        submit: () => null,
+      });
+    });
+    it('shows the validation error', () => {
+      render(<ChooseStorage />);
+      expect(
+        screen.getByText('Please choose a valid container')
+      ).toBeInTheDocument();
     });
   });
 });
