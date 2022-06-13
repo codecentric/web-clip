@@ -2,26 +2,28 @@ import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
 import { useEffect, useState } from 'react';
 import { ProfileApi } from './ProfileApi';
 import { SolidSession } from './SolidSession';
+import { StorageApi } from './StorageApi';
 
-function initializeApi(session: SolidSession) {
-  const store = graph();
+function initializeApis(session: SolidSession) {
+  const store = graph() as LiveStore;
   new UpdateManager(store);
   new Fetcher(store, { fetch: session.fetch });
-  return new ProfileApi(session, store as LiveStore);
+  return {
+    profileApi: new ProfileApi(session, store),
+    storageApi: new StorageApi(session.info.webId, store),
+  };
 }
 
 export const useSolidApis = (session: SolidSession) => {
-  const [profileApi, setProfileApi] = useState(() => {
-    return initializeApi(session);
+  const [apis, setApis] = useState(() => {
+    return initializeApis(session);
   });
 
   useEffect(() => {
     session.onLogin(() => {
-      setProfileApi(initializeApi(session));
+      setApis(initializeApis(session));
     });
   }, []);
 
-  return {
-    profileApi,
-  };
+  return apis;
 };

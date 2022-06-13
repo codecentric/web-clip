@@ -17,18 +17,17 @@ describe('AuthorizationSection', () => {
       when(useCheckAccessPermissions)
         .calledWith(
           new ExtensionUrl('chrome-extension://extension-id/'),
-          new URL('https://extension-id.chromiumapp.org'),
-          profileApi
+          new URL('https://extension-id.chromiumapp.org')
         )
         .mockReturnValue({
           checking: true,
+          profileApi,
         });
 
       render(
         <AuthorizationSection
           extensionUrl={new ExtensionUrl('chrome-extension://extension-id/')}
           redirectUrl={new URL('https://extension-id.chromiumapp.org')}
-          profileApi={profileApi}
         />
       );
     });
@@ -54,18 +53,17 @@ describe('AuthorizationSection', () => {
       when(useCheckAccessPermissions)
         .calledWith(
           new ExtensionUrl('chrome-extension://extension-id/'),
-          new URL('https://extension-id.chromiumapp.org'),
-          profileApi
+          new URL('https://extension-id.chromiumapp.org')
         )
         .mockReturnValue({
           checking: false,
+          profileApi,
         });
 
       render(
         <AuthorizationSection
           extensionUrl={new ExtensionUrl('chrome-extension://extension-id/')}
           redirectUrl={new URL('https://extension-id.chromiumapp.org')}
-          profileApi={profileApi}
         />
       );
     });

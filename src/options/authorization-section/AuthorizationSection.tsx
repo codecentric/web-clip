@@ -1,6 +1,5 @@
 import React from 'react';
 import { ExtensionUrl } from '../../chrome/urls';
-import { ProfileApi } from '../../api/ProfileApi';
 import { CheckingAccessPermissions } from './CheckingAccessPermissions';
 import { GrantAccess } from './GrantAccess';
 import { useCheckAccessPermissions } from './useCheckAccessPermissions';
@@ -8,18 +7,12 @@ import { useCheckAccessPermissions } from './useCheckAccessPermissions';
 interface Props {
   extensionUrl: ExtensionUrl;
   redirectUrl: URL;
-  profileApi: ProfileApi;
 }
 
-export const AuthorizationSection = ({
-  extensionUrl,
-  redirectUrl,
-  profileApi,
-}: Props) => {
-  const { checking } = useCheckAccessPermissions(
+export const AuthorizationSection = ({ extensionUrl, redirectUrl }: Props) => {
+  const { checking, profileApi } = useCheckAccessPermissions(
     extensionUrl,
-    redirectUrl,
-    profileApi
+    redirectUrl
   );
 
   return (

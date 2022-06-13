@@ -1,6 +1,7 @@
 import { act, renderHook, RenderResult } from '@testing-library/react-hooks';
 
 import { when } from 'jest-when';
+import { StorageApi } from '../api/StorageApi';
 import { ExtensionUrl } from '../chrome/urls';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
 import { ProfileApi } from '../api/ProfileApi';
@@ -21,9 +22,11 @@ describe('useOptionsPage', () => {
   let renderResult: RenderResult<ReturnType<typeof useOptionsPage>>;
 
   let profileApi: ProfileApi;
+  let storageApi: StorageApi;
   beforeEach(async () => {
     profileApi = {} as unknown as ProfileApi;
-    when(useSolidApis).mockReturnValue({ profileApi });
+    storageApi = {} as unknown as StorageApi;
+    when(useSolidApis).mockReturnValue({ profileApi, storageApi });
     when(useChromeExtension).mockReturnValue({
       extensionUrl: new ExtensionUrl('chrome-extension://extension-id/'),
       redirectUrl: new URL('https://redirect.test'),
@@ -65,12 +68,6 @@ describe('useOptionsPage', () => {
             providerUrl: 'https://pod.provider.example',
           },
         },
-      });
-    });
-
-    it('returns the profile api', () => {
-      expect(renderResult.all[1]).toMatchObject({
-        profileApi,
       });
     });
 

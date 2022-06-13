@@ -1,10 +1,10 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
 import { renderHook, RenderResult } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
-import { ExtensionUrl } from '../../chrome/urls';
-import { MessageType } from '../../domain/messages';
 import { ProfileApi } from '../../api/ProfileApi';
 import { useSolidApis } from '../../api/useSolidApis';
+import { ExtensionUrl } from '../../chrome/urls';
+import { MessageType } from '../../domain/messages';
 import { sendMessage } from '../messaging/sendMessage';
 import { useAuthorization } from './useAuthorization';
 
@@ -24,7 +24,9 @@ describe('useAuthorization', () => {
         login: jest.fn().mockResolvedValue(null),
       } as unknown as Session;
       const profileApi = {} as ProfileApi;
-      when(useSolidApis).calledWith(session).mockReturnValue({ profileApi });
+      when(useSolidApis)
+        .calledWith(session)
+        .mockReturnValue({ profileApi, storageApi: null });
 
       const render = renderHook(() =>
         useAuthorization(
@@ -61,7 +63,9 @@ describe('useAuthorization', () => {
       profileApi = {
         grantAccessTo: jest.fn().mockResolvedValue(null),
       } as unknown as ProfileApi;
-      when(useSolidApis).calledWith(session).mockReturnValue({ profileApi });
+      when(useSolidApis)
+        .calledWith(session)
+        .mockReturnValue({ profileApi, storageApi: null });
       const render = renderHook(() =>
         useAuthorization(
           session,
@@ -119,7 +123,9 @@ describe('useAuthorization', () => {
           .fn()
           .mockRejectedValue(new Error('granting access failed')),
       } as unknown as ProfileApi;
-      when(useSolidApis).calledWith(session).mockReturnValue({ profileApi });
+      when(useSolidApis)
+        .calledWith(session)
+        .mockReturnValue({ profileApi, storageApi: null });
       const render = renderHook(() =>
         useAuthorization(
           session,
