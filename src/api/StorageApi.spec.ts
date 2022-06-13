@@ -26,4 +26,50 @@ describe('StorageApi', () => {
       expect(storage).toEqual(new Storage('https://alice.test/'));
     });
   });
+
+  describe('validateIfContainer', () => {
+    it('is valid if it is a container', async () => {
+      const fetchMock = jest.fn();
+      when(fetchMock)
+        .calledWith('https://alice.test/public/', expect.anything())
+        .mockResolvedValue(
+          turtleResponse(`
+          @prefix ldp: <http://www.w3.org/ns/ldp#> .
+          <> a ldp:Container .
+          `)
+        );
+      const store = graph();
+      new Fetcher(store, { fetch: fetchMock });
+      const api = new StorageApi(
+        'https://alice.test/profile/card#me',
+        store as LiveStore
+      );
+      const result = await api.validateIfContainer(
+        'https://alice.test/public/'
+      );
+      expect(result).toBe(true);
+    });
+
+    it('is not valid if it is not a container', async () => {
+      const fetchMock = jest.fn();
+      when(fetchMock)
+        .calledWith('https://alice.test/profile/card', expect.anything())
+        .mockResolvedValue(
+          turtleResponse(`
+          @prefix ldp: <http://www.w3.org/ns/ldp#> .
+          <> a ldp:Resource .
+          `)
+        );
+      const store = graph();
+      new Fetcher(store, { fetch: fetchMock });
+      const api = new StorageApi(
+        'https://alice.test/profile/card#me',
+        store as LiveStore
+      );
+      const result = await api.validateIfContainer(
+        'https://alice.test/profile/card'
+      );
+      expect(result).toBe(false);
+    });
+  });
 });

@@ -30,4 +30,26 @@ describe('StorageStore', () => {
       expect(storage).toEqual(new Storage('https://alice.test/'));
     });
   });
+  describe('isContainer', () => {
+    it('returns false if store is empty', () => {
+      const store = graph();
+      const storageStore = new StorageStore(store);
+      const result = storageStore.isContainer('https://alice.test/public/');
+      expect(result).toBe(false);
+    });
+    it('returns true if url identifies a container', () => {
+      const store = graph();
+      parse(
+        `
+         @prefix ldp: <http://www.w3.org/ns/ldp#> .
+          <> a ldp:Container .
+        `,
+        store,
+        'https://alice.test/public/'
+      );
+      const storageStore = new StorageStore(store);
+      const result = storageStore.isContainer('https://alice.test/public/');
+      expect(result).toBe(true);
+    });
+  });
 });

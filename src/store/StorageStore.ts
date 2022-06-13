@@ -23,4 +23,12 @@ export class StorageStore {
     }
     return null;
   }
+
+  isContainer(containerUrl: string) {
+    return this.store.holds(
+      sym(containerUrl),
+      this.ns.rdf('type'),
+      this.ns.ldp('Container')
+    );
+  }
 }
