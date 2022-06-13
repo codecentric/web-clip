@@ -6,6 +6,7 @@ import { useChooseStorage } from './useChooseStorage';
 export const ChooseStorage = () => {
   const {
     loading,
+    submitting,
     manualChanges,
     containerUrl,
     setContainerUrl,
@@ -34,7 +35,11 @@ export const ChooseStorage = () => {
           </span>
         )}
       </label>
-      <Button loading={loading} loadingLabel="Please wait..." onClick={submit}>
+      <Button
+        loading={loading || submitting}
+        loadingLabel="Please wait..."
+        onClick={submit}
+      >
         {manualChanges ? 'Submit' : 'Confirm'}
       </Button>
     </div>
