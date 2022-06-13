@@ -12,6 +12,4 @@
         foaf:Person;
     solid:oidcIssuer
             <http://localhost:3000/>;
-    pim:storage
-            </>;
 .
