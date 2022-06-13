@@ -200,7 +200,9 @@ describe('OptionsPage', () => {
       ).not.toBeInTheDocument();
 
       expect(
-        await screen.findByText('Where do you want to store your clips?')
+        await screen.findByText(
+          'WebClip is going to store data at the following location. Confirm, if you are fine with that, or enter the URL of a different location.'
+        )
       ).toBeInTheDocument();
 
       expect(
