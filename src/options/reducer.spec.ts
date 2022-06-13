@@ -13,6 +13,7 @@ describe('options reducer', () => {
           value: {
             trustedApp: false,
             providerUrl: '',
+            containerUrl: '',
           },
         },
         {
@@ -20,6 +21,7 @@ describe('options reducer', () => {
           payload: {
             trustedApp: true,
             providerUrl: 'https://pod.provider.test',
+            containerUrl: 'https://pod.provider.test/alice/webclip',
           },
         }
       );
@@ -33,6 +35,7 @@ describe('options reducer', () => {
       expect(newState.value).toEqual({
         trustedApp: true,
         providerUrl: 'https://pod.provider.test',
+        containerUrl: 'https://pod.provider.test/alice/webclip',
       });
     });
   });

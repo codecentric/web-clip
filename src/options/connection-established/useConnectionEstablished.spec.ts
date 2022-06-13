@@ -42,6 +42,23 @@ describe('useConnectionEstablished', () => {
     });
   });
 
+  it('returns container url', () => {
+    when(useOptions).mockReturnValue({
+      state: {
+        ...initialState,
+        value: {
+          ...initialState.value,
+          containerUrl: 'https://provider.test/alice/webclip',
+        },
+      },
+      dispatch,
+    });
+    const render = renderHook(() => useConnectionEstablished());
+    expect(render.result.current).toMatchObject({
+      containerUrl: 'https://provider.test/alice/webclip',
+    });
+  });
+
   describe('on disconnect', () => {
     beforeEach(() => {
       when(useOptions).mockReturnValue({

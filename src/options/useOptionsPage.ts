@@ -16,7 +16,7 @@ export const initialState: State = {
     sessionId: '',
     isLoggedIn: false,
   },
-  value: { providerUrl: '', trustedApp: false },
+  value: { providerUrl: '', trustedApp: false, containerUrl: '' },
 };
 
 export const useOptionsPage = (session: SolidSession) => {
