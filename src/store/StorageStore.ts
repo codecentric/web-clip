@@ -16,7 +16,7 @@ export class StorageStore {
    * Returns any storage linked from the given WebID, or null if none can be found.
    * @param webId
    */
-  getStorageForWebId(webId: string): Storage {
+  getStorageForWebId(webId: string): Storage | null {
     const storage = this.store.any(sym(webId), this.ns.space('storage'));
     if (storage) {
       return new Storage(storage.value);

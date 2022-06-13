@@ -1,7 +1,6 @@
 import { Fetcher, LiveStore, UpdateManager } from 'rdflib';
-import { ProfileStore } from '../store/ProfileStore';
+import { Storage } from '../domain/Storage';
 import { StorageStore } from '../store/StorageStore';
-import { SolidSession } from './SolidSession';
 
 export class StorageApi {
   private store: StorageStore;
@@ -14,7 +13,7 @@ export class StorageApi {
     this.updater = liveStore.updater;
   }
 
-  async findStorage() {
+  async findStorage(): Promise<Storage | null> {
     await this.fetcher.load(this.webId);
     return this.store.getStorageForWebId(this.webId);
   }

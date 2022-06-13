@@ -5,15 +5,30 @@ export function useChooseStorage() {
   const [state, setState] = useState({
     loading: true,
     containerUrl: '',
+    manualChanges: false,
   });
   const storageApi = useStorageApi();
   useEffect(() => {
     storageApi.findStorage().then((storage) => {
       setState({
         loading: false,
-        containerUrl: new URL('webclip/', storage.url).toString(),
+        manualChanges: storage === null,
+        containerUrl: storage
+          ? new URL('webclip/', storage.url).toString()
+          : null,
       });
     });
   }, [storageApi]);
-  return state;
+
+  const setContainerUrl = (containerUrl: string) =>
+    setState((state) => ({
+      ...state,
+      manualChanges: true,
+      containerUrl,
+    }));
+
+  return {
+    ...state,
+    setContainerUrl,
+  };
 }
