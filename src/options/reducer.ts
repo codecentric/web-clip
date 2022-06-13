@@ -1,4 +1,5 @@
 import { ISessionInfo } from '@inrupt/solid-client-authn-browser';
+import { Storage } from '../domain/Storage';
 import { Options } from './optionsStorageApi';
 
 interface PageState<T> {
@@ -16,6 +17,7 @@ export enum ActionType {
   LOGGED_IN = 'LOGGED_IN',
   TRUSTED_APP = 'TRUSTED_APP',
   DISCONNECTED_POD = 'DISCONNECTED_POD',
+  SELECTED_STORAGE_CONTAINER = 'SELECTED_STORAGE_CONTAINER',
 }
 
 export type State = PageState<Options>;
@@ -25,6 +27,7 @@ export type Action =
   | OptionsSaved
   | LoggedIn
   | TrustedApp
+  | SelectedStorage
   | DisconnectedPod;
 export type Dispatch = (action: Action) => void;
 
@@ -49,6 +52,11 @@ interface OptionsSaved {
 
 interface TrustedApp {
   type: ActionType.TRUSTED_APP;
+}
+
+interface SelectedStorage {
+  type: ActionType.SELECTED_STORAGE_CONTAINER;
+  payload: string;
 }
 
 interface DisconnectedPod {
@@ -95,6 +103,15 @@ export default (
           ...state.value,
           trustedApp: true,
         },
+      };
+    case ActionType.SELECTED_STORAGE_CONTAINER:
+      return {
+        ...state,
+        value: {
+          ...state.value,
+          containerUrl: action.payload,
+        },
+        unsavedChanges: true,
       };
     case ActionType.DISCONNECTED_POD:
       return {

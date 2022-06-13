@@ -4,7 +4,7 @@ import { Input } from '../../components/Input';
 import { useChooseStorage } from './useChooseStorage';
 
 export const ChooseStorage = () => {
-  const { loading, manualChanges, containerUrl, setContainerUrl } =
+  const { loading, manualChanges, containerUrl, setContainerUrl, submit } =
     useChooseStorage();
   return (
     <div>
@@ -22,11 +22,7 @@ export const ChooseStorage = () => {
           onChange={(event) => setContainerUrl(event.target.value)}
         />
       </label>
-      <Button
-        loading={loading}
-        loadingLabel="Please wait..."
-        onClick={() => null}
-      >
+      <Button loading={loading} loadingLabel="Please wait..." onClick={submit}>
         {manualChanges ? 'Submit' : 'Confirm'}
       </Button>
     </div>
