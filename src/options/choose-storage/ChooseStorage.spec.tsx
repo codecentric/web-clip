@@ -15,6 +15,7 @@ describe('ChooseStorage', () => {
         containerUrl: '',
         manualChanges: false,
         setContainerUrl: jest.fn(),
+        submit: () => null,
       });
     });
 
@@ -36,6 +37,7 @@ describe('ChooseStorage', () => {
         manualChanges: false,
         containerUrl: 'https://pod.example/alice/webclip/',
         setContainerUrl,
+        submit: () => null,
       });
     });
 
@@ -76,13 +78,16 @@ describe('ChooseStorage', () => {
 
   describe('after loading and finding no storage', () => {
     let setContainerUrl: jest.Mock;
+    let submit: jest.Mock;
     beforeEach(() => {
+      submit = jest.fn();
       setContainerUrl = jest.fn();
       when(useChooseStorage).mockReturnValue({
         loading: false,
         containerUrl: null,
         manualChanges: true,
         setContainerUrl,
+        submit,
       });
     });
 
@@ -111,6 +116,7 @@ describe('ChooseStorage', () => {
       const continueButton = screen.getByText('Submit');
       expect(continueButton).toBeInTheDocument();
       userEvent.click(continueButton);
+      expect(submit).toHaveBeenCalled();
     });
   });
 });

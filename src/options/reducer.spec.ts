@@ -1,3 +1,4 @@
+import { Storage } from '../domain/Storage';
 import reducer, { ActionType, State } from './reducer';
 import { initialState } from './useOptionsPage';
 
@@ -125,6 +126,29 @@ describe('options reducer', () => {
 
     it('sets session info', () => {
       expect(newState.value.trustedApp).toBe(true);
+    });
+
+    it('indicates unsaved changes', () => {
+      expect(newState.unsavedChanges).toBe(true);
+    });
+  });
+
+  describe('SELECTED_STORAGE_CONTAINER', () => {
+    beforeEach(() => {
+      newState = reducer(
+        {
+          ...initialState,
+          value: { ...initialState.value, containerUrl: '' },
+        },
+        {
+          type: ActionType.SELECTED_STORAGE_CONTAINER,
+          payload: 'https://alice.test/my-clips',
+        }
+      );
+    });
+
+    it('sets the new container url', () => {
+      expect(newState.value.containerUrl).toBe('https://alice.test/my-clips');
     });
 
     it('indicates unsaved changes', () => {

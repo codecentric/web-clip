@@ -4,16 +4,26 @@ import { when } from 'jest-when';
 import { useStorageApi } from '../../api/ApiContext';
 import { StorageApi } from '../../api/StorageApi';
 import { Storage } from '../../domain/Storage';
+import { useOptions } from '../OptionsContext';
+import { ActionType, Dispatch } from '../reducer';
+import { initialState } from '../useOptionsPage';
 import { useChooseStorage } from './useChooseStorage';
 
 jest.mock('../auth/AuthenticationContext');
 jest.mock('../../api/ApiContext');
+jest.mock('../OptionsContext');
 
 describe('useChooseStorage', () => {
   let renderResult: RenderResult<ReturnType<typeof useChooseStorage>>;
+  let dispatch: Dispatch;
 
   describe('when a storage can be found', () => {
+    dispatch = jest.fn();
     beforeEach(async () => {
+      when(useOptions).mockReturnValue({
+        state: { ...initialState },
+        dispatch,
+      });
       when(useStorageApi).mockReturnValue({
         findStorage: jest
           .fn()
@@ -65,6 +75,18 @@ describe('useChooseStorage', () => {
           renderResult.current.setContainerUrl('http://new.url.test/');
         });
         expect(renderResult.current.manualChanges).toBe(true);
+      });
+    });
+
+    describe('submit', () => {
+      it('dispatches STORAGE_SELECTED action', () => {
+        act(() => {
+          renderResult.current.submit();
+        });
+        expect(dispatch).toHaveBeenLastCalledWith({
+          type: ActionType.SELECTED_STORAGE_CONTAINER,
+          payload: 'https://pod.test/alice/webclip/',
+        });
       });
     });
   });

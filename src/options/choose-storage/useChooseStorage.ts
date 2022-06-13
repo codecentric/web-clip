@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useStorageApi } from '../../api/ApiContext';
+import { Storage } from '../../domain/Storage';
+import { useOptions } from '../OptionsContext';
+import { ActionType } from '../reducer';
 
 export function useChooseStorage() {
+  const { dispatch } = useOptions();
   const [state, setState] = useState({
     loading: true,
     containerUrl: '',
@@ -30,5 +34,10 @@ export function useChooseStorage() {
   return {
     ...state,
     setContainerUrl,
+    submit: () =>
+      dispatch({
+        type: ActionType.SELECTED_STORAGE_CONTAINER,
+        payload: state.containerUrl,
+      }),
   };
 }
