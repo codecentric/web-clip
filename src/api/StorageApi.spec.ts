@@ -71,5 +71,30 @@ describe('StorageApi', () => {
       );
       expect(result).toBe(false);
     });
+
+    it('is not valid if not found', async () => {
+      const fetchMock = jest.fn();
+      when(fetchMock)
+        .calledWith('https://alice.test/not/existing/', expect.anything())
+        .mockResolvedValue({
+          ok: false,
+          status: 401,
+          headers: new Headers({
+            'Content-Type': 'text/plain',
+          }),
+          statusText: 'Not Found',
+          text: async () => 'Not Found',
+        });
+      const store = graph();
+      new Fetcher(store, { fetch: fetchMock });
+      const api = new StorageApi(
+        'https://alice.test/profile/card#me',
+        store as LiveStore
+      );
+      const result = await api.validateIfContainer(
+        'https://alice.test/not/existing/'
+      );
+      expect(result).toBe(false);
+    });
   });
 });

@@ -16,19 +16,22 @@ jest.mock('../OptionsContext');
 describe('useChooseStorage', () => {
   let renderResult: RenderResult<ReturnType<typeof useChooseStorage>>;
   let dispatch: Dispatch;
+  let storageApi: StorageApi;
 
   describe('when a storage can be found', () => {
-    dispatch = jest.fn();
     beforeEach(async () => {
+      dispatch = jest.fn();
       when(useOptions).mockReturnValue({
         state: { ...initialState },
         dispatch,
       });
-      when(useStorageApi).mockReturnValue({
+      storageApi = {
         findStorage: jest
           .fn()
           .mockResolvedValue(new Storage('https://pod.test/alice/')),
-      } as unknown as StorageApi);
+        validateIfContainer: jest.fn(),
+      } as unknown as StorageApi;
+      when(useStorageApi).mockReturnValue(storageApi);
 
       const { result, waitForNextUpdate } = renderHook(() =>
         useChooseStorage()
@@ -38,6 +41,10 @@ describe('useChooseStorage', () => {
     });
     it('indicates loading initially', () => {
       expect(renderResult.all[0]).toMatchObject({ loading: true });
+    });
+
+    it('indicates no current submission', () => {
+      expect(renderResult.current).toMatchObject({ submitting: false });
     });
 
     it('returns empty container url initially', () => {
@@ -78,15 +85,54 @@ describe('useChooseStorage', () => {
       });
     });
 
-    describe('submit', () => {
-      it('dispatches STORAGE_SELECTED action', () => {
+    describe('submit successfully', () => {
+      beforeEach(() => {
+        when(storageApi.validateIfContainer)
+          .calledWith('https://pod.test/alice/webclip/')
+          .mockResolvedValue(true);
         act(() => {
           renderResult.current.submit();
         });
+      });
+      it('indicates submission', () => {
+        expect(renderResult.all[2]).toMatchObject({ submitting: true });
+      });
+      it('finishes indication of submission', () => {
+        expect(renderResult.current).toMatchObject({ submitting: false });
+      });
+      it('dispatches STORAGE_SELECTED action', () => {
         expect(dispatch).toHaveBeenLastCalledWith({
           type: ActionType.SELECTED_STORAGE_CONTAINER,
           payload: 'https://pod.test/alice/webclip/',
         });
+      });
+    });
+
+    describe('submit invalid container url', () => {
+      beforeEach(() => {
+        when(storageApi.validateIfContainer)
+          .calledWith('https://pod.test/alice/webclip/')
+          .mockResolvedValue(false);
+        act(() => {
+          renderResult.current.submit();
+        });
+      });
+      it('indicates submission', () => {
+        expect(renderResult.all[2]).toMatchObject({ submitting: true });
+      });
+      it('finishes indication of submission', () => {
+        expect(renderResult.current).toMatchObject({ submitting: false });
+      });
+      it('dispatches nothing', () => {
+        expect(dispatch).not.toHaveBeenCalled();
+      });
+
+      it('shows a validation error', () => {
+        expect(renderResult.current.validationError).toEqual(
+          new Error(
+            'Please provide the URL of an existing, accessible container'
+          )
+        );
       });
     });
   });
