@@ -1,8 +1,10 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { when } from 'jest-when';
-import React from 'react';
 import { ExtensionUrl } from '../chrome/urls';
+import { StorageApi } from '../api/StorageApi';
+import { Storage } from '../domain/Storage';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
 import { ProfileApi } from '../api/ProfileApi';
 import { useAuthentication } from './auth/AuthenticationContext';
@@ -18,6 +20,7 @@ jest.mock('../api/useSolidApis');
 
 describe('OptionsPage', () => {
   let profileApi: ProfileApi;
+  let storageApi: StorageApi;
 
   beforeEach(() => {
     when(useChromeExtension).mockReturnValue({
@@ -28,7 +31,10 @@ describe('OptionsPage', () => {
       canExtensionAccessPod: jest.fn().mockResolvedValue(false),
       getProfileDocUrl: () => '',
     } as unknown as ProfileApi;
-    when(useSolidApis).mockReturnValue({ profileApi });
+    storageApi = {
+      findStorage: jest.fn(),
+    } as unknown as StorageApi;
+    when(useSolidApis).mockReturnValue({ profileApi, storageApi });
   });
 
   describe('while loading', () => {
@@ -58,6 +64,7 @@ describe('OptionsPage', () => {
       (saveOptions as jest.Mock).mockResolvedValue(undefined);
       (loadOptions as jest.Mock).mockResolvedValue({
         providerUrl: 'https://solidcommunity.net',
+        containerUrl: 'https://alice.solidcommunity.net/webclip/',
       });
     });
 
@@ -114,6 +121,7 @@ describe('OptionsPage', () => {
 
       expect(saveOptions).toHaveBeenCalledWith({
         providerUrl: 'https://pod.provider.example',
+        containerUrl: 'https://alice.solidcommunity.net/webclip/',
         trustedApp: false,
       });
     });
@@ -153,6 +161,52 @@ describe('OptionsPage', () => {
 
       expect(
         await screen.findByText('Everything is set up correctly.')
+      ).toBeInTheDocument();
+    });
+
+    it('asks for a storage location after checking access', async () => {
+      (loadOptions as jest.Mock).mockResolvedValue({
+        providerUrl: 'https://solidcommunity.net',
+        containerUrl: '',
+      });
+      when(profileApi.canExtensionAccessPod).mockResolvedValue(true);
+      when(storageApi.findStorage).mockResolvedValue(
+        new Storage('https://alice.pod.test/private/')
+      );
+      when(useAuthentication).mockReturnValue({
+        session: {
+          login: (): null => null,
+          info: {
+            sessionId: 'test-session',
+            isLoggedIn: true,
+            webId: 'https://pod.test/alice#me',
+          },
+        },
+        redirectUrl: '',
+      });
+      render(<OptionsPage session={new Session()} />);
+      const input = await screen.findByLabelText('Pod Provider URL');
+      fireEvent.change(input, {
+        target: {
+          value: 'https://pod.provider.example',
+        },
+      });
+      const button = await screen.findByText('Connect Pod');
+      fireEvent.click(button);
+      await screen.findByText('Signing in');
+
+      expect(
+        await screen.queryByText('Everything is set up correctly.')
+      ).not.toBeInTheDocument();
+
+      expect(
+        await screen.findByText('Where do you want to store your clips?')
+      ).toBeInTheDocument();
+
+      expect(
+        await screen.findByDisplayValue(
+          'https://alice.pod.test/private/webclip/'
+        )
       ).toBeInTheDocument();
     });
   });

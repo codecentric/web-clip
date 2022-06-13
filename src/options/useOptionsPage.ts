@@ -6,7 +6,6 @@ import { load as loadOptions, save as saveOptions } from './optionsStorageApi';
 
 import reducer, { ActionType, State } from './reducer';
 import { useChromeExtension } from './useChromeExtension';
-import { useSolidApis } from '../api/useSolidApis';
 
 export const initialState: State = {
   loading: true,
@@ -20,7 +19,6 @@ export const initialState: State = {
 };
 
 export const useOptionsPage = (session: SolidSession) => {
-  const { profileApi } = useSolidApis(session);
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
     sessionInfo: session.info,
@@ -54,7 +52,6 @@ export const useOptionsPage = (session: SolidSession) => {
   return {
     state,
     dispatch,
-    profileApi,
     redirectUrl,
     extensionUrl,
   };

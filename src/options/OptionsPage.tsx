@@ -1,7 +1,10 @@
 import React from 'react';
+import { useSolidApis } from '../api/useSolidApis';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
 import { AuthenticationContext } from './auth/AuthenticationContext';
+import { ApiContext } from '../api/ApiContext';
 import { AuthorizationSection } from './authorization-section/AuthorizationSection';
+import { ChooseStorage } from './choose-storage/ChooseStorage';
 import { ConnectPodSection } from './connect-pod/ConnectPodSection';
 import { ConnectionEstablished } from './connection-established/ConnectionEstablished';
 import { HelpSection } from './HelpSection';
@@ -33,8 +36,10 @@ const AllSaved = () => {
 };
 
 export const OptionsPage = ({ session }: Props) => {
-  const { state, dispatch, profileApi, redirectUrl, extensionUrl } =
+  const { state, dispatch, redirectUrl, extensionUrl } =
     useOptionsPage(session);
+
+  const apis = useSolidApis(session);
 
   if (state.loading) {
     return <p>Loading...</p>;
@@ -42,6 +47,7 @@ export const OptionsPage = ({ session }: Props) => {
 
   const trustedApp = state.value.trustedApp;
   const isLoggedIn = state.sessionInfo.isLoggedIn;
+  const containerUrl = state.value.containerUrl;
 
   return (
     <AuthenticationContext.Provider
@@ -50,24 +56,29 @@ export const OptionsPage = ({ session }: Props) => {
         redirectUrl: redirectUrl.toString(),
       }}
     >
-      <OptionsContext.Provider value={{ state, dispatch }}>
-        <main className="container text-lg mx-auto p-8">
-          <h1 className="my-8 flex items-center gap-2 text-xl font-medium">
-            Setup WebClip {state.saved && <AllSaved />}
-          </h1>
-          {!isLoggedIn && !trustedApp && <ConnectPodSection />}
-          {isLoggedIn && !trustedApp && (
-            <AuthorizationSection
-              extensionUrl={extensionUrl}
-              redirectUrl={redirectUrl}
-              profileApi={profileApi}
-            ></AuthorizationSection>
-          )}
+      <ApiContext.Provider value={apis}>
+        <OptionsContext.Provider value={{ state, dispatch }}>
+          <main className="container text-lg mx-auto p-8">
+            <h1 className="my-8 flex items-center gap-2 text-xl font-medium">
+              Setup WebClip {state.saved && <AllSaved />}
+            </h1>
+            {!isLoggedIn && (!trustedApp || !containerUrl) && (
+              <ConnectPodSection />
+            )}
+            {isLoggedIn && !trustedApp && (
+              <AuthorizationSection
+                extensionUrl={extensionUrl}
+                redirectUrl={redirectUrl}
+              ></AuthorizationSection>
+            )}
 
-          {trustedApp && <ConnectionEstablished />}
-          <HelpSection />
-        </main>
-      </OptionsContext.Provider>
+            {isLoggedIn && !containerUrl && <ChooseStorage />}
+
+            {trustedApp && containerUrl && <ConnectionEstablished />}
+            <HelpSection />
+          </main>
+        </OptionsContext.Provider>
+      </ApiContext.Provider>
     </AuthenticationContext.Provider>
   );
 };

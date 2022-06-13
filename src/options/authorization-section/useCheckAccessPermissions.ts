@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
+import { useProfileApi } from '../../api/ApiContext';
 import { ExtensionUrl } from '../../chrome/urls';
-import { ProfileApi } from '../../api/ProfileApi';
 import { useOptions } from '../OptionsContext';
 import { ActionType } from '../reducer';
 
 export const useCheckAccessPermissions = (
   extensionUrl: ExtensionUrl,
-  redirectUrl: URL,
-  profileApi: ProfileApi
+  redirectUrl: URL
 ) => {
   const { state, dispatch } = useOptions();
+  const profileApi = useProfileApi();
 
   const [checking, setChecking] = useState(false);
 
@@ -29,5 +29,6 @@ export const useCheckAccessPermissions = (
 
   return {
     checking,
+    profileApi,
   };
 };
