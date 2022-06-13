@@ -4,12 +4,16 @@ import { Input } from '../../components/Input';
 import { useChooseStorage } from './useChooseStorage';
 
 export const ChooseStorage = () => {
-  const { containerUrl } = useChooseStorage();
+  const { loading, containerUrl } = useChooseStorage();
   return (
     <div>
       <p className="my-4 font-thin">Where do you want to store your clips?</p>
       <Input value={containerUrl} />
-      <Button loading={false} loadingLabel="Wait" onClick={() => null}>
+      <Button
+        loading={loading}
+        loadingLabel="Please wait..."
+        onClick={() => null}
+      >
         Continue
       </Button>
     </div>
