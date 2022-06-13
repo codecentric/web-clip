@@ -1,6 +1,5 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { Button } from '../../components/Button';
-import { ErrorMessage } from '../../components/ErrorMessage';
 import { Input } from '../../components/Input';
 import { useChooseStorage } from './useChooseStorage';
 
@@ -26,10 +25,15 @@ export const ChooseStorage = () => {
         <p>Storage Location</p>
         <Input
           value={containerUrl}
+          aria-invalid={!!validationError}
           onChange={(event) => setContainerUrl(event.target.value)}
         />
+        {validationError && (
+          <span className="text-xs text-red-700">
+            {validationError.message}
+          </span>
+        )}
       </label>
-      {validationError && <ErrorMessage error={validationError} />}
       <Button loading={loading} loadingLabel="Please wait..." onClick={submit}>
         {manualChanges ? 'Submit' : 'Confirm'}
       </Button>
