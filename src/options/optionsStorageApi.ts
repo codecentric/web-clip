@@ -9,11 +9,16 @@ export interface Options {
    * whether WebClip is a trusted app with the required permissions in the connected pod
    */
   trustedApp: boolean;
+  /**
+   * url of a container where the data is stored
+   */
+  containerUrl: string;
 }
 
 const defaultsOptions: Options = {
   providerUrl: '',
   trustedApp: false,
+  containerUrl: '',
 };
 
 export const save = (options: Options): Promise<Options> => {

@@ -12,6 +12,7 @@ describe('ConnectionEstablished', () => {
   it('shows the connected provider url', () => {
     when(useConnectionEstablished).mockReturnValue({
       providerUrl: 'https://pod.test',
+      containerUrl: 'https://pod.test/alice/webclip',
       disconnect: () => null,
     });
     render(<ConnectionEstablished />);
@@ -22,6 +23,7 @@ describe('ConnectionEstablished', () => {
     const disconnect = jest.fn();
     when(useConnectionEstablished).mockReturnValue({
       providerUrl: 'https://pod.test',
+      containerUrl: 'https://pod.test/alice/webclip',
       disconnect,
     });
     render(<ConnectionEstablished />);

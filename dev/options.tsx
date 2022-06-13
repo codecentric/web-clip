@@ -12,8 +12,9 @@ import { Options } from '../src/options/optionsStorageApi';
 import { Session as ChromeExtensionSession } from '../src/solid-client-authn-chrome-ext/Session';
 
 let inMemoryStorage = {
-  providerUrl: '',
-  trustedApp: false,
+  providerUrl: 'https://pod.provider',
+  trustedApp: true,
+  containerUrl: '',
 };
 
 chrome.runtime = {

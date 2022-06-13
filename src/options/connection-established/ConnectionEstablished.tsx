@@ -2,7 +2,7 @@ import React from 'react';
 import { useConnectionEstablished } from './useConnectionEstablished';
 
 export const ConnectionEstablished = () => {
-  const { providerUrl, disconnect } = useConnectionEstablished();
+  const { providerUrl, containerUrl, disconnect } = useConnectionEstablished();
 
   return (
     <div className="flex flex-col gap-2">
@@ -24,19 +24,27 @@ export const ConnectionEstablished = () => {
         Everything is set up correctly.
       </div>
 
-      <div className="flex">
-        <div className="rounded flex flex-col border bg-slate-50 py-2 px-3 leading-tight text-gray-700 shadow">
+      <div className="flex flex-col gap-2 leading-tight text-gray-700">
+        <div className="rounded flex flex-col py-2 px-3 border bg-slate-50 shadow w-fit">
           <span className="text-xs font-light">Your Pod Provider</span>
           <div className="flex flex-row">
             <span>{providerUrl}</span>
             <button
-              className="mx-2.5 p-0 text-gray-500 hover:text-gray-800 hover:underline"
+              className="mx-2.5 p-0 text-orange-800 hover:text-red-600 hover:underline"
               onClick={() => disconnect()}
             >
               Disconnect
             </button>
           </div>
         </div>
+        {containerUrl && (
+          <div className="py-2 px-3">
+            <span className="text-xs font-light">Data Location</span>
+            <div className="flex flex-row">
+              <span>{containerUrl}</span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
