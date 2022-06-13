@@ -17,4 +17,9 @@ export class StorageApi {
     await this.fetcher.load(this.webId);
     return this.store.getStorageForWebId(this.webId);
   }
+
+  async validateIfContainer(containerUrl: string): Promise<boolean> {
+    await this.fetcher.load(containerUrl);
+    return this.store.isContainer(containerUrl);
+  }
 }
