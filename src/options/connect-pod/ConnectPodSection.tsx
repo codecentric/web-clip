@@ -1,4 +1,5 @@
 import React from 'react';
+import { Input } from '../../components/Input';
 import { GetAPodSection } from '../get-a-pod/GetAPodSection';
 import { ConnectPodButton } from './ConnectPodButton';
 import { useConnectPod } from './useConnectPod';
@@ -16,10 +17,9 @@ export const ConnectPodSection = () => {
 
       <label className="block text-gray-700 text-sm font-bold mb-2">
         <p>Pod Provider URL</p>
-        <input
+        <Input
           list="providers"
           placeholder="Enter or select your Provider"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           onChange={(e) => setProviderUrl(e.target.value)}
           value={providerUrl}
           type="url"
