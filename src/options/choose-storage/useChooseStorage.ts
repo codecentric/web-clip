@@ -44,29 +44,28 @@ export function useChooseStorage() {
   return {
     ...state,
     setContainerUrl,
-    submit: () => {
+    submit: async () => {
       setState((state) => ({
         ...state,
         submitting: true,
       }));
-      storageApi.validateIfContainer(state.containerUrl).then((result) => {
-        setState((state) => ({
-          ...state,
-          submitting: false,
-          validationError:
-            result === false
-              ? new Error(
-                  'Please provide the URL of an existing, accessible container'
-                )
-              : null,
-        }));
-        if (result === true) {
-          dispatch({
-            type: ActionType.SELECTED_STORAGE_CONTAINER,
-            payload: state.containerUrl,
-          });
-        }
-      });
+      const result = await storageApi.validateIfContainer(state.containerUrl);
+      setState((state) => ({
+        ...state,
+        submitting: false,
+        validationError:
+          result === false
+            ? new Error(
+                'Please provide the URL of an existing, accessible container'
+              )
+            : null,
+      }));
+      if (result === true) {
+        dispatch({
+          type: ActionType.SELECTED_STORAGE_CONTAINER,
+          payload: state.containerUrl,
+        });
+      }
     },
   };
 }
