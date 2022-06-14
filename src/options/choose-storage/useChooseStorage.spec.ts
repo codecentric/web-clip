@@ -86,12 +86,12 @@ describe('useChooseStorage', () => {
     });
 
     describe('submit successfully', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         when(storageApi.validateIfContainer)
           .calledWith('https://pod.test/alice/webclip/')
           .mockResolvedValue(true);
-        act(() => {
-          renderResult.current.submit();
+        await act(async () => {
+          await renderResult.current.submit();
         });
       });
       it('indicates submission', () => {
@@ -109,12 +109,12 @@ describe('useChooseStorage', () => {
     });
 
     describe('submit invalid container url', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         when(storageApi.validateIfContainer)
           .calledWith('https://pod.test/alice/webclip/')
           .mockResolvedValue(false);
-        act(() => {
-          renderResult.current.submit();
+        await act(async () => {
+          await renderResult.current.submit();
         });
       });
       it('indicates submission', () => {
