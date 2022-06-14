@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useStorageApi } from '../../api/ApiContext';
 import { useOptions } from '../OptionsContext';
 import { ActionType } from '../reducer';
@@ -33,39 +33,44 @@ export function useChooseStorage() {
     });
   }, [storageApi]);
 
-  const setContainerUrl = (containerUrl: string) =>
+  const setContainerUrl = useCallback(
+    (containerUrl: string) =>
+      setState((state) => ({
+        ...state,
+        manualChanges: true,
+        validationError: null,
+        containerUrl,
+      })),
+    []
+  );
+
+  const submit = useCallback(async () => {
     setState((state) => ({
       ...state,
-      manualChanges: true,
-      validationError: null,
-      containerUrl,
+      submitting: true,
     }));
+    const result = await storageApi.validateIfContainer(state.containerUrl);
+    setState((state) => ({
+      ...state,
+      submitting: false,
+      validationError:
+        result === false
+          ? new Error(
+              'Please provide the URL of an existing, accessible container'
+            )
+          : null,
+    }));
+    if (result === true) {
+      dispatch({
+        type: ActionType.SELECTED_STORAGE_CONTAINER,
+        payload: state.containerUrl,
+      });
+    }
+  }, [storageApi, state.containerUrl]);
 
   return {
     ...state,
     setContainerUrl,
-    submit: async () => {
-      setState((state) => ({
-        ...state,
-        submitting: true,
-      }));
-      const result = await storageApi.validateIfContainer(state.containerUrl);
-      setState((state) => ({
-        ...state,
-        submitting: false,
-        validationError:
-          result === false
-            ? new Error(
-                'Please provide the URL of an existing, accessible container'
-              )
-            : null,
-      }));
-      if (result === true) {
-        dispatch({
-          type: ActionType.SELECTED_STORAGE_CONTAINER,
-          payload: state.containerUrl,
-        });
-      }
-    },
+    submit,
   };
 }
