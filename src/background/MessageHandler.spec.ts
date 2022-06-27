@@ -76,6 +76,19 @@ describe('MessageHandler', () => {
     });
   });
 
+  describe('handle type LOGOUT', () => {
+    it('calls logout and returns nothing', async () => {
+      const result = await messageHandler.handleMessage(
+        {
+          type: MessageType.LOGOUT,
+        },
+        {}
+      );
+      expect(authenticationApi.logout).toHaveBeenCalledWith();
+      expect(result).toEqual({});
+    });
+  });
+
   describe('handle type LOAD_PROFILE', () => {
     it('calls loadProfile and returns result', async () => {
       bookmarkApi.loadProfile.mockResolvedValue({

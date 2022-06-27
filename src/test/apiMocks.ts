@@ -5,6 +5,7 @@ export interface BockmarkApiMock {
 }
 
 export interface AuthenticationApiMock {
+  logout: jest.Mock;
   login: jest.Mock;
 }
 
@@ -19,5 +20,6 @@ export function mockBookmarkApi(): BockmarkApiMock {
 export function mockAuthenticationApi(): AuthenticationApiMock {
   return {
     login: jest.fn().mockResolvedValue(undefined),
+    logout: jest.fn().mockResolvedValue(undefined),
   };
 }

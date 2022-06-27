@@ -5,6 +5,7 @@ import { PageMetaData } from './PageMetaData';
 export enum MessageType {
   ACTIVATE = 'ACTIVATE',
   LOGIN = 'LOGIN',
+  LOGOUT = 'LOGOUT',
   LOGGED_IN = 'LOGGED_IN',
   LOAD_PROFILE = 'LOAD_PROFILE',
   LOAD_BOOKMARK = 'LOAD_BOOKMARK',
@@ -18,6 +19,7 @@ export type Message =
   | ActivateMessage
   | OpenOptionsMessage
   | LoginMessage
+  | LogoutMessage
   | LoggedInMessage
   | LoadProfileMessage
   | LoadBookmarkMessage
@@ -36,6 +38,10 @@ export type OpenOptionsMessage = {
 
 export type LoginMessage = {
   type: MessageType.LOGIN;
+};
+
+export type LogoutMessage = {
+  type: MessageType.LOGOUT;
 };
 
 export type LoggedInMessage = {
