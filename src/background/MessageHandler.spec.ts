@@ -1,10 +1,17 @@
 import { when } from 'jest-when';
+import { AuthenticationApi } from '../api/AuthenticationApi';
 import { BookmarkApi } from '../api/BookmarkApi';
+import { SolidSession } from '../api/SolidSession';
 import { Bookmark } from '../domain/Bookmark';
 import { MessageType } from '../domain/messages';
 import { PageMetaData } from '../domain/PageMetaData';
 import { BookmarkStore } from '../store/BookmarkStore';
-import { mockBookmarkApi, BookmarkApiMock } from '../test/bookmarkApiMock';
+import {
+  mockBookmarkApi,
+  BockmarkApiMock,
+  AuthenticationApiMock,
+  mockAuthenticationApi,
+} from '../test/apiMocks';
 import { MessageHandler } from './MessageHandler';
 import { openOptionsPage } from './openOptionsPage';
 
@@ -12,16 +19,22 @@ jest.mock('./openOptionsPage');
 
 describe('MessageHandler', () => {
   let messageHandler: MessageHandler;
-  let bookmarkApi: BookmarkApiMock;
+  let bookmarkApi: BockmarkApiMock;
+  let authenticationApi: AuthenticationApiMock;
+  let session: SolidSession;
   let store: BookmarkStore;
   beforeEach(() => {
     bookmarkApi = mockBookmarkApi();
-    store = {
-      importFromUrl: jest.fn().mockResolvedValue(null),
-    } as undefined as BookmarkStore;
+    authenticationApi = mockAuthenticationApi();
+    (session = {} as SolidSession),
+      (store = {
+        importFromUrl: jest.fn().mockResolvedValue(null),
+      } as undefined as BookmarkStore);
     messageHandler = new MessageHandler(
+      session,
       bookmarkApi as unknown as BookmarkApi,
-      store
+      store,
+      authenticationApi as unknown as AuthenticationApi
     );
   });
 
@@ -58,7 +71,7 @@ describe('MessageHandler', () => {
         },
         {}
       );
-      expect(bookmarkApi.login).toHaveBeenCalledWith();
+      expect(authenticationApi.login).toHaveBeenCalledWith();
       expect(result).toEqual({});
     });
   });

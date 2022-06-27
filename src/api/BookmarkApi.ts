@@ -1,7 +1,4 @@
-import {
-  ILoginInputOptions,
-  Session,
-} from '@inrupt/solid-client-authn-browser';
+import { Session } from '@inrupt/solid-client-authn-browser';
 import * as rdf from 'rdflib';
 import {
   Fetcher,
@@ -33,7 +30,6 @@ function getIndex(storageUrl: string): NamedNode {
 
 export class BookmarkApi {
   private readonly me: NamedNode;
-  private readonly session: Session | ChromeExtensionSession;
   private readonly store: BookmarkStore;
 
   /**
@@ -44,38 +40,14 @@ export class BookmarkApi {
   private readonly fetcher: Fetcher;
   private readonly updater: UpdateManager;
   private readonly ns: Record<string, (alias: string) => NamedNode>;
-  private readonly redirectUrl: string;
-  private providerUrl: string;
 
-  constructor(
-    session: Session | ChromeExtensionSession,
-    store: BookmarkStore,
-    providerUrl: string,
-    redirectUrl: string = window.location.href
-  ) {
-    this.session = session;
+  constructor(session: Session | ChromeExtensionSession, store: BookmarkStore) {
     this.me = session.info.isLoggedIn ? sym(session.info.webId) : null;
     this.store = store;
     this.graph = store.getGraph();
     this.fetcher = new Fetcher(this.graph, { fetch: session.fetch });
     this.updater = new UpdateManager(this.graph);
     this.ns = solidNamespace(rdf);
-    this.redirectUrl = redirectUrl;
-    this.providerUrl = providerUrl;
-  }
-
-  /**
-   * @deprecated TODO: move to AuthenticationApi
-   */
-  async login(options: ILoginInputOptions = {}) {
-    if (!this.providerUrl) {
-      throw new Error('No pod provider URL configured');
-    }
-    return this.session.login({
-      oidcIssuer: this.providerUrl,
-      redirectUrl: this.redirectUrl,
-      ...options,
-    });
   }
 
   /**

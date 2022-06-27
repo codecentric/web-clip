@@ -1,4 +1,6 @@
+import { AuthenticationApi } from '../api/AuthenticationApi';
 import { BookmarkApi } from '../api/BookmarkApi';
+import { SolidSession } from '../api/SolidSession';
 import { Message, MessageType, Response } from '../domain/messages';
 import { BookmarkStore } from '../store/BookmarkStore';
 import { openOptionsPage } from './openOptionsPage';
@@ -6,8 +8,10 @@ import MessageSender = chrome.runtime.MessageSender;
 
 export class MessageHandler {
   constructor(
+    private readonly session: SolidSession,
     private readonly bookmarkApi: BookmarkApi,
-    private readonly store: BookmarkStore
+    private readonly store: BookmarkStore,
+    private readonly authenticationApi: AuthenticationApi
   ) {}
 
   handleMessage(
@@ -20,7 +24,7 @@ export class MessageHandler {
         openOptionsPage();
         return Promise.resolve({});
       case MessageType.LOGIN:
-        return this.bookmarkApi.login().then(() => ({}));
+        return this.authenticationApi.login().then(() => ({}));
       case MessageType.LOAD_PROFILE: {
         return this.bookmarkApi.loadProfile().then((profile) => ({
           payload: profile,

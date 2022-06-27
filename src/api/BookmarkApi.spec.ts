@@ -17,37 +17,6 @@ describe('SolidApi', () => {
     jest.resetAllMocks();
   });
 
-  describe('login', () => {
-    it('logs in against the configured provider url', async () => {
-      // when I log in
-      const login = jest.fn();
-      const api = new BookmarkApi(
-        { info: { isLoggedIn: false }, login } as unknown as Session,
-        new BookmarkStore(),
-        'https://pod.provider.example'
-      );
-      await api.login();
-      // then I can log in at that pod provider and am redirected to the current page after that
-      expect(login).toHaveBeenCalledWith({
-        oidcIssuer: 'https://pod.provider.example',
-        redirectUrl: 'http://localhost/',
-      });
-    });
-
-    it('login fails if provider url is not present yet', async () => {
-      // when I try to log in
-      const api = new BookmarkApi(
-        { info: { isLoggedIn: false } } as Session,
-        new BookmarkStore(),
-        undefined
-      );
-      // then I see this error
-      await expect(() => api.login()).rejects.toEqual(
-        new Error('No pod provider URL configured')
-      );
-    });
-  });
-
   describe('loadProfile', () => {
     describe('profile can be read after being loaded', () => {
       it('name is Anonymous, when profile contains no name', async () => {
@@ -60,8 +29,7 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new BookmarkStore(),
-          'https://pod.provider.example'
+          new BookmarkStore()
         );
 
         const result = await api.loadProfile();
@@ -90,8 +58,7 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new BookmarkStore(),
-          'https://pod.provider.example'
+          new BookmarkStore()
         );
 
         const result = await api.loadProfile();
@@ -109,8 +76,7 @@ describe('SolidApi', () => {
     it('profile cannot be loaded, when noone is logged in', async () => {
       const api = new BookmarkApi(
         { info: { isLoggedIn: false } } as Session,
-        new BookmarkStore(),
-        'https://pod.provider.example'
+        new BookmarkStore()
       );
 
       await expect(api.loadProfile()).rejects.toThrow('No user is logged in.');
@@ -139,8 +105,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store),
-        'https://pod.provider.example'
+        new BookmarkStore(store)
       );
 
       await api.bookmark({
@@ -189,8 +154,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store),
-        'https://pod.provider.example'
+        new BookmarkStore(store)
       );
 
       await api.bookmark({
@@ -226,8 +190,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        store,
-        'https://pod.provider.example'
+        store
       );
 
       await expect(
@@ -267,8 +230,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store),
-        'https://pod.provider.example'
+        new BookmarkStore(store)
       );
 
       await api.bookmark({
@@ -322,8 +284,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store),
-        'https://pod.provider.example'
+        new BookmarkStore(store)
       );
 
       const result = await api.bookmark({
@@ -358,8 +319,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store),
-        'https://pod.provider.example'
+        new BookmarkStore(store)
       );
 
       await api.bookmark(
@@ -413,8 +373,7 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store),
-        'https://pod.provider.example'
+        new BookmarkStore(store)
       );
 
       await api.bookmark(
@@ -469,8 +428,7 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new BookmarkStore(store),
-          'https://pod.provider.example'
+          new BookmarkStore(store)
         );
 
         result = await api.loadBookmark({
@@ -518,8 +476,7 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new BookmarkStore(store),
-          'https://pod.provider.example'
+          new BookmarkStore(store)
         );
 
         result = await api.loadBookmark({
@@ -567,8 +524,7 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new BookmarkStore(store),
-          'https://pod.provider.example'
+          new BookmarkStore(store)
         );
 
         result = await api.loadBookmark({
