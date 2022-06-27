@@ -5,7 +5,11 @@ import {
   thenNoSparqlUpdateIsSentToUrl,
   thenSparqlUpdateIsSentToUrl,
 } from '../test/thenSparqlUpdateIsSentToUrl';
-import { turtleResponse } from '../test/turtleResponse';
+import {
+  containerResponse,
+  storageResponse,
+  turtleResponse,
+} from '../test/turtleResponse';
 import { StorageApi } from './StorageApi';
 
 describe('StorageApi', () => {
@@ -28,6 +32,59 @@ describe('StorageApi', () => {
       );
       const storage = await api.findStorage();
       expect(storage).toEqual(new Storage('https://alice.test/'));
+    });
+
+    it('finds a storage searching upwards from the WebID profile', async () => {
+      const fetchMock = jest.fn();
+      when(fetchMock)
+        .calledWith(
+          'https://provider.test/alice/profile/card',
+          expect.anything()
+        )
+        .mockResolvedValue(turtleResponse(''));
+      when(fetchMock)
+        .calledWith('https://provider.test/alice/profile/', expect.anything())
+        .mockResolvedValue(containerResponse());
+      when(fetchMock)
+        .calledWith('https://provider.test/alice/', expect.anything())
+        .mockResolvedValue(storageResponse());
+
+      const store = graph();
+      new Fetcher(store, { fetch: fetchMock });
+      const api = new StorageApi(
+        'https://provider.test/alice/profile/card#me',
+        store as LiveStore
+      );
+      const storage = await api.findStorage();
+      expect(storage).toEqual(new Storage('https://provider.test/alice/'));
+    });
+
+    it('returns null if nothing can be found search the hierarchy', async () => {
+      const fetchMock = jest.fn();
+      when(fetchMock)
+        .calledWith(
+          'https://provider.test/alice/profile/card',
+          expect.anything()
+        )
+        .mockResolvedValue(turtleResponse(''));
+      when(fetchMock)
+        .calledWith('https://provider.test/alice/profile/', expect.anything())
+        .mockResolvedValue(containerResponse());
+      when(fetchMock)
+        .calledWith('https://provider.test/alice/', expect.anything())
+        .mockResolvedValue(containerResponse());
+      when(fetchMock)
+        .calledWith('https://provider.test/', expect.anything())
+        .mockResolvedValue(containerResponse());
+
+      const store = graph();
+      new Fetcher(store, { fetch: fetchMock });
+      const api = new StorageApi(
+        'https://provider.test/alice/profile/card#me',
+        store as LiveStore
+      );
+      const storage = await api.findStorage();
+      expect(storage).toEqual(null);
     });
   });
 
