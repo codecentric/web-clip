@@ -1,6 +1,7 @@
 import { when } from 'jest-when';
 import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
 import { Storage } from '../domain/Storage';
+import { thenSparqlUpdateIsSentToUrl } from '../test/thenSparqlUpdateIsSentToUrl';
 import { turtleResponse } from '../test/turtleResponse';
 import { StorageApi } from './StorageApi';
 
@@ -102,29 +103,73 @@ describe('StorageApi', () => {
       expect(result).toBe(false);
     });
 
-    it('is not valid if not found', async () => {
+    it('is valid, if not found, but can be created', async () => {
       const fetchMock = jest.fn();
+
       when(fetchMock)
-        .calledWith('https://alice.test/not/existing/', expect.anything())
-        .mockResolvedValue({
+        .calledWith(
+          'https://alice.test/existing/non-existing/',
+          expect.anything()
+        )
+        .mockResolvedValueOnce({
           ok: false,
           status: 404,
           headers: new Headers({
             'Content-Type': 'text/plain',
+            'ms-author-via': 'SPARQL',
           }),
           statusText: 'Not Found',
           text: async () => 'Not Found',
         });
+
+      when(fetchMock)
+        .calledWith(
+          'https://alice.test/existing/non-existing/',
+          expect.anything()
+        )
+        .mockResolvedValueOnce(
+          turtleResponse(
+            `
+          @prefix ldp: <http://www.w3.org/ns/ldp#> .
+          <> a ldp:Container .
+          `,
+            'read write append'
+          )
+        );
+
+      when(fetchMock)
+        .calledWith('https://alice.test/existing/', expect.anything())
+        .mockResolvedValueOnce(
+          turtleResponse(
+            `
+          @prefix ldp: <http://www.w3.org/ns/ldp#> .
+          <> a ldp:Container .
+          `,
+            'read write append'
+          )
+        );
+
       const store = graph();
       new Fetcher(store, { fetch: fetchMock });
+      new UpdateManager(store);
+
       const api = new StorageApi(
         'https://alice.test/profile/card#me',
         store as LiveStore
       );
       const result = await api.validateIfContainer(
-        'https://alice.test/not/existing/'
+        'https://alice.test/existing/non-existing/'
       );
-      expect(result).toBe(false);
+      thenSparqlUpdateIsSentToUrl(
+        fetchMock,
+        'https://alice.test/existing/non-existing/',
+        `
+      INSERT DATA {
+        <https://alice.test/existing/non-existing/>
+          a <http://www.w3.org/ns/ldp#Container> .
+      }`
+      );
+      expect(result).toBe(true);
     });
   });
 });

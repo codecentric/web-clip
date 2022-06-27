@@ -1,4 +1,4 @@
-import { graph, parse } from 'rdflib';
+import { graph, parse, st, sym } from 'rdflib';
 import { Storage } from '../domain/Storage';
 import { StorageStore } from './StorageStore';
 
@@ -50,6 +50,23 @@ describe('StorageStore', () => {
       const storageStore = new StorageStore(store);
       const result = storageStore.isContainer('https://alice.test/public/');
       expect(result).toBe(true);
+    });
+  });
+  describe('createContainerStatement', () => {
+    it('creates a single statement to describe a container', () => {
+      const store = graph();
+      const storageStore = new StorageStore(store);
+      const result = storageStore.createContainerStatement(
+        'https://alice.test/public/'
+      );
+      expect(result).toEqual([
+        st(
+          sym('https://alice.test/public/'),
+          sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+          sym('http://www.w3.org/ns/ldp#Container'),
+          sym('https://alice.test/public/')
+        ),
+      ]);
     });
   });
 });

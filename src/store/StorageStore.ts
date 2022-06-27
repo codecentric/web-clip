@@ -1,5 +1,5 @@
 import * as rdf from 'rdflib';
-import { IndexedFormula, NamedNode, sym } from 'rdflib';
+import { IndexedFormula, NamedNode, st, Statement, sym } from 'rdflib';
 import solidNamespace from 'solid-namespace';
 import { Storage } from '../domain/Storage';
 
@@ -30,5 +30,16 @@ export class StorageStore {
       this.ns.rdf('type'),
       this.ns.ldp('Container')
     );
+  }
+
+  createContainerStatement(containerUrl: string): Statement[] {
+    return [
+      st(
+        sym(containerUrl),
+        this.ns.rdf('type'),
+        this.ns.ldp('Container'),
+        sym(containerUrl)
+      ),
+    ];
   }
 }
