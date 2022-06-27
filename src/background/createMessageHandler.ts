@@ -1,10 +1,14 @@
 import { AuthenticationApi } from '../api/AuthenticationApi';
 import { BookmarkApi } from '../api/BookmarkApi';
+import { OptionsStorage } from '../options/OptionsStorage';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
 import { BookmarkStore } from '../store/BookmarkStore';
 import { MessageHandler } from './MessageHandler';
 
-export function createMessageHandler(session: Session, providerUrl: string) {
+export function createMessageHandler(
+  session: Session,
+  optionsStorage: OptionsStorage
+) {
   const store = new BookmarkStore();
   return new MessageHandler(
     session,
@@ -12,7 +16,7 @@ export function createMessageHandler(session: Session, providerUrl: string) {
     store,
     new AuthenticationApi(
       session,
-      providerUrl,
+      optionsStorage,
       chrome.identity.getRedirectURL()
     )
   );

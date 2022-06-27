@@ -1,28 +1,30 @@
 import { ILoginInputOptions } from '@inrupt/solid-client-authn-browser';
+import { OptionsStorage } from '../options/OptionsStorage';
 import { SolidSession } from './SolidSession';
 
 export class AuthenticationApi {
   private readonly session: SolidSession;
 
   private readonly redirectUrl: string;
-  private readonly providerUrl: string;
+  private readonly optionsStorage: OptionsStorage;
 
   constructor(
     session: SolidSession,
-    providerUrl: string,
+    optionsStorage: OptionsStorage,
     redirectUrl: string = window.location.href
   ) {
     this.session = session;
     this.redirectUrl = redirectUrl;
-    this.providerUrl = providerUrl;
+    this.optionsStorage = optionsStorage;
   }
 
   async login(options: ILoginInputOptions = {}) {
-    if (!this.providerUrl) {
+    const { providerUrl } = this.optionsStorage.getOptions();
+    if (!providerUrl) {
       throw new Error('No pod provider URL configured');
     }
     return this.session.login({
-      oidcIssuer: this.providerUrl,
+      oidcIssuer: providerUrl,
       redirectUrl: this.redirectUrl,
       ...options,
     });
