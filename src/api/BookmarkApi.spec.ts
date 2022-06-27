@@ -6,10 +6,13 @@ import { OptionsStorage } from '../options/OptionsStorage';
 import { Options } from '../options/optionsStorageApi';
 import { BookmarkStore } from '../store/BookmarkStore';
 import { givenStoreContaining } from '../test/givenStoreContaining';
-import { thenSparqlUpdateIsSentToUrl } from '../test/thenSparqlUpdateIsSentToUrl';
+import {
+  thenNoSparqlUpdateIsSentToUrl,
+  thenSparqlUpdateIsSentToUrl,
+} from '../test/thenSparqlUpdateIsSentToUrl';
+import { BookmarkApi } from './BookmarkApi';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
-import { BookmarkApi } from './BookmarkApi';
 
 jest.mock('@inrupt/solid-client-authn-browser');
 jest.mock('./generateUuid');
@@ -668,16 +671,4 @@ function givenGeneratedUuidWillBe(value: string) {
 
 function givenNowIs(timestamp: number) {
   (now as jest.Mock).mockReturnValue(new Date(timestamp));
-}
-
-function thenNoSparqlUpdateIsSentToUrl(
-  authenticatedFetch: jest.Mock,
-  url: string
-) {
-  const calls = authenticatedFetch.mock.calls;
-  const sparqlUpdateCall = calls.find(
-    (it) => it[0] === url && it[1].method === 'PATCH'
-  );
-
-  expect(sparqlUpdateCall).not.toBeDefined();
 }

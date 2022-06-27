@@ -21,3 +21,15 @@ export function thenSparqlUpdateIsSentToUrl(
   const expectedQuery = parser.parse(query) as Update;
   expect(actualQuery).toEqual(expectedQuery);
 }
+
+export function thenNoSparqlUpdateIsSentToUrl(
+  authenticatedFetch: jest.Mock,
+  url: string
+) {
+  const calls = authenticatedFetch.mock.calls;
+  const sparqlUpdateCall = calls.find(
+    (it) => it[0] === url && it[1].method === 'PATCH'
+  );
+
+  expect(sparqlUpdateCall).not.toBeDefined();
+}

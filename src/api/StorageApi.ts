@@ -28,19 +28,28 @@ export class StorageApi {
     try {
       await this.fetcher.load(containerUrl);
     } catch (err) {
-      try {
-        await this.updater.update(
-          [],
-          this.store.createContainerStatement(containerUrl)
-        );
-        return true;
-      } catch (err) {
-        return false;
+      if (err.status === 404) {
+        return await this.tryToCreateContainerAt(containerUrl);
       }
+      console.log(err);
+      return false;
     }
     return (
       this.store.isContainer(containerUrl) &&
       !!this.updater.editable(containerUrl)
     );
+  }
+
+  private async tryToCreateContainerAt(containerUrl: string) {
+    try {
+      await this.updater.update(
+        [],
+        this.store.createContainerStatement(containerUrl)
+      );
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   }
 }
