@@ -47,7 +47,7 @@ export const useOptionsPage = (session: SolidSession) => {
     if (state.unsavedChanges) {
       save();
     }
-  }, [state.value.trustedApp, state.value.providerUrl, state.unsavedChanges]);
+  }, [state.value, state.unsavedChanges]);
 
   return {
     state,
