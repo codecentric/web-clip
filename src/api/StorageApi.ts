@@ -28,11 +28,15 @@ export class StorageApi {
     try {
       await this.fetcher.load(containerUrl);
     } catch (err) {
-      this.updater.update(
-        [],
-        this.store.createContainerStatement(containerUrl)
-      );
-      return true;
+      try {
+        await this.updater.update(
+          [],
+          this.store.createContainerStatement(containerUrl)
+        );
+        return true;
+      } catch (err) {
+        return false;
+      }
     }
     return (
       this.store.isContainer(containerUrl) &&
