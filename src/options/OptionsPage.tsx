@@ -72,7 +72,7 @@ export const OptionsPage = ({ session }: Props) => {
               ></AuthorizationSection>
             )}
 
-            {isLoggedIn && !containerUrl && <ChooseStorage />}
+            {isLoggedIn && trustedApp && !containerUrl && <ChooseStorage />}
 
             {trustedApp && containerUrl && <ConnectionEstablished />}
             <HelpSection />
