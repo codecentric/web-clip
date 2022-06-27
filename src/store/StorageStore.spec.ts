@@ -52,6 +52,29 @@ describe('StorageStore', () => {
       expect(result).toBe(true);
     });
   });
+
+  describe('isStorage', () => {
+    it('returns false if store is empty', () => {
+      const store = graph();
+      const storageStore = new StorageStore(store);
+      const result = storageStore.isStorage('https://alice.test/public/');
+      expect(result).toBe(false);
+    });
+    it('returns true if url identifies a storage', () => {
+      const store = graph();
+      parse(
+        `
+         @prefix space: <http://www.w3.org/ns/pim/space#> .
+          <> a space:Storage .
+        `,
+        store,
+        'https://alice.test/public/'
+      );
+      const storageStore = new StorageStore(store);
+      const result = storageStore.isStorage('https://alice.test/public/');
+      expect(result).toBe(true);
+    });
+  });
   describe('createContainerStatement', () => {
     it('creates a single statement to describe a container', () => {
       const store = graph();
