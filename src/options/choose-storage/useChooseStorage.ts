@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import urljoin from 'url-join';
 import { useStorageApi } from '../../api/ApiContext';
 import { useOptions } from '../OptionsContext';
 import { ActionType } from '../reducer';
@@ -9,6 +10,10 @@ interface State {
   containerUrl: string;
   manualChanges: boolean;
   validationError?: Error;
+}
+
+function addMissingSlash(containerUrl: string) {
+  return urljoin(containerUrl, '/');
 }
 
 export function useChooseStorage() {
@@ -45,11 +50,13 @@ export function useChooseStorage() {
   );
 
   const submit = useCallback(async () => {
+    const containerUrl = addMissingSlash(state.containerUrl);
     setState((state) => ({
       ...state,
+      containerUrl,
       submitting: true,
     }));
-    const result = await storageApi.ensureValidContainer(state.containerUrl);
+    const result = await storageApi.ensureValidContainer(containerUrl);
     setState((state) => ({
       ...state,
       submitting: false,
@@ -63,7 +70,7 @@ export function useChooseStorage() {
     if (result === true) {
       dispatch({
         type: ActionType.SELECTED_STORAGE_CONTAINER,
-        payload: state.containerUrl,
+        payload: containerUrl,
       });
     }
   }, [storageApi, state.containerUrl]);
