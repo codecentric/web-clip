@@ -15,6 +15,11 @@ const optionsStorage = new OptionsStorage();
 optionsStorage.init().then(() => {
   const { providerUrl } = optionsStorage.getOptions();
 
+  optionsStorage.on('providerUrl', async () => {
+    console.log('logging out, because provider URL changed');
+    await session.logout();
+  });
+
   messageHandler = createMessageHandler(session, providerUrl);
 
   chrome.browserAction.onClicked.addListener(async function (tab) {

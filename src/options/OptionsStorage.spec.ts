@@ -83,4 +83,46 @@ describe('OptionsStorage', () => {
       trustedApp: true,
     });
   });
+
+  describe('events', () => {
+    it('notifies about all changes', async () => {
+      when(load).mockResolvedValue({
+        providerUrl: 'https://provider.test',
+        containerUrl: 'https://container.test',
+        trustedApp: true,
+      });
+      const storage = new OptionsStorage();
+      await storage.init();
+      expect(onChanged).toHaveBeenCalled();
+      const providerUrlListener = jest.fn();
+      const containerUrlListener = jest.fn();
+      const trustedAppListener = jest.fn();
+      storage.on('providerUrl', providerUrlListener);
+      storage.on('containerUrl', containerUrlListener);
+      storage.on('trustedApp', trustedAppListener);
+      const change = (onChanged as jest.Mock).mock.calls[0][0];
+      change(
+        {
+          providerUrl: {
+            newValue: 'https://new.provider.test',
+            oldValue: 'https://provider.test',
+          },
+          containerUrl: {
+            newValue: 'https://new.container.test',
+            oldValue: 'https://container.test',
+          },
+        },
+        'sync'
+      );
+      expect(providerUrlListener).toHaveBeenCalledWith({
+        newValue: 'https://new.provider.test',
+        oldValue: 'https://provider.test',
+      });
+      expect(containerUrlListener).toHaveBeenCalledWith({
+        newValue: 'https://new.container.test',
+        oldValue: 'https://container.test',
+      });
+      expect(trustedAppListener).not.toHaveBeenCalled();
+    });
+  });
 });
