@@ -171,5 +171,60 @@ describe('StorageApi', () => {
       );
       expect(result).toBe(true);
     });
+
+    it('is not valid, if not found, and also cannot be created', async () => {
+      const fetchMock = jest.fn();
+
+      when(fetchMock)
+        .calledWith(
+          'https://alice.test/no-permission/non-existing/',
+          expect.anything()
+        )
+        .mockResolvedValue({
+          ok: false,
+          status: 404,
+          headers: new Headers({
+            'Content-Type': 'text/plain',
+            'ms-author-via': 'SPARQL',
+          }),
+          statusText: 'Not Found',
+          text: async () => 'Not Found',
+        });
+
+      when(fetchMock)
+        .calledWith('https://alice.test/no-permission/', expect.anything())
+        .mockResolvedValue({
+          ok: false,
+          status: 403,
+          headers: new Headers({
+            'Content-Type': 'text/plain',
+            'ms-author-via': 'SPARQL',
+          }),
+          statusText: 'Not allowed',
+          text: async () => 'Not allowed',
+        });
+
+      const store = graph();
+      new Fetcher(store, { fetch: fetchMock });
+      new UpdateManager(store);
+
+      const api = new StorageApi(
+        'https://alice.test/profile/card#me',
+        store as LiveStore
+      );
+      const result = await api.validateIfContainer(
+        'https://alice.test/no-permission/non-existing/'
+      );
+      thenSparqlUpdateIsSentToUrl(
+        fetchMock,
+        'https://alice.test/no-permission/non-existing/',
+        `
+      INSERT DATA {
+        <https://alice.test/no-permission/non-existing/>
+          a <http://www.w3.org/ns/ldp#Container> .
+      }`
+      );
+      expect(result).toBe(false);
+    });
   });
 });
