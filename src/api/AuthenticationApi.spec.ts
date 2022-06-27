@@ -32,4 +32,17 @@ describe('AuthenticationApi', () => {
       );
     });
   });
+  describe('logout', () => {
+    it('logs out from current session', async () => {
+      // when I log in
+      const logout = jest.fn();
+      const api = new AuthenticationApi(
+        { info: { isLoggedIn: false }, logout } as unknown as Session,
+        'https://pod.provider.example'
+      );
+      await api.logout();
+      // then I can log in at that pod provider and am redirected to the current page after that
+      expect(logout).toHaveBeenCalled();
+    });
+  });
 });
