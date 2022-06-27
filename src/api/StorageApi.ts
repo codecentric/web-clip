@@ -20,11 +20,13 @@ export class StorageApi {
   }
 
   /**
-   * validates if the given container URL points to an actual container that
-   * is editable by the current user
+   * tries to ensure, that the given container URL points to a valid container.
+   * Therefore, the container must exist and be editable by the current user.
+   * If the container does not exist, it tries to create a container at that location.
+   * Returns true if finally a valid container exists at the URL, or false otherwise.
    * @param containerUrl
    */
-  async validateIfContainer(containerUrl: string): Promise<boolean> {
+  async ensureValidContainer(containerUrl: string): Promise<boolean> {
     try {
       await this.fetcher.load(containerUrl);
     } catch (err) {
