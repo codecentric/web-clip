@@ -52,7 +52,7 @@ describe('StorageApi', () => {
         'https://alice.test/profile/card#me',
         store as LiveStore
       );
-      const result = await api.validateIfContainer(
+      const result = await api.ensureValidContainer(
         'https://alice.test/public/'
       );
       expect(result).toBe(true);
@@ -78,7 +78,7 @@ describe('StorageApi', () => {
         'https://alice.test/profile/card#me',
         store as LiveStore
       );
-      const result = await api.validateIfContainer(
+      const result = await api.ensureValidContainer(
         'https://alice.test/public/'
       );
       expect(result).toBe(false);
@@ -100,7 +100,7 @@ describe('StorageApi', () => {
         'https://alice.test/profile/card#me',
         store as LiveStore
       );
-      const result = await api.validateIfContainer(
+      const result = await api.ensureValidContainer(
         'https://alice.test/profile/card'
       );
       expect(result).toBe(false);
@@ -160,7 +160,7 @@ describe('StorageApi', () => {
         'https://alice.test/profile/card#me',
         store as LiveStore
       );
-      const result = await api.validateIfContainer(
+      const result = await api.ensureValidContainer(
         'https://alice.test/existing/non-existing/'
       );
       thenSparqlUpdateIsSentToUrl(
@@ -199,7 +199,7 @@ describe('StorageApi', () => {
         'https://alice.test/profile/card#me',
         store as LiveStore
       );
-      const result = await api.validateIfContainer(
+      const result = await api.ensureValidContainer(
         'https://alice.test/no-permission/'
       );
       thenNoSparqlUpdateIsSentToUrl(
@@ -249,7 +249,7 @@ describe('StorageApi', () => {
         'https://alice.test/profile/card#me',
         store as LiveStore
       );
-      const result = await api.validateIfContainer(
+      const result = await api.ensureValidContainer(
         'https://alice.test/no-permission/non-existing/'
       );
       thenSparqlUpdateIsSentToUrl(

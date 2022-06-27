@@ -49,7 +49,7 @@ export function useChooseStorage() {
       ...state,
       submitting: true,
     }));
-    const result = await storageApi.validateIfContainer(state.containerUrl);
+    const result = await storageApi.ensureValidContainer(state.containerUrl);
     setState((state) => ({
       ...state,
       submitting: false,

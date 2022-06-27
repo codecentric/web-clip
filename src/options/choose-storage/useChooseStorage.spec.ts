@@ -29,7 +29,7 @@ describe('useChooseStorage', () => {
         findStorage: jest
           .fn()
           .mockResolvedValue(new Storage('https://pod.test/alice/')),
-        validateIfContainer: jest.fn(),
+        ensureValidContainer: jest.fn(),
       } as unknown as StorageApi;
       when(useStorageApi).mockReturnValue(storageApi);
 
@@ -87,7 +87,7 @@ describe('useChooseStorage', () => {
 
     describe('submit successfully', () => {
       beforeEach(async () => {
-        when(storageApi.validateIfContainer)
+        when(storageApi.ensureValidContainer)
           .calledWith('https://pod.test/alice/webclip/')
           .mockResolvedValue(true);
         await act(async () => {
@@ -110,7 +110,7 @@ describe('useChooseStorage', () => {
 
     describe('submit invalid container url', () => {
       beforeEach(async () => {
-        when(storageApi.validateIfContainer)
+        when(storageApi.ensureValidContainer)
           .calledWith('https://pod.test/alice/webclip/')
           .mockResolvedValue(false);
         await act(async () => {
