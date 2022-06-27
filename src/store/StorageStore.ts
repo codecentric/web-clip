@@ -32,6 +32,14 @@ export class StorageStore {
     );
   }
 
+  isStorage(url: string) {
+    return this.store.holds(
+      sym(url),
+      this.ns.rdf('type'),
+      this.ns.space('Storage')
+    );
+  }
+
   createContainerStatement(containerUrl: string): Statement[] {
     return [
       st(
