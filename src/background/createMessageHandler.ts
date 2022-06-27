@@ -12,7 +12,7 @@ export function createMessageHandler(
   const store = new BookmarkStore();
   return new MessageHandler(
     session,
-    new BookmarkApi(session, store),
+    new BookmarkApi(session, store, optionsStorage),
     store,
     new AuthenticationApi(
       session,

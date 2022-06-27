@@ -1,5 +1,6 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
 import { Bookmark } from '../domain/Bookmark';
+import { OptionsStorage } from '../options/OptionsStorage';
 import { BookmarkStore } from '../store/BookmarkStore';
 import { givenStoreContaining } from '../test/givenStoreContaining';
 import { thenSparqlUpdateIsSentToUrl } from '../test/thenSparqlUpdateIsSentToUrl';
@@ -13,8 +14,13 @@ jest.mock('./now');
 jest.mock('../options/optionsStorageApi');
 
 describe('SolidApi', () => {
+  let optionsStorage: OptionsStorage;
+
   beforeEach(() => {
     jest.resetAllMocks();
+    optionsStorage = {
+      getOptions: jest.fn(),
+    } as unknown as OptionsStorage;
   });
 
   describe('loadProfile', () => {
@@ -29,7 +35,8 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new BookmarkStore()
+          new BookmarkStore(),
+          optionsStorage
         );
 
         const result = await api.loadProfile();
@@ -58,7 +65,8 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new BookmarkStore()
+          new BookmarkStore(),
+          optionsStorage
         );
 
         const result = await api.loadProfile();
@@ -76,7 +84,8 @@ describe('SolidApi', () => {
     it('profile cannot be loaded, when noone is logged in', async () => {
       const api = new BookmarkApi(
         { info: { isLoggedIn: false } } as Session,
-        new BookmarkStore()
+        new BookmarkStore(),
+        optionsStorage
       );
 
       await expect(api.loadProfile()).rejects.toThrow('No user is logged in.');
@@ -105,7 +114,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store)
+        new BookmarkStore(store),
+        optionsStorage
       );
 
       await api.bookmark({
@@ -154,7 +164,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store)
+        new BookmarkStore(store),
+        optionsStorage
       );
 
       await api.bookmark({
@@ -190,7 +201,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        store
+        store,
+        optionsStorage
       );
 
       await expect(
@@ -230,7 +242,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store)
+        new BookmarkStore(store),
+        optionsStorage
       );
 
       await api.bookmark({
@@ -284,7 +297,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store)
+        new BookmarkStore(store),
+        optionsStorage
       );
 
       const result = await api.bookmark({
@@ -319,7 +333,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store)
+        new BookmarkStore(store),
+        optionsStorage
       );
 
       await api.bookmark(
@@ -373,7 +388,8 @@ describe('SolidApi', () => {
           },
           fetch: authenticatedFetch,
         } as unknown as Session,
-        new BookmarkStore(store)
+        new BookmarkStore(store),
+        optionsStorage
       );
 
       await api.bookmark(
@@ -428,7 +444,8 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new BookmarkStore(store)
+          new BookmarkStore(store),
+          optionsStorage
         );
 
         result = await api.loadBookmark({
@@ -476,7 +493,8 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new BookmarkStore(store)
+          new BookmarkStore(store),
+          optionsStorage
         );
 
         result = await api.loadBookmark({
@@ -524,7 +542,8 @@ describe('SolidApi', () => {
             },
             fetch: authenticatedFetch,
           } as unknown as Session,
-          new BookmarkStore(store)
+          new BookmarkStore(store),
+          optionsStorage
         );
 
         result = await api.loadBookmark({
