@@ -83,6 +83,40 @@ describe('useChooseStorage', () => {
         });
         expect(renderResult.current.manualChanges).toBe(true);
       });
+
+      it('submits the use defined value', async () => {
+        when(storageApi.ensureValidContainer)
+          .calledWith('http://pod.test/my-storage/')
+          .mockResolvedValue(true);
+        act(() => {
+          renderResult.current.setContainerUrl('http://pod.test/my-storage/');
+        });
+        await act(async () => {
+          await renderResult.current.submit();
+        });
+        expect(renderResult.current.containerUrl).toBe(
+          'http://pod.test/my-storage/'
+        );
+      });
+
+      it('adds the missing trailing slash when submitting without', async () => {
+        when(storageApi.ensureValidContainer)
+          .calledWith('https://pod.test/my-storage/')
+          .mockResolvedValue(true);
+        act(() => {
+          renderResult.current.setContainerUrl('https://pod.test/my-storage');
+        });
+        await act(async () => {
+          await renderResult.current.submit();
+        });
+        expect(renderResult.current.containerUrl).toBe(
+          'https://pod.test/my-storage/'
+        );
+        expect(dispatch).toHaveBeenLastCalledWith({
+          type: ActionType.SELECTED_STORAGE_CONTAINER,
+          payload: 'https://pod.test/my-storage/',
+        });
+      });
     });
 
     describe('submit successfully', () => {
