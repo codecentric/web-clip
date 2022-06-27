@@ -1,5 +1,5 @@
 import { when } from 'jest-when';
-import { Fetcher, graph, LiveStore } from 'rdflib';
+import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
 import { Storage } from '../domain/Storage';
 import { turtleResponse } from '../test/turtleResponse';
 import { StorageApi } from './StorageApi';
@@ -28,18 +28,22 @@ describe('StorageApi', () => {
   });
 
   describe('validateIfContainer', () => {
-    it('is valid if it is a container', async () => {
+    it('is valid if it is an editable container', async () => {
       const fetchMock = jest.fn();
       when(fetchMock)
         .calledWith('https://alice.test/public/', expect.anything())
         .mockResolvedValue(
-          turtleResponse(`
+          turtleResponse(
+            `
           @prefix ldp: <http://www.w3.org/ns/ldp#> .
           <> a ldp:Container .
-          `)
+          `,
+            'read write append'
+          )
         );
       const store = graph();
       new Fetcher(store, { fetch: fetchMock });
+      new UpdateManager(store);
       const api = new StorageApi(
         'https://alice.test/profile/card#me',
         store as LiveStore
@@ -48,6 +52,32 @@ describe('StorageApi', () => {
         'https://alice.test/public/'
       );
       expect(result).toBe(true);
+    });
+
+    it('is not valid if it is an read-only container', async () => {
+      const fetchMock = jest.fn();
+      when(fetchMock)
+        .calledWith('https://alice.test/public/', expect.anything())
+        .mockResolvedValue(
+          turtleResponse(
+            `
+          @prefix ldp: <http://www.w3.org/ns/ldp#> .
+          <> a ldp:Container .
+          `,
+            'read'
+          )
+        );
+      const store = graph();
+      new Fetcher(store, { fetch: fetchMock });
+      new UpdateManager(store);
+      const api = new StorageApi(
+        'https://alice.test/profile/card#me',
+        store as LiveStore
+      );
+      const result = await api.validateIfContainer(
+        'https://alice.test/public/'
+      );
+      expect(result).toBe(false);
     });
 
     it('is not valid if it is not a container', async () => {
@@ -78,7 +108,7 @@ describe('StorageApi', () => {
         .calledWith('https://alice.test/not/existing/', expect.anything())
         .mockResolvedValue({
           ok: false,
-          status: 401,
+          status: 404,
           headers: new Headers({
             'Content-Type': 'text/plain',
           }),

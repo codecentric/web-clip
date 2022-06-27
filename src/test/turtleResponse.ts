@@ -1,9 +1,13 @@
-export function turtleResponse(bodyText: string) {
+export function turtleResponse(
+  bodyText: string,
+  userPermissions = 'read write append control',
+  publicPermissions = ''
+) {
   return {
     ok: true,
     headers: new Headers({
       'Content-Type': 'text/turtle',
-      'wac-allow': 'user="read write append control",public=""',
+      'wac-allow': `user="${userPermissions}", public="${publicPermissions}"`,
       'ms-author-via': 'SPARQL',
     }),
     status: 200,
