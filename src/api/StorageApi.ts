@@ -28,7 +28,6 @@ export class StorageApi {
     try {
       await this.fetcher.load(containerUrl);
     } catch (err) {
-      console.log(err);
       this.updater.update(
         [],
         this.store.createContainerStatement(containerUrl)
