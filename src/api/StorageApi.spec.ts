@@ -1,7 +1,10 @@
 import { when } from 'jest-when';
 import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
 import { Storage } from '../domain/Storage';
-import { thenSparqlUpdateIsSentToUrl } from '../test/thenSparqlUpdateIsSentToUrl';
+import {
+  thenNoSparqlUpdateIsSentToUrl,
+  thenSparqlUpdateIsSentToUrl,
+} from '../test/thenSparqlUpdateIsSentToUrl';
 import { turtleResponse } from '../test/turtleResponse';
 import { StorageApi } from './StorageApi';
 
@@ -170,6 +173,40 @@ describe('StorageApi', () => {
       }`
       );
       expect(result).toBe(true);
+    });
+
+    it('is not valid, and does not try to create a container, if user has no permission', async () => {
+      const fetchMock = jest.fn();
+
+      when(fetchMock)
+        .calledWith('https://alice.test/no-permission/', expect.anything())
+        .mockResolvedValue({
+          ok: false,
+          status: 403,
+          headers: new Headers({
+            'Content-Type': 'text/plain',
+            'ms-author-via': 'SPARQL',
+          }),
+          statusText: 'Not Found',
+          text: async () => 'Not Found',
+        });
+
+      const store = graph();
+      new Fetcher(store, { fetch: fetchMock });
+      new UpdateManager(store);
+
+      const api = new StorageApi(
+        'https://alice.test/profile/card#me',
+        store as LiveStore
+      );
+      const result = await api.validateIfContainer(
+        'https://alice.test/no-permission/'
+      );
+      thenNoSparqlUpdateIsSentToUrl(
+        fetchMock,
+        'https://alice.test/no-permission/'
+      );
+      expect(result).toBe(false);
     });
 
     it('is not valid, if not found, and also cannot be created', async () => {
