@@ -1,4 +1,5 @@
-import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
+import { Fetcher, graph, lit, LiveStore, st, sym, UpdateManager } from 'rdflib';
+import urljoin from 'url-join';
 import { Storage } from '../domain/Storage';
 import { StorageStore } from '../store/StorageStore';
 
@@ -27,7 +28,12 @@ export class StorageApi {
     try {
       await this.fetcher.load(containerUrl);
     } catch (err) {
-      return false;
+      console.log(err);
+      this.updater.update(
+        [],
+        this.store.createContainerStatement(containerUrl)
+      );
+      return true;
     }
     return (
       this.store.isContainer(containerUrl) &&
