@@ -1,10 +1,10 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MessageType } from '../../domain/messages';
-import { sendMessage } from '../messaging/sendMessage';
+import { sendMessage } from '../../chrome/sendMessage';
 import { SetupButton } from './SetupButton';
 
-jest.mock('../messaging/sendMessage');
+jest.mock('../../chrome/sendMessage');
 
 describe('SetupButton', () => {
   it('triggers open option page message and calls close when clicked', () => {

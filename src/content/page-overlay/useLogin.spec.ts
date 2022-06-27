@@ -1,10 +1,10 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
 import { MessageType } from '../../domain/messages';
-import { sendMessage } from '../messaging/sendMessage';
+import { sendMessage } from '../../chrome/sendMessage';
 import { useLogin } from './useLogin';
 
-jest.mock('../messaging/sendMessage');
+jest.mock('../../chrome/sendMessage');
 
 describe('useLogin', () => {
   it('returns loading false', () => {

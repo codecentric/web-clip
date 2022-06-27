@@ -1,5 +1,5 @@
 import { when } from 'jest-when';
-import { MessageType, Response } from '../../domain/messages';
+import { MessageType, Response } from '../domain/messages';
 import { sendMessage } from './sendMessage';
 
 describe('messages', () => {
