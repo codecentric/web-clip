@@ -15,12 +15,17 @@ export class StorageApi {
   }
 
   async findStorage(): Promise<Storage | null> {
-    await this.fetcher.load(this.webId);
-    const storageFromProfile = this.store.getStorageForWebId(this.webId);
-    if (!storageFromProfile) {
-      return await this.findStorageInHierarchy(this.webId);
+    try {
+      await this.fetcher.load(this.webId);
+      const storageFromProfile = this.store.getStorageForWebId(this.webId);
+      if (!storageFromProfile) {
+        return await this.findStorageInHierarchy(this.webId);
+      }
+      return storageFromProfile;
+    } catch (err) {
+      console.log(err);
+      return null;
     }
-    return storageFromProfile;
   }
 
   private async findStorageInHierarchy(url: string): Promise<Storage | null> {

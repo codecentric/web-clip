@@ -86,6 +86,39 @@ describe('StorageApi', () => {
       const storage = await api.findStorage();
       expect(storage).toEqual(null);
     });
+
+    it('returns null if an error occurs', async () => {
+      const fetchMock = jest.fn();
+      when(fetchMock)
+        .calledWith(
+          'https://provider.test/alice/profile/card',
+          expect.anything()
+        )
+        .mockResolvedValue(turtleResponse(''));
+      when(fetchMock)
+        .calledWith('https://provider.test/alice/profile/', expect.anything())
+        .mockResolvedValue(containerResponse());
+      when(fetchMock)
+        .calledWith('https://provider.test/alice/', expect.anything())
+        .mockResolvedValue({
+          ok: false,
+          status: 500,
+          headers: new Headers({
+            'Content-Type': 'text/plain',
+          }),
+          statusText: 'Fake Error',
+          text: async () => 'Fake Error',
+        });
+
+      const store = graph();
+      new Fetcher(store, { fetch: fetchMock });
+      const api = new StorageApi(
+        'https://provider.test/alice/profile/card#me',
+        store as LiveStore
+      );
+      const storage = await api.findStorage();
+      expect(storage).toEqual(null);
+    });
   });
 
   describe('validateIfContainer', () => {
