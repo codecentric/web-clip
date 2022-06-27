@@ -5,7 +5,7 @@ export class AuthenticationApi {
   private readonly session: SolidSession;
 
   private readonly redirectUrl: string;
-  private providerUrl: string;
+  private readonly providerUrl: string;
 
   constructor(
     session: SolidSession,
@@ -26,5 +26,9 @@ export class AuthenticationApi {
       redirectUrl: this.redirectUrl,
       ...options,
     });
+  }
+
+  async logout() {
+    await this.session.logout();
   }
 }
