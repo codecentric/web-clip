@@ -1,6 +1,6 @@
-import { Fetcher, graph, lit, LiveStore, st, sym, UpdateManager } from 'rdflib';
-import urljoin from 'url-join';
+import { Fetcher, LiveStore, UpdateManager } from 'rdflib';
 import { Storage } from '../domain/Storage';
+import { getContainerUrl } from '../store/getContainerUrl';
 import { StorageStore } from '../store/StorageStore';
 
 export class StorageApi {
@@ -16,7 +16,24 @@ export class StorageApi {
 
   async findStorage(): Promise<Storage | null> {
     await this.fetcher.load(this.webId);
-    return this.store.getStorageForWebId(this.webId);
+    const storageFromProfile = this.store.getStorageForWebId(this.webId);
+    if (!storageFromProfile) {
+      return await this.findStorageInHierarchy(this.webId);
+    }
+    return storageFromProfile;
+  }
+
+  private async findStorageInHierarchy(url: string): Promise<Storage | null> {
+    const containerUrl = getContainerUrl(url);
+    if (!containerUrl) {
+      return null;
+    }
+    await this.fetcher.load(containerUrl);
+    if (this.store.isStorage(containerUrl)) {
+      return new Storage(containerUrl);
+    } else {
+      return this.findStorageInHierarchy(containerUrl);
+    }
   }
 
   /**
