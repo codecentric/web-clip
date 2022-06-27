@@ -119,6 +119,7 @@ export default (
         value: {
           ...state.value,
           providerUrl: '',
+          containerUrl: '',
           trustedApp: false,
         },
       };

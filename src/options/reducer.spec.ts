@@ -164,6 +164,7 @@ describe('options reducer', () => {
             ...initialState.value,
             trustedApp: true,
             providerUrl: 'https://old.provider.test',
+            containerUrl: 'https://old.container.test',
           },
         },
         {
@@ -174,6 +175,10 @@ describe('options reducer', () => {
 
     it('clears provider url', () => {
       expect(newState.value.providerUrl).toBe('');
+    });
+
+    it('clears container url', () => {
+      expect(newState.value.containerUrl).toBe('');
     });
 
     it('resets the pod trust', () => {
