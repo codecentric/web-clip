@@ -50,7 +50,9 @@ export class StorageApi {
    */
   async ensureValidContainer(containerUrl: string): Promise<boolean> {
     try {
-      await this.fetcher.load(containerUrl);
+      await this.fetcher.load(containerUrl, {
+        force: true, // the load is forced, so that the user can retry, after creating a container manually
+      });
     } catch (err) {
       if (err.status === 404) {
         return await this.tryToCreateContainerAt(containerUrl);
