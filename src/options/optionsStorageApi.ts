@@ -15,6 +15,13 @@ export interface Options {
   containerUrl: string;
 }
 
+type AreaName = 'sync' | 'local' | 'managed';
+
+interface StorageChange {
+  oldValue: string;
+  newValue: string;
+}
+
 const defaultsOptions: Options = {
   providerUrl: '',
   trustedApp: false,
@@ -39,6 +46,16 @@ export const load = (): Promise<Options> => {
   });
 };
 
+export const onChanged = (
+  listener: (
+    changes: { [p: string]: StorageChange },
+    namespace: AreaName
+  ) => void
+) => chrome.storage.onChanged.addListener(listener);
+
+/**
+ * @deprecated
+ */
 export const subscribeOption = (
   key: keyof Options,
   callback: (value: Options[typeof key]) => void
