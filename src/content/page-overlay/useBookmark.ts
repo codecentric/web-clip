@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Bookmark } from '../../domain/Bookmark';
 import { MessageType } from '../../domain/messages';
 import { PageMetaData } from '../../domain/PageMetaData';
-import { sendMessage } from '../messaging/sendMessage';
+import { sendMessage } from '../../chrome/sendMessage';
 
 interface AsyncState<T> {
   loading: boolean;

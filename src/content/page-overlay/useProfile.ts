@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Profile } from '../../api/BookmarkApi';
 import { MessageType } from '../../domain/messages';
-import { sendMessage } from '../messaging/sendMessage';
+import { sendMessage } from '../../chrome/sendMessage';
 
 interface AsyncState<T> {
   loading: boolean;
