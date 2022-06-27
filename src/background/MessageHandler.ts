@@ -25,6 +25,8 @@ export class MessageHandler {
         return Promise.resolve({});
       case MessageType.LOGIN:
         return this.authenticationApi.login().then(() => ({}));
+      case MessageType.LOGOUT:
+        return this.authenticationApi.logout().then(() => ({}));
       case MessageType.LOAD_PROFILE: {
         return this.bookmarkApi.loadProfile().then((profile) => ({
           payload: profile,
