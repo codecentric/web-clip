@@ -1,6 +1,9 @@
 import { Session } from '@inrupt/solid-client-authn-browser';
+import { when } from 'jest-when';
+import { graph } from 'rdflib';
 import { Bookmark } from '../domain/Bookmark';
 import { OptionsStorage } from '../options/OptionsStorage';
+import { Options } from '../options/optionsStorageApi';
 import { BookmarkStore } from '../store/BookmarkStore';
 import { givenStoreContaining } from '../test/givenStoreContaining';
 import { thenSparqlUpdateIsSentToUrl } from '../test/thenSparqlUpdateIsSentToUrl';
@@ -19,7 +22,7 @@ describe('SolidApi', () => {
   beforeEach(() => {
     jest.resetAllMocks();
     optionsStorage = {
-      getOptions: jest.fn(),
+      getOptions: jest.fn().mockReturnValue({}),
     } as unknown as OptionsStorage;
   });
 
@@ -81,7 +84,7 @@ describe('SolidApi', () => {
         });
       });
     });
-    it('profile cannot be loaded, when noone is logged in', async () => {
+    it('profile cannot be loaded, when no-one is logged in', async () => {
       const api = new BookmarkApi(
         { info: { isLoggedIn: false } } as Session,
         new BookmarkStore(),
@@ -93,41 +96,42 @@ describe('SolidApi', () => {
   });
 
   describe('bookmark', () => {
-    it("stores a bookmark in the user's pod when storage is available", async () => {
-      const authenticatedFetch = mockFetchWithResponse('');
-      givenGeneratedUuidWillBe('some-uuid');
-      givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
+    describe('with legacy storage determination', () => {
+      it("stores a bookmark in the user's pod when storage is available", async () => {
+        const authenticatedFetch = mockFetchWithResponse('');
+        givenGeneratedUuidWillBe('some-uuid');
+        givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
 
-      const store = givenStoreContaining(
-        'https://pod.example/',
-        `
+        const store = givenStoreContaining(
+          'https://pod.example/',
+          `
           <#me>
             <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
           `
-      );
+        );
 
-      const api = new BookmarkApi(
-        {
-          info: {
-            webId: 'https://pod.example/#me',
-            isLoggedIn: true,
-          },
-          fetch: authenticatedFetch,
-        } as unknown as Session,
-        new BookmarkStore(store),
-        optionsStorage
-      );
+        const api = new BookmarkApi(
+          {
+            info: {
+              webId: 'https://pod.example/#me',
+              isLoggedIn: true,
+            },
+            fetch: authenticatedFetch,
+          } as unknown as Session,
+          new BookmarkStore(store),
+          optionsStorage
+        );
 
-      await api.bookmark({
-        type: 'WebPage',
-        url: 'https://myfavouriteurl.example',
-        name: 'I love this page',
-      });
+        await api.bookmark({
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        });
 
-      thenSparqlUpdateIsSentToUrl(
-        authenticatedFetch,
-        'https://storage.example/webclip/2021/03/12/some-uuid',
-        `
+        thenSparqlUpdateIsSentToUrl(
+          authenticatedFetch,
+          'https://storage.example/webclip/2021/03/12/some-uuid',
+          `
       INSERT DATA {
         <https://storage.example/webclip/2021/03/12/some-uuid#it>
           a <http://schema.org/BookmarkAction> ;
@@ -140,78 +144,169 @@ describe('SolidApi', () => {
           <http://schema.org/name> "I love this page" ;
         .
       }`
-      );
-    });
+        );
+      });
 
-    it('adds the bookmark to the webclip index', async () => {
-      const authenticatedFetch = mockFetchWithResponse('');
-      givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
-      givenGeneratedUuidWillBe('some-uuid');
+      it('adds the bookmark to the webclip index', async () => {
+        const authenticatedFetch = mockFetchWithResponse('');
+        givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
+        givenGeneratedUuidWillBe('some-uuid');
 
-      const store = givenStoreContaining(
-        'https://pod.example/',
-        `
+        const store = givenStoreContaining(
+          'https://pod.example/',
+          `
           <#me>
             <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
           `
-      );
+        );
 
-      const api = new BookmarkApi(
-        {
-          info: {
-            webId: 'https://pod.example/#me',
-            isLoggedIn: true,
-          },
-          fetch: authenticatedFetch,
-        } as unknown as Session,
-        new BookmarkStore(store),
-        optionsStorage
-      );
+        const api = new BookmarkApi(
+          {
+            info: {
+              webId: 'https://pod.example/#me',
+              isLoggedIn: true,
+            },
+            fetch: authenticatedFetch,
+          } as unknown as Session,
+          new BookmarkStore(store),
+          optionsStorage
+        );
 
-      await api.bookmark({
-        type: 'WebPage',
-        url: 'https://myfavouriteurl.example',
-        name: 'I love this page',
-      });
+        await api.bookmark({
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        });
 
-      thenSparqlUpdateIsSentToUrl(
-        authenticatedFetch,
-        'https://storage.example/webclip/index.ttl',
-        `
+        thenSparqlUpdateIsSentToUrl(
+          authenticatedFetch,
+          'https://storage.example/webclip/index.ttl',
+          `
       INSERT DATA {
         <https://storage.example/webclip/2021/03/12/some-uuid#it>
           a <http://schema.org/BookmarkAction> ;
           <http://schema.org/object> <https://myfavouriteurl.example>
         .
       }`
-      );
+        );
+      });
+
+      it('throws an exception if no storage is available', async () => {
+        const authenticatedFetch = mockFetchWithResponse('');
+        (generateUuid as jest.Mock).mockReturnValue('some-uuid');
+
+        const store = new BookmarkStore();
+
+        const api = new BookmarkApi(
+          {
+            info: {
+              webId: 'https://pod.example/#me',
+              isLoggedIn: true,
+            },
+            fetch: authenticatedFetch,
+          } as unknown as Session,
+          store,
+          optionsStorage
+        );
+
+        await expect(
+          api.bookmark({
+            type: 'WebPage',
+            url: 'https://myfavouriteurl.example',
+            name: 'I love this page',
+          })
+        ).rejects.toThrow('No storage available.');
+      });
     });
 
-    it('throws an exception if no storage is available', async () => {
-      const authenticatedFetch = mockFetchWithResponse('');
-      (generateUuid as jest.Mock).mockReturnValue('some-uuid');
+    describe('with a container url chosen during setup', () => {
+      it("stores a bookmark in the user's pod at the chosen container", async () => {
+        const authenticatedFetch = mockFetchWithResponse('');
+        givenGeneratedUuidWillBe('some-uuid');
+        givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
 
-      const store = new BookmarkStore();
+        when(optionsStorage.getOptions).mockReturnValue({
+          containerUrl: 'https://storage.example/my-bookmarks/',
+        } as Options);
+        const store = graph();
 
-      const api = new BookmarkApi(
-        {
-          info: {
-            webId: 'https://pod.example/#me',
-            isLoggedIn: true,
-          },
-          fetch: authenticatedFetch,
-        } as unknown as Session,
-        store,
-        optionsStorage
-      );
+        const api = new BookmarkApi(
+          {
+            info: {
+              webId: 'https://pod.example/#me',
+              isLoggedIn: true,
+            },
+            fetch: authenticatedFetch,
+          } as unknown as Session,
+          new BookmarkStore(store),
+          optionsStorage
+        );
 
-      await expect(
-        api.bookmark({
+        await api.bookmark({
           type: 'WebPage',
           url: 'https://myfavouriteurl.example',
           name: 'I love this page',
-        })
-      ).rejects.toThrow('No storage available.');
+        });
+
+        thenSparqlUpdateIsSentToUrl(
+          authenticatedFetch,
+          'https://storage.example/my-bookmarks/2021/03/12/some-uuid',
+          `
+      INSERT DATA {
+        <https://storage.example/my-bookmarks/2021/03/12/some-uuid#it>
+          a <http://schema.org/BookmarkAction> ;
+          <http://schema.org/startTime> "2021-03-12T09:10:11.012Z"^^<http://schema.org/DateTime> ;
+          <http://schema.org/object> <https://myfavouriteurl.example>
+        .
+        <https://myfavouriteurl.example>
+          a <http://schema.org/WebPage> ;
+          <http://schema.org/url> <https://myfavouriteurl.example> ;
+          <http://schema.org/name> "I love this page" ;
+        .
+      }`
+        );
+      });
+
+      it('adds the bookmark to the webclip index', async () => {
+        const authenticatedFetch = mockFetchWithResponse('');
+        givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
+        givenGeneratedUuidWillBe('some-uuid');
+
+        when(optionsStorage.getOptions).mockReturnValue({
+          containerUrl: 'https://storage.example/my-bookmarks/',
+        } as Options);
+        const store = graph();
+
+        const api = new BookmarkApi(
+          {
+            info: {
+              webId: 'https://pod.example/#me',
+              isLoggedIn: true,
+            },
+            fetch: authenticatedFetch,
+          } as unknown as Session,
+          new BookmarkStore(store),
+          optionsStorage
+        );
+
+        await api.bookmark({
+          type: 'WebPage',
+          url: 'https://myfavouriteurl.example',
+          name: 'I love this page',
+        });
+
+        thenSparqlUpdateIsSentToUrl(
+          authenticatedFetch,
+          'https://storage.example/my-bookmarks/index.ttl',
+          `
+      INSERT DATA {
+        <https://storage.example/my-bookmarks/2021/03/12/some-uuid#it>
+          a <http://schema.org/BookmarkAction> ;
+          <http://schema.org/object> <https://myfavouriteurl.example>
+        .
+      }`
+        );
+      });
     });
 
     it('relates the bookmarked page to named node found on that page', async () => {
@@ -219,13 +314,10 @@ describe('SolidApi', () => {
       givenGeneratedUuidWillBe('some-uuid');
       givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
 
+      when(optionsStorage.getOptions).mockReturnValue({
+        containerUrl: 'https://storage.example/webclip/',
+      } as Options);
       const store = givenStoreContaining(
-        'https://pod.example/',
-        `
-                @prefix space: <http://www.w3.org/ns/pim/space#> .
-                <#me> space:storage <https://storage.example/>.
-                `
-      ).and(
         'https://shop.example/product/0815.html',
         `
           @prefix schema: <http://schema.org/> .
@@ -281,13 +373,10 @@ describe('SolidApi', () => {
       givenGeneratedUuidWillBe('some-uuid');
       givenNowIs(Date.UTC(2021, 2, 12, 9, 10, 11, 12));
 
-      const store = givenStoreContaining(
-        'https://pod.example/',
-        `
-          <#me>
-            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
-          `
-      );
+      when(optionsStorage.getOptions).mockReturnValue({
+        containerUrl: 'https://storage.example/webclip/',
+      } as Options);
+      const store = graph();
 
       const api = new BookmarkApi(
         {
@@ -411,6 +500,12 @@ describe('SolidApi', () => {
   });
 
   describe('load bookmark', () => {
+    beforeEach(() => {
+      when(optionsStorage.getOptions).mockReturnValue({
+        containerUrl: 'https://storage.example/webclip/',
+      } as Options);
+    });
+
     describe('when no index is found', () => {
       let result: Bookmark;
       let authenticatedFetch: jest.Mock;
@@ -428,13 +523,7 @@ describe('SolidApi', () => {
           text: async () => 'Cannot find requested file',
         });
 
-        const store = givenStoreContaining(
-          'https://pod.example/',
-          `
-          <#me>
-            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
-          `
-        );
+        const store = graph();
 
         const api = new BookmarkApi(
           {
@@ -477,13 +566,7 @@ describe('SolidApi', () => {
           <http://storage.example/webclip/irrelevant#it> a schema:BookmarkAction; schema:object <https://irrelevant.example> .
         `);
 
-        const store = givenStoreContaining(
-          'https://pod.example/',
-          `
-          <#me>
-            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
-          `
-        );
+        const store = graph();
 
         const api = new BookmarkApi(
           {
@@ -526,13 +609,7 @@ describe('SolidApi', () => {
           <http://storage.example/webclip/relevant#it> a schema:BookmarkAction; schema:object <https://myfavouriteurl.example> .
         `);
 
-        const store = givenStoreContaining(
-          'https://pod.example/',
-          `
-          <#me>
-            <http://www.w3.org/ns/pim/space#storage> <https://storage.example/> .
-          `
-        );
+        const store = graph();
 
         const api = new BookmarkApi(
           {

@@ -102,8 +102,11 @@ export class BookmarkApi {
   }
 
   private getContainerUrl() {
-    const storageUrl = this.getStorageUrl();
-    const containerUrl = urlJoin(storageUrl, 'webclip');
+    const { containerUrl } = this.optionsStorage.getOptions();
+    if (!containerUrl) {
+      const storageUrl = this.getStorageUrl();
+      return urlJoin(storageUrl, 'webclip');
+    }
     return containerUrl;
   }
 
