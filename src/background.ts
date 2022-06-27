@@ -13,14 +13,12 @@ let messageHandler: MessageHandler = null;
 const optionsStorage = new OptionsStorage();
 
 optionsStorage.init().then(() => {
-  const { providerUrl } = optionsStorage.getOptions();
-
   optionsStorage.on('providerUrl', async () => {
     console.log('logging out, because provider URL changed');
     await session.logout();
   });
 
-  messageHandler = createMessageHandler(session, providerUrl);
+  messageHandler = createMessageHandler(session, optionsStorage);
 
   chrome.browserAction.onClicked.addListener(async function (tab) {
     const { providerUrl } = optionsStorage.getOptions();
@@ -48,8 +46,7 @@ optionsStorage.init().then(() => {
   });
 
   session.onLogin(() => {
-    const { providerUrl } = optionsStorage.getOptions();
-    messageHandler = createMessageHandler(session, providerUrl);
+    messageHandler = createMessageHandler(session, optionsStorage);
 
     sendMessageToActiveTab({
       type: MessageType.LOGGED_IN,
@@ -58,7 +55,6 @@ optionsStorage.init().then(() => {
   });
 
   session.onLogout(() => {
-    const { providerUrl } = optionsStorage.getOptions();
-    messageHandler = createMessageHandler(session, providerUrl);
+    messageHandler = createMessageHandler(session, optionsStorage);
   });
 });
