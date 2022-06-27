@@ -24,8 +24,8 @@ export interface Profile {
   name: string;
 }
 
-function getIndex(storageUrl: string): NamedNode {
-  return sym(urlJoin(storageUrl, 'webclip', 'index.ttl'));
+function getIndex(containerUrl: string): NamedNode {
+  return sym(urlJoin(containerUrl, 'index.ttl'));
 }
 
 export class BookmarkApi {
@@ -78,14 +78,13 @@ export class BookmarkApi {
   }
 
   async bookmark(page: PageMetaData, existing?: Bookmark): Promise<Bookmark> {
-    const storageUrl = this.getStorageUrl();
+    const containerUrl = this.getContainerUrl();
 
     const clip = existing
       ? sym(existing.uri)
       : sym(
           urlJoin(
-            storageUrl,
-            'webclip',
+            containerUrl,
             generateDatePathForToday(),
             generateUuid(),
             '#it'
@@ -95,15 +94,22 @@ export class BookmarkApi {
     await this.savePageData(clip, page);
 
     if (!existing) {
-      const index = getIndex(storageUrl);
+      const index = getIndex(containerUrl);
       await this.updateIndex(index, clip, page);
     }
 
     return { uri: clip.uri };
   }
 
+  private getContainerUrl() {
+    const storageUrl = this.getStorageUrl();
+    const containerUrl = urlJoin(storageUrl, 'webclip');
+    return containerUrl;
+  }
+
   /**
-   * @deprecated TODO: move to ProfileApi
+   * @deprecated legacy method to determine storage,
+   * if no container url has been configured during setup
    */
   private getStorageUrl() {
     const storageUrl = this.graph.anyValue(this.me, this.ns.space('storage'));
@@ -152,7 +158,7 @@ export class BookmarkApi {
   }
 
   async loadBookmark(page: PageMetaData): Promise<Bookmark> {
-    const index = getIndex(this.getStorageUrl());
+    const index = getIndex(this.getContainerUrl());
     try {
       await this.fetcher.load(index);
     } catch (err) {
