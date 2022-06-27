@@ -1,4 +1,4 @@
-import { Fetcher, LiveStore, UpdateManager } from 'rdflib';
+import { Fetcher, graph, LiveStore, UpdateManager } from 'rdflib';
 import { Storage } from '../domain/Storage';
 import { StorageStore } from '../store/StorageStore';
 
@@ -18,12 +18,20 @@ export class StorageApi {
     return this.store.getStorageForWebId(this.webId);
   }
 
+  /**
+   * validates if the given container URL points to an actual container that
+   * is editable by the current user
+   * @param containerUrl
+   */
   async validateIfContainer(containerUrl: string): Promise<boolean> {
     try {
       await this.fetcher.load(containerUrl);
     } catch (err) {
       return false;
     }
-    return this.store.isContainer(containerUrl);
+    return (
+      this.store.isContainer(containerUrl) &&
+      !!this.updater.editable(containerUrl)
+    );
   }
 }
