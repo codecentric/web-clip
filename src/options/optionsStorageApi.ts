@@ -1,5 +1,3 @@
-import { onOptionChange } from './onOptionChange';
-
 export interface Options {
   /**
    * URL of the chosen OIDC provider
@@ -52,14 +50,3 @@ export const onChanged = (
     namespace: AreaName
   ) => void
 ) => chrome.storage.onChanged.addListener(listener);
-
-/**
- * @deprecated
- */
-export const subscribeOption = (
-  key: keyof Options,
-  callback: (value: Options[typeof key]) => void
-) => {
-  load().then((options) => callback(options[key]));
-  chrome.storage.onChanged.addListener(onOptionChange(key, callback));
-};

@@ -4,7 +4,11 @@ export class OptionsStorage {
   private value: Options;
 
   async init() {
-    load().then((options) => (this.value = options));
+    this.value = await load();
+    this.updateWhenChanged();
+  }
+
+  private updateWhenChanged() {
     onChanged((changes, namespace) => {
       if (namespace !== 'sync') return;
       const result = Object.keys(changes).reduce(
