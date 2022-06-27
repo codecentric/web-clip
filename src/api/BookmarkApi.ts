@@ -1,4 +1,3 @@
-import { Session } from '@inrupt/solid-client-authn-browser';
 import * as rdf from 'rdflib';
 import {
   Fetcher,
@@ -14,11 +13,12 @@ import solidNamespace from 'solid-namespace';
 import urlJoin from 'url-join';
 import { Bookmark } from '../domain/Bookmark';
 import { PageMetaData } from '../domain/PageMetaData';
-import { Session as ChromeExtensionSession } from '../solid-client-authn-chrome-ext/Session';
+import { OptionsStorage } from '../options/OptionsStorage';
 import { BookmarkStore } from '../store/BookmarkStore';
 import { generateDatePathForToday } from './generateDatePathForToday';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
+import { SolidSession } from './SolidSession';
 
 export interface Profile {
   name: string;
@@ -41,13 +41,20 @@ export class BookmarkApi {
   private readonly updater: UpdateManager;
   private readonly ns: Record<string, (alias: string) => NamedNode>;
 
-  constructor(session: Session | ChromeExtensionSession, store: BookmarkStore) {
+  private readonly optionsStorage: OptionsStorage;
+
+  constructor(
+    session: SolidSession,
+    store: BookmarkStore,
+    optionsStorage: OptionsStorage
+  ) {
     this.me = session.info.isLoggedIn ? sym(session.info.webId) : null;
     this.store = store;
     this.graph = store.getGraph();
     this.fetcher = new Fetcher(this.graph, { fetch: session.fetch });
     this.updater = new UpdateManager(this.graph);
     this.ns = solidNamespace(rdf);
+    this.optionsStorage = optionsStorage;
   }
 
   /**
