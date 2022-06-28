@@ -15,7 +15,6 @@ export const Toolbar = ({ profile }: Props) => {
   const { addBookmark, loading, saving, error, bookmark } = useBookmark(page);
   return (
     <>
-      <ProfileInfo {...profile} />
       {loading ? null : (
         <Button
           loading={saving}
@@ -33,6 +32,7 @@ export const Toolbar = ({ profile }: Props) => {
           </a>
         </p>
       )}
+      <ProfileInfo {...profile} />
     </>
   );
 };
