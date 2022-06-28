@@ -2,7 +2,6 @@ import { renderHook } from '@testing-library/react-hooks';
 import { when } from 'jest-when';
 import { SolidSession } from '../../api/SolidSession';
 import { sendMessage } from '../../chrome/sendMessage';
-import { MessageType } from '../../domain/messages';
 import { useAuthentication } from '../auth/AuthenticationContext';
 import { useOptions } from '../OptionsContext';
 import { ActionType, Dispatch } from '../reducer';
