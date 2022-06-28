@@ -13,16 +13,13 @@ import solidNamespace from 'solid-namespace';
 import urlJoin from 'url-join';
 import { Bookmark } from '../domain/Bookmark';
 import { PageMetaData } from '../domain/PageMetaData';
+import { Profile } from '../domain/Profile';
 import { OptionsStorage } from '../options/OptionsStorage';
 import { BookmarkStore } from '../store/BookmarkStore';
 import { generateDatePathForToday } from './generateDatePathForToday';
 import { generateUuid } from './generateUuid';
 import { now } from './now';
 import { SolidSession } from './SolidSession';
-
-export interface Profile {
-  name: string;
-}
 
 function getIndex(containerUrl: string): NamedNode {
   return sym(urlJoin(containerUrl, 'index.ttl'));
@@ -73,8 +70,8 @@ export class BookmarkApi {
    */
   private getProfile(): Profile {
     const name: string =
-      this.graph.anyValue(this.me, this.ns.vcard('fn')) || 'Anonymous';
-    return { name };
+      this.graph.anyValue(this.me, this.ns.vcard('fn')) || 'Nameless';
+    return { webId: this.me.uri, name };
   }
 
   async bookmark(page: PageMetaData, existing?: Bookmark): Promise<Bookmark> {

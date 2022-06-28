@@ -31,7 +31,7 @@ describe('SolidApi', () => {
 
   describe('loadProfile', () => {
     describe('profile can be read after being loaded', () => {
-      it('name is Anonymous, when profile contains no name', async () => {
+      it('name is Nameless, when profile contains no name', async () => {
         const authenticatedFetch = mockFetchWithResponse('');
         const api = new BookmarkApi(
           {
@@ -53,7 +53,8 @@ describe('SolidApi', () => {
         );
 
         expect(result).toEqual({
-          name: 'Anonymous',
+          webId: 'https://pod.example/#me',
+          name: 'Nameless',
         });
       });
 
@@ -83,6 +84,7 @@ describe('SolidApi', () => {
         );
 
         expect(result).toEqual({
+          webId: 'https://pod.example/#me',
           name: 'Solid User',
         });
       });

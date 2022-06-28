@@ -1,5 +1,14 @@
 @tailwind base;
 @tailwind components;
+
+.tooltip {
+    @apply invisible absolute;
+}
+
+.has-tooltip:hover .tooltip {
+    @apply visible z-max;
+}
+
 @tailwind utilities;
 
 .paperclip {

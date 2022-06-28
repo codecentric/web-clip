@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button } from '../../components/Button';
 import { ErrorMessage } from '../../components/ErrorMessage';
+import { Profile } from '../../domain/Profile';
+import { ProfileInfo } from './ProfileInfo';
 import { useBookmark } from './useBookmark';
 import { usePage } from './usePage';
 
 interface Props {
-  profile: {
-    name: string;
-  };
+  profile: Profile;
 }
 
 export const Toolbar = ({ profile }: Props) => {
@@ -15,7 +15,7 @@ export const Toolbar = ({ profile }: Props) => {
   const { addBookmark, loading, saving, error, bookmark } = useBookmark(page);
   return (
     <>
-      <p className="my-1">{profile.name}</p>
+      <ProfileInfo {...profile} />
       {loading ? null : (
         <Button
           loading={saving}

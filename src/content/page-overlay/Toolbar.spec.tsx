@@ -17,12 +17,20 @@ describe('Toolbar', () => {
     });
 
     it("renders the user's name", () => {
-      render(<Toolbar profile={{ name: 'Jane Doe' }} />);
+      render(
+        <Toolbar
+          profile={{ webId: 'https://pod.test/janedoe#me', name: 'Jane Doe' }}
+        />
+      );
       expect(screen.getByText('Jane Doe')).toBeInTheDocument();
     });
 
     it('hides the clip it button', () => {
-      render(<Toolbar profile={{ name: 'Jane Doe' }} />);
+      render(
+        <Toolbar
+          profile={{ webId: 'https://pod.test/janedoe#me', name: 'Jane Doe' }}
+        />
+      );
 
       const button = screen.queryByRole('button');
       expect(button).not.toBeInTheDocument();
@@ -43,7 +51,11 @@ describe('Toolbar', () => {
     });
 
     it("renders the user's name", () => {
-      render(<Toolbar profile={{ name: 'Jane Doe' }} />);
+      render(
+        <Toolbar
+          profile={{ webId: 'https://pod.test/janedoe#me', name: 'Jane Doe' }}
+        />
+      );
       expect(screen.getByText('Jane Doe')).toBeInTheDocument();
     });
 
@@ -54,7 +66,11 @@ describe('Toolbar', () => {
           url: 'https://page.example/article',
           name: 'An interesting article',
         });
-        render(<Toolbar profile={{ name: 'Jane Doe' }} />);
+        render(
+          <Toolbar
+            profile={{ webId: 'https://pod.test/janedoe#me', name: 'Jane Doe' }}
+          />
+        );
         expect(useBookmark).toHaveBeenCalledWith({
           type: 'WebPage',
           url: 'https://page.example/article',
@@ -68,7 +84,11 @@ describe('Toolbar', () => {
           url: 'https://page.example/article',
           name: 'An interesting article',
         });
-        render(<Toolbar profile={{ name: 'Jane Doe' }} />);
+        render(
+          <Toolbar
+            profile={{ webId: 'https://pod.test/janedoe#me', name: 'Jane Doe' }}
+          />
+        );
         const button = screen.getByText('Clip it!');
         fireEvent.click(button);
         expect(addBookmark).toHaveBeenCalledWith();
@@ -81,7 +101,11 @@ describe('Toolbar', () => {
           addBookmark,
         });
 
-        render(<Toolbar profile={{ name: 'Jane Doe' }} />);
+        render(
+          <Toolbar
+            profile={{ webId: 'https://pod.test/janedoe#me', name: 'Jane Doe' }}
+          />
+        );
 
         expect(screen.queryByText('Clip it!')).not.toBeInTheDocument();
         const button = screen.getByText('Saving...');
@@ -96,7 +120,11 @@ describe('Toolbar', () => {
           addBookmark,
         });
 
-        render(<Toolbar profile={{ name: 'Jane Doe' }} />);
+        render(
+          <Toolbar
+            profile={{ webId: 'https://pod.test/janedoe#me', name: 'Jane Doe' }}
+          />
+        );
 
         expect(screen.getByText('Pod not available')).toBeInTheDocument();
         const button = screen.getByText('Clip it!');
@@ -110,7 +138,11 @@ describe('Toolbar', () => {
           addBookmark,
         });
 
-        render(<Toolbar profile={{ name: 'Jane Doe' }} />);
+        render(
+          <Toolbar
+            profile={{ webId: 'https://pod.test/janedoe#me', name: 'Jane Doe' }}
+          />
+        );
 
         expect(screen.getByText('Show in pod').getAttribute('href')).toBe(
           'https://storage.example/bookmark#it'
