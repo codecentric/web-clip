@@ -10,6 +10,7 @@ import contentCss from '../src/assets/content.css';
 import { createMessageHandler } from '../src/background/createMessageHandler';
 import { MessageHandler } from '../src/background/MessageHandler';
 import { PageContent } from '../src/content/page-overlay/PageContent';
+import { OptionsStorage } from '../src/options/OptionsStorage';
 
 let handler: MessageHandler;
 
@@ -40,10 +41,17 @@ async function handleRedirectAfterLogin() {
 
 const providerUrl = 'http://localhost:3000';
 
+const optionsStorage = {
+  getOptions: () => ({
+    providerUrl,
+    containerUrl: 'http://localhost:3000/webclip/',
+  }),
+} as unknown as OptionsStorage;
+
 handleRedirectAfterLogin().then((session: Session) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore: this dev environment is no chrome extension, so we use regular browser session here
-  handler = createMessageHandler(session, providerUrl);
+  handler = createMessageHandler(session, optionsStorage);
   renderApp(session);
 });
 
