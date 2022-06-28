@@ -6,8 +6,9 @@ import { Parser as SparqlParser, Update } from 'sparqljs';
 import { generateDatePathForToday } from '../api/generateDatePathForToday';
 import { generateUuid } from '../api/generateUuid';
 import { now } from '../api/now';
-import { PageContent } from '../content/page-overlay/PageContent';
 import { createMessageHandler } from '../background/createMessageHandler';
+import { PageContent } from '../content/page-overlay/PageContent';
+import { OptionsStorage } from '../options/OptionsStorage';
 import { Session } from '../solid-client-authn-chrome-ext/Session';
 
 jest.mock('@inrupt/solid-client-authn-browser');
@@ -21,13 +22,18 @@ describe('bookmarking an html page with embedded data', () => {
 
   let authenticatedFetch: typeof fetch;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     jest.resetAllMocks();
     delete window.location;
     window.location = { ...location };
     window.location.href = '';
     window.document.title = '';
     authenticatedFetch = jest.fn();
+    const optionsStorage = {
+      getOptions: () => ({
+        containerUrl: 'https://storage.example/webclip/',
+      }),
+    } as unknown as OptionsStorage;
     const handler = createMessageHandler(
       {
         info: {
@@ -37,7 +43,7 @@ describe('bookmarking an html page with embedded data', () => {
         },
         fetch: authenticatedFetch,
       } as unknown as Session,
-      'https://pod.provider.test'
+      optionsStorage
     );
     (chrome.runtime.sendMessage as jest.Mock).mockImplementation(
       async (message, sendResponse) => {
@@ -198,7 +204,7 @@ describe('bookmarking an html page with embedded data', () => {
       `
                 <https://pod.example/#me>
                 <http://www.w3.org/ns/pim/space#storage>
-                <https://storage.example/> .
+                <https://irrelevant.storage.example/> .
             `
     );
 
