@@ -209,7 +209,7 @@ describe('StorageApi', () => {
           status: 404,
           headers: new Headers({
             'Content-Type': 'text/plain',
-            'ms-author-via': 'SPARQL',
+            'accept-patch': 'application/sparql-update',
           }),
           statusText: 'Not Found',
           text: async () => 'Not Found',
@@ -275,7 +275,7 @@ describe('StorageApi', () => {
           status: 403,
           headers: new Headers({
             'Content-Type': 'text/plain',
-            'ms-author-via': 'SPARQL',
+            'accept-patch': 'application/sparql-update',
           }),
           statusText: 'Not Found',
           text: async () => 'Not Found',
@@ -312,7 +312,7 @@ describe('StorageApi', () => {
           status: 404,
           headers: new Headers({
             'Content-Type': 'text/plain',
-            'ms-author-via': 'SPARQL',
+            'accept-patch': 'application/sparql-update',
           }),
           statusText: 'Not Found',
           text: async () => 'Not Found',
@@ -325,7 +325,7 @@ describe('StorageApi', () => {
           status: 403,
           headers: new Headers({
             'Content-Type': 'text/plain',
-            'ms-author-via': 'SPARQL',
+            'accept-patch': 'application/sparql-update',
           }),
           statusText: 'Not allowed',
           text: async () => 'Not allowed',

@@ -269,7 +269,7 @@ function mockFetchWithResponse(
     headers: new Headers({
       'Content-Type': 'text/turtle',
       'wac-allow': 'user="read write append control",public=""',
-      'ms-author-via': 'SPARQL',
+      'accept-patch': 'application/sparql-update',
     }),
     status: 200,
     statusText: 'OK',

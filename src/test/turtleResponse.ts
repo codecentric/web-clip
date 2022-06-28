@@ -8,7 +8,7 @@ export function turtleResponse(
     headers: new Headers({
       'Content-Type': 'text/turtle',
       'wac-allow': `user="${userPermissions}", public="${publicPermissions}"`,
-      'ms-author-via': 'SPARQL',
+      'accept-patch': 'application/sparql-update',
     }),
     status: 200,
     statusText: 'OK',
@@ -25,7 +25,7 @@ export function containerResponse(
     headers: new Headers({
       'Content-Type': 'text/turtle',
       'wac-allow': `user="${userPermissions}", public="${publicPermissions}"`,
-      'ms-author-via': 'SPARQL',
+      'accept-patch': 'application/sparql-update',
       Link: '<http://www.w3.org/ns/ldp#Container>; rel="type"',
     }),
     status: 200,
@@ -46,7 +46,7 @@ export function storageResponse(
     headers: new Headers({
       'Content-Type': 'text/turtle',
       'wac-allow': `user="${userPermissions}", public="${publicPermissions}"`,
-      'ms-author-via': 'SPARQL',
+      'accept-patch': 'application/sparql-update',
       Link: 'Link: <http://www.w3.org/ns/pim/space#Storage>; rel="type"',
     }),
     status: 200,
