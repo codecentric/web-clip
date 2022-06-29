@@ -1,4 +1,7 @@
-import { activateWebClipForTab } from './background/activate';
+import {
+  activateWebClipForTab,
+  deactivateWebClipForTab,
+} from './background/activate';
 import { createMessageHandler } from './background/createMessageHandler';
 import { MessageHandler } from './background/MessageHandler';
 import { sendMessageToActiveTab } from './background/sendMessageToActiveTab';
@@ -19,6 +22,12 @@ optionsStorage.init().then(() => {
   });
 
   messageHandler = createMessageHandler(session, optionsStorage);
+
+  chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+    if (changeInfo.status == 'complete') {
+      deactivateWebClipForTab(tab);
+    }
+  });
 
   chrome.browserAction.onClicked.addListener(async function (tab) {
     const { providerUrl } = optionsStorage.getOptions();

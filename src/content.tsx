@@ -39,6 +39,10 @@ if (isOnAuthorizationPage(extensionId)) {
         renderApp(chromeMessageListener, sessionInfo, providerUrl);
         break;
       }
+      case MessageType.DEACTIVATE: {
+        unmountApp();
+        break;
+      }
     }
     sendResponse();
   });

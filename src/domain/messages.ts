@@ -4,6 +4,7 @@ import { PageMetaData } from './PageMetaData';
 
 export enum MessageType {
   ACTIVATE = 'ACTIVATE',
+  DEACTIVATE = 'DEACTIVATE',
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
   LOGGED_IN = 'LOGGED_IN',

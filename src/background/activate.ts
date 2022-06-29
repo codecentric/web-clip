@@ -20,3 +20,13 @@ export function activateWebClipForTab(
     }
   );
 }
+
+export function deactivateWebClipForTab(tab: Tab) {
+  chrome.tabs.sendMessage(
+    tab.id,
+    { type: MessageType.DEACTIVATE },
+    function () {
+      return null;
+    }
+  );
+}
