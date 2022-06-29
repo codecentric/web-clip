@@ -11,6 +11,11 @@ export function activateWebClipForTab(
     tab.id,
     { type: MessageType.ACTIVATE, payload: { ...sessionInfo, providerUrl } },
     function () {
+      if (chrome.runtime.lastError) {
+        alert(
+          'WebClip does only work on secure web pages (starting with https://)'
+        );
+      }
       return null;
     }
   );
