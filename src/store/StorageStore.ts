@@ -1,6 +1,7 @@
 import * as rdf from 'rdflib';
 import { IndexedFormula, NamedNode, st, Statement, sym } from 'rdflib';
 import solidNamespace from 'solid-namespace';
+import urljoin from 'url-join';
 import { Storage } from '../domain/Storage';
 
 export class StorageStore {
@@ -40,14 +41,8 @@ export class StorageStore {
     );
   }
 
-  createContainerStatement(containerUrl: string): Statement[] {
-    return [
-      st(
-        sym(containerUrl),
-        this.ns.rdf('type'),
-        this.ns.ldp('Container'),
-        sym(containerUrl)
-      ),
-    ];
+  createIndexDocumentStatement(containerUrl: string): Statement[] {
+    const index = sym(urljoin(containerUrl, 'index.ttl'));
+    return [st(index, this.ns.rdf('type'), this.ns.ldp('Resource'), index)];
   }
 }

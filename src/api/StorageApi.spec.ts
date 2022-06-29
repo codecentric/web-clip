@@ -242,6 +242,22 @@ describe('StorageApi', () => {
           )
         );
 
+      when(fetchMock)
+        .calledWith(
+          'https://alice.test/existing/non-existing/index.ttl',
+          expect.anything()
+        )
+        .mockResolvedValue({
+          ok: true,
+          status: 201,
+          headers: new Headers({
+            'Content-Type': 'text/plain',
+            'accept-patch': 'application/sparql-update',
+          }),
+          statusText: 'Created',
+          text: async () => 'Created',
+        });
+
       const store = graph();
       new Fetcher(store, { fetch: fetchMock });
       new UpdateManager(store);
@@ -255,11 +271,11 @@ describe('StorageApi', () => {
       );
       thenSparqlUpdateIsSentToUrl(
         fetchMock,
-        'https://alice.test/existing/non-existing/',
+        'https://alice.test/existing/non-existing/index.ttl',
         `
       INSERT DATA {
-        <https://alice.test/existing/non-existing/>
-          a <http://www.w3.org/ns/ldp#Container> .
+        <https://alice.test/existing/non-existing/index.ttl>
+          a <http://www.w3.org/ns/ldp#Resource> .
       }`
       );
       expect(result).toBe(true);
@@ -331,6 +347,22 @@ describe('StorageApi', () => {
           text: async () => 'Not allowed',
         });
 
+      when(fetchMock)
+        .calledWith(
+          'https://alice.test/no-permission/non-existing/index.ttl',
+          expect.anything()
+        )
+        .mockResolvedValue({
+          ok: false,
+          status: 404,
+          headers: new Headers({
+            'Content-Type': 'text/plain',
+            'accept-patch': 'application/sparql-update',
+          }),
+          statusText: 'Not Found',
+          text: async () => 'Not Found',
+        });
+
       const store = graph();
       new Fetcher(store, { fetch: fetchMock });
       new UpdateManager(store);
@@ -344,11 +376,11 @@ describe('StorageApi', () => {
       );
       thenSparqlUpdateIsSentToUrl(
         fetchMock,
-        'https://alice.test/no-permission/non-existing/',
+        'https://alice.test/no-permission/non-existing/index.ttl',
         `
       INSERT DATA {
-        <https://alice.test/no-permission/non-existing/>
-          a <http://www.w3.org/ns/ldp#Container> .
+        <https://alice.test/no-permission/non-existing/index.ttl>
+          a <http://www.w3.org/ns/ldp#Resource> .
       }`
       );
       expect(result).toBe(false);

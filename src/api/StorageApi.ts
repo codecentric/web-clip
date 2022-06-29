@@ -55,7 +55,7 @@ export class StorageApi {
       });
     } catch (err) {
       if (err.status === 404) {
-        return await this.tryToCreateContainerAt(containerUrl);
+        return await this.tryToCreateIndexAtContainer(containerUrl);
       }
       console.log(err);
       return false;
@@ -66,11 +66,11 @@ export class StorageApi {
     );
   }
 
-  private async tryToCreateContainerAt(containerUrl: string) {
+  private async tryToCreateIndexAtContainer(containerUrl: string) {
     try {
       await this.updater.update(
         [],
-        this.store.createContainerStatement(containerUrl)
+        this.store.createIndexDocumentStatement(containerUrl)
       );
       return true;
     } catch (err) {

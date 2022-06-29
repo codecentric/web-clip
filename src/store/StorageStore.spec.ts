@@ -75,19 +75,19 @@ describe('StorageStore', () => {
       expect(result).toBe(true);
     });
   });
-  describe('createContainerStatement', () => {
-    it('creates a single statement to describe a container', () => {
+  describe('createIndexDocumentStatement', () => {
+    it('creates a single statement to describe the index document', () => {
       const store = graph();
       const storageStore = new StorageStore(store);
-      const result = storageStore.createContainerStatement(
+      const result = storageStore.createIndexDocumentStatement(
         'https://alice.test/public/'
       );
       expect(result).toEqual([
         st(
-          sym('https://alice.test/public/'),
+          sym('https://alice.test/public/index.ttl'),
           sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-          sym('http://www.w3.org/ns/ldp#Container'),
-          sym('https://alice.test/public/')
+          sym('http://www.w3.org/ns/ldp#Resource'),
+          sym('https://alice.test/public/index.ttl')
         ),
       ]);
     });
